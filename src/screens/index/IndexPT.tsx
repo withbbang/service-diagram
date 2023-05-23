@@ -2,11 +2,9 @@ import React, { useEffect } from 'react';
 import styles from './Index.module.scss';
 
 const IndexPT = ({ onNavigate }: typeIndexPT): JSX.Element => {
-  useEffect(() => {}, []);
-
   return (
     <div className={styles.wrap}>
-      <h1>Diagrams Index Page!</h1>
+      <h1>Service Diagrams</h1>
       <div className={styles.buttons}>
         <button onClick={() => onNavigate('sequence')}>
           Sequence Diagrams
