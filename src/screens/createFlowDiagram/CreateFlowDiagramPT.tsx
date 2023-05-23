@@ -1,10 +1,16 @@
+import FlowDiagram from 'components/flowDiagram';
 import React from 'react';
 import styles from './CreateFlowDiagram.module.scss';
 
 const CreateFlowDiagramPT = ({}: typeCreateFlowDiagramPT): JSX.Element => {
   return (
     <div className={styles.wrap}>
-      <h1>CreateFlowDiagram Page!</h1>
+      <div className={styles.innerWrap}>
+        {/* <h2 className={styles.title}>{title}</h2> */}
+        <div className={styles.content}>
+          <FlowDiagram />
+        </div>
+      </div>
     </div>
   );
 };

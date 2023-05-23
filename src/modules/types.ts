@@ -5,3 +5,8 @@ export interface typeSVG {
   fill?: string;
   stroke?: string;
 }
+
+export interface typeIcon {
+  path: JSX.Element;
+  size: number;
+}
