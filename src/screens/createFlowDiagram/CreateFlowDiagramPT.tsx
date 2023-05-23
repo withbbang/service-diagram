@@ -8,7 +8,7 @@ const CreateFlowDiagramPT = ({}: typeCreateFlowDiagramPT): JSX.Element => {
     </div>
   );
 };
-9;
+
 interface typeCreateFlowDiagramPT {}
 
 export default CreateFlowDiagramPT;

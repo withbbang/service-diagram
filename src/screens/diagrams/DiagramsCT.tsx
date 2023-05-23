@@ -21,7 +21,7 @@ const DiagramsCT = (props: typeDiagramsCT): JSX.Element => {
     }
   }, []);
 
-  return <DiagramsPT title={title} />;
+  return <DiagramsPT type={type} title={title} />;
 };
 
 interface typeDiagramsCT {}
