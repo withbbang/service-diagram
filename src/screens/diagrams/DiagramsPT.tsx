@@ -2,15 +2,11 @@ import React, { useEffect } from 'react';
 import styles from './Diagrams.module.scss';
 import Card from 'components/card/Card';
 
-const DiagramsPT = ({ type }: typeDiagramsPT): JSX.Element => {
+const DiagramsPT = ({ type, title }: typeDiagramsPT): JSX.Element => {
   return (
     <>
       <div className={styles.wrap}>
-        <h2>
-          {type !== undefined &&
-            type.replace(/^[a-z]/, (char) => char.toUpperCase()) + ' '}
-          Diagrams
-        </h2>
+        <h2>{title}</h2>
         <div className={styles.innerWrap}>
           <Card id={0} idx={-1} title={''} path={`/diagram/${type}/create`} />
           {/* TODO: 다이어그램들 뿌려주기 */}
@@ -33,6 +29,7 @@ const DiagramsPT = ({ type }: typeDiagramsPT): JSX.Element => {
 
 interface typeDiagramsPT {
   type?: string;
+  title: string;
 }
 
 export default DiagramsPT;

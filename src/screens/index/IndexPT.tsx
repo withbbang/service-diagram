@@ -9,7 +9,10 @@ const IndexPT = ({ onNavigate }: typeIndexPT): JSX.Element => {
         <button onClick={() => onNavigate('sequence')}>
           Sequence Diagrams
         </button>
-        <button onClick={() => onNavigate('erd')}>ERD Diagrams</button>
+        <button onClick={() => onNavigate('flow')}>Flow Diagrams</button>
+        <button onClick={() => onNavigate('erd')}>
+          Entity-Relation Diagrams
+        </button>
       </div>
     </div>
   );
