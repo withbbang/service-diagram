@@ -1,17 +1,21 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import DiagramsPT from './DiagramsPT';
 
 const DiagramsCT = (props: typeDiagramsCT): JSX.Element => {
-  const navigate = useNavigate();
+  const { type } = useParams();
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (type !== undefined) {
+      if (type === 'sequence') {
+        //TODO: sequence diagram 불러오기
+      } else if (type === 'erd') {
+        //TODO: erd diagram 불러오기
+      }
+    }
+  }, []);
 
-  const handleNavigate = (type: string) => {
-    navigate('/diagram/' + type);
-  };
-
-  return <DiagramsPT onNavigate={handleNavigate} />;
+  return <DiagramsPT type={type} />;
 };
 
 interface typeDiagramsCT {}

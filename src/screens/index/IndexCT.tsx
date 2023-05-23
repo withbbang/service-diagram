@@ -8,7 +8,9 @@ const IndexCT = (props: typeIndexCT): JSX.Element => {
   useEffect(() => {}, []);
 
   const handleNavigate = (type: string) => {
-    navigate('/diagram/' + type);
+    type !== undefined
+      ? navigate(`diagrams/${type}`)
+      : alert('Type 정의 오류!');
   };
 
   return <IndexPT onNavigate={handleNavigate} />;

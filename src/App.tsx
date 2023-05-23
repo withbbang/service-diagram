@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import CreateSequencDiagram from 'screens/createSequencDiagram';
 import Diagrams from 'screens/diagrams';
 import Index from 'screens/index';
+import NotFound from 'screens/notFound';
 
 const App = (): JSX.Element => {
   return (
@@ -14,6 +15,7 @@ const App = (): JSX.Element => {
           path="/diagram/sequence/create"
           element={<CreateSequencDiagram />}
         />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
