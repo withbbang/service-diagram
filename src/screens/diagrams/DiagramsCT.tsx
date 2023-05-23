@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import IndexPT from './IndexPT';
+import DiagramsPT from './DiagramsPT';
 
-const IndexCT = (props: typeIndexCT): JSX.Element => {
+const DiagramsCT = (props: typeDiagramsCT): JSX.Element => {
   const navigate = useNavigate();
 
   useEffect(() => {}, []);
@@ -11,9 +11,9 @@ const IndexCT = (props: typeIndexCT): JSX.Element => {
     navigate('/diagram/' + type);
   };
 
-  return <IndexPT onNavigate={handleNavigate} />;
+  return <DiagramsPT onNavigate={handleNavigate} />;
 };
 
-interface typeIndexCT {}
+interface typeDiagramsCT {}
 
-export default IndexCT;
+export default DiagramsCT;
