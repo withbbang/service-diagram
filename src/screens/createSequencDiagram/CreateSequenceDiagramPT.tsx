@@ -1,39 +1,44 @@
 import React, { useEffect } from 'react';
 import Sequence from 'react-sequence-diagram';
 import styles from './CreateSequenceDiagram.module.scss';
+import SVG from 'modules/SVG';
+import FunctionPopup from 'components/functionPopup/FunctionPopup';
 
-const CreateSequenceDiagramPT = (
-  props: typeCreateSequenceDiagramPT
-): JSX.Element => {
-  const ORIGIN = '1.0';
-  const REVERSE = '2.0';
-  const SELLER = 'Vendedor :department_store:';
-  const BUYER = 'Comprador :shopping_trolley:';
-
-  useEffect(() => {}, []);
-
+const CreateSequenceDiagramPT = ({
+  title,
+  content,
+  isFunctionPopupActive,
+  children,
+  onCreateUpdatePopup
+}: typeCreateSequenceDiagramPT): JSX.Element => {
   return (
-    <div className={styles.wrap}>
-      <h1>CreateSequenceDiagram Page!</h1>
-      <div className={styles.content}>
-        <Sequence
-          options={{ theme: 'simple' }}
-          input={`
-            ${ORIGIN}-->${ORIGIN}: 🟢 ${SELLER}
-            ${ORIGIN}-->${ORIGIN}: 🟢 HQRRT\\nOCASA 321\\nSeguimiento: EC34874565\\nFecha: 12/11/2021 14:30:55hs
-            ${ORIGIN}-->${ORIGIN}: 🟢 Operational_RT\\nCarrier 2FG\\nFecha: 14/11/2021 11:55:33hs
-            ${ORIGIN}-->${ORIGIN}: ❌ ${BUYER}
-            ${REVERSE}->${REVERSE}: 🔵 P2P_RT\\nCORREO ARGENTINO 422\\nSeguimiento: 16XG34329\\nFecha: 18/11/2021 13:17:23hs
-            ${REVERSE}->${ORIGIN}: 🔵 Inicializado
-            ${REVERSE}->${REVERSE}: 🔵 ${SELLER}\\nFecha: 24/11/2021 14:30:56hs
-            ${REVERSE}->${ORIGIN}: 🔵 Completado  
-          `}
-        />
+    <>
+      <FunctionPopup
+        isActive={isFunctionPopupActive}
+        children={children}
+        onClose={onCreateUpdatePopup}
+      />
+      <div className={styles.wrap}>
+        <div className={styles.innerWrap}>
+          <h2 className={styles.title}>{title}</h2>
+          <div className={styles.content}>
+            <Sequence options={{ theme: 'simple' }} input={content} />
+          </div>
+          <div className={styles.createUpdateBtn} onClick={onCreateUpdatePopup}>
+            <SVG type="modify" width="20px" height="20px" />
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
-interface typeCreateSequenceDiagramPT {}
+interface typeCreateSequenceDiagramPT {
+  title: string;
+  content: string;
+  isFunctionPopupActive: boolean;
+  children: JSX.Element;
+  onCreateUpdatePopup: () => void;
+}
 
 export default CreateSequenceDiagramPT;

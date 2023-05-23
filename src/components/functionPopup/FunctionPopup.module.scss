@@ -1,0 +1,123 @@
+.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+
+  .modal_body {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
+    max-width: 80%;
+    max-height: 80%;
+    padding: 40px;
+    text-align: center;
+    border-radius: 10px;
+    background-color: $more-light;
+    cursor: move;
+
+    > div {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      cursor: pointer;
+    }
+
+    .categoryBox {
+      :nth-child(n) {
+        width: 250px;
+        height: 40px;
+        border: solid 1px $less-light;
+        border-radius: 10px;
+        box-sizing: border-box;
+        background-color: $most-light;
+        margin: 10px 0;
+        @include boxShadow('none');
+      }
+
+      > input,
+      select {
+        padding: 0 10px;
+      }
+
+      > input:focus,
+      select:focus,
+      button:hover {
+        @include boxShadow(4px 4px 2px 1px rgba(0, 0, 0, 0.2));
+      }
+
+      > input::placeholder {
+        color: #aaa;
+      }
+
+      > select,
+      button {
+        cursor: pointer;
+      }
+    }
+
+    .contentBox {
+      :nth-child(n) {
+        width: 720px;
+        height: 40px;
+        margin: 10px 0;
+        box-sizing: border-box;
+      }
+
+      .option {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        :nth-child(n) {
+          width: 100%;
+          border-radius: 10px;
+          padding: 0 10px;
+          border: solid 1px $less-light;
+        }
+
+        > input:focus {
+          @include boxShadow(4px 4px 2px 1px rgba(0, 0, 0, 0.2));
+        }
+      }
+
+      > textarea {
+        height: 400px !important;
+        resize: none;
+      }
+
+      > textarea,
+      button {
+        padding: 10px;
+        border: solid 1px $less-light;
+        border-radius: 10px;
+        background: $most-light;
+        @include boxShadow('none');
+      }
+
+      > textarea:focus,
+      button:hover {
+        @include boxShadow(4px 4px 2px 1px rgba(0, 0, 0, 0.2));
+      }
+
+      > button,
+      select {
+        cursor: pointer;
+      }
+    }
+  }
+}
