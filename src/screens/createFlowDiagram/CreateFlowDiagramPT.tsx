@@ -1,6 +1,7 @@
 import FlowDiagram from 'components/flowDiagram';
 import React from 'react';
 import styles from './CreateFlowDiagram.module.scss';
+import Flow from 'components/flow/Flow';
 
 const CreateFlowDiagramPT = ({}: typeCreateFlowDiagramPT): JSX.Element => {
   return (
@@ -8,7 +9,8 @@ const CreateFlowDiagramPT = ({}: typeCreateFlowDiagramPT): JSX.Element => {
       <div className={styles.innerWrap}>
         {/* <h2 className={styles.title}>{title}</h2> */}
         <div className={styles.content}>
-          <FlowDiagram />
+          {/* <FlowDiagram /> */}
+          <Flow />
         </div>
       </div>
     </div>
