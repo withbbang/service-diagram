@@ -18,9 +18,16 @@ import 'reactflow/dist/style.css';
 const nodeTypes = { diamonNode: DiamondNode, rectangleNode: RectangleNode };
 
 const Flow = () => {
-  const [id, setId] = useState<string>('-1');
+  const [id, setId] = useState<string>('');
   const [nodeName, setNodeName] = useState<string>('');
   const [edgeName, setEdgeName] = useState<string>('');
+
+  const nodeNameRef = React.useRef(
+    null
+  ) as React.MutableRefObject<HTMLInputElement | null>;
+  const edgeNameRef = React.useRef(
+    null
+  ) as React.MutableRefObject<HTMLInputElement | null>;
 
   const defaultViewport = { x: 0, y: 0, zoom: 1.5 };
 
@@ -115,19 +122,32 @@ const Flow = () => {
     [setEdges]
   );
 
-  const onNodeClick = (
+  const onNodeDoubleClick = (
     e: React.MouseEvent<Element, MouseEvent>,
     node: Node
   ) => {
     setEdgeName('');
     setId(node.id);
     setNodeName(node.data.label);
+    nodeNameRef && nodeNameRef.current && nodeNameRef.current.focus();
+    edgeNameRef && edgeNameRef.current && edgeNameRef.current.blur();
   };
 
-  const onEdgeClick = (e: React.MouseEvent, edge: any) => {
+  const onEdgeDoubleClick = (e: React.MouseEvent, edge: any) => {
     setNodeName('');
     setId(edge.id);
     edge.label ? setEdgeName(edge.label) : setEdgeName('');
+    edgeNameRef && edgeNameRef.current && edgeNameRef.current.focus();
+    nodeNameRef && nodeNameRef.current && nodeNameRef.current.blur();
+  };
+
+  const onBlur = (type: string) => {
+    setId('');
+    if (type === 'node' && nodeNameRef && nodeNameRef.current) {
+      setNodeName('');
+    } else if (type === 'edge' && edgeNameRef && edgeNameRef.current) {
+      setEdgeName('');
+    }
   };
 
   return (
@@ -138,8 +158,8 @@ const Flow = () => {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
-        onNodeClick={onNodeClick}
-        onEdgeClick={onEdgeClick}
+        onNodeDoubleClick={onNodeDoubleClick}
+        onEdgeDoubleClick={onEdgeDoubleClick}
         defaultViewport={defaultViewport}
         nodeTypes={nodeTypes}
         fitView
@@ -151,12 +171,16 @@ const Flow = () => {
           <label>Node Label:</label>
           <input
             value={nodeName}
-            onChange={(evt) => setNodeName(evt.target.value)}
+            onChange={(e) => setNodeName(e.target.value)}
+            onBlur={() => onBlur('node')}
+            ref={nodeNameRef}
           />
           <label>Edge Label:</label>
           <input
             value={edgeName}
-            onChange={(evt) => setEdgeName(evt.target.value)}
+            onChange={(e) => setEdgeName(e.target.value)}
+            onBlur={() => onBlur('edge')}
+            ref={edgeNameRef}
           />
         </div>
       </ReactFlow>
