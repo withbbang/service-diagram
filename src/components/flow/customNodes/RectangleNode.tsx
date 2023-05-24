@@ -1,11 +1,19 @@
-import { Handle, Position } from 'reactflow';
+import { memo } from 'react';
+import { Handle, Position, NodeResizer } from 'reactflow';
+import { typeCustomNode } from 'modules/types';
 import styles from './CommonNode.module.scss';
 
-function RectangleNode({ data, isConnectable }: typeRectangleNode) {
+function RectangleNode({ data, isConnectable, selected }: typeCustomNode) {
   // TODO: data에 추가 값을 넣어 실시간으로 타입정의 필요
 
   return (
     <div className={styles.rectangleNode}>
+      <NodeResizer
+        color="#ff0071"
+        isVisible={selected}
+        minWidth={100}
+        minHeight={30}
+      />
       <Handle
         type="target"
         position={Position.Top}
@@ -34,9 +42,4 @@ function RectangleNode({ data, isConnectable }: typeRectangleNode) {
   );
 }
 
-interface typeRectangleNode {
-  data: any;
-  isConnectable?: boolean;
-}
-
-export default RectangleNode;
+export default memo(RectangleNode);

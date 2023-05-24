@@ -10,3 +10,11 @@ export interface typeIcon {
   path: JSX.Element;
   size: number;
 }
+
+export interface typeCustomNode {
+  data: any;
+  isConnectable: boolean;
+  selected: boolean;
+  xPos: number;
+  yPos: number;
+}
