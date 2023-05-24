@@ -1,4 +1,3 @@
-import FlowDiagram from 'components/flowDiagram';
 import React from 'react';
 import styles from './CreateFlowDiagram.module.scss';
 import Flow from 'components/flow/Flow';
