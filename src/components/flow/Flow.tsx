@@ -12,9 +12,10 @@ import ReactFlow, {
 } from 'reactflow';
 import styles from './Flow.module.scss';
 import DiamondNode from './customNodes/DiamondNode';
+import RectangleNode from './customNodes/RectangleNode';
 import 'reactflow/dist/style.css';
 
-const nodeTypes = { diamonNode: DiamondNode };
+const nodeTypes = { diamonNode: DiamondNode, rectangleNode: RectangleNode };
 
 const Flow = () => {
   const [id, setId] = useState<string>('-1');
@@ -27,6 +28,18 @@ const Flow = () => {
     {
       id: 'node-1',
       type: 'diamonNode',
+      position: { x: 0, y: 0 },
+      data: { label: 's' }
+    },
+    {
+      id: 'node-4',
+      type: 'rectangleNode',
+      position: { x: 0, y: 0 },
+      data: { label: 's' }
+    },
+    {
+      id: 'node-5',
+      type: 'rectangleNode',
       position: { x: 0, y: 0 },
       data: { label: 's' }
     },

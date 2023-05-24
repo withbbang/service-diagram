@@ -1,11 +1,11 @@
 import { Handle, Position } from 'reactflow';
 import styles from './CommonNode.module.scss';
 
-function DiamondNode({ data, isConnectable }: typeDiamondNode) {
+function RectangleNode({ data, isConnectable }: typeRectangleNode) {
   // TODO: data에 추가 값을 넣어 실시간으로 타입정의 필요
 
   return (
-    <div className={styles.diamondNode}>
+    <div className={styles.rectangleNode}>
       <Handle
         type="target"
         position={Position.Top}
@@ -34,9 +34,9 @@ function DiamondNode({ data, isConnectable }: typeDiamondNode) {
   );
 }
 
-interface typeDiamondNode {
+interface typeRectangleNode {
   data: any;
   isConnectable?: boolean;
 }
 
-export default DiamondNode;
+export default RectangleNode;
