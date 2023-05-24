@@ -1,39 +1,47 @@
 .wrap {
   background-color: #fff;
   display: flex;
+  position: relative;
   flex-flow: row nowrap;
   align-items: center;
-  width: 100%;
-  height: 100%;
-  border-radius: 0.5rem;
+  width: 50px;
+  height: 50px;
+  border-radius: 77rem;
   border: 2px solid #888;
+  justify-content: center;
+  font-size: 0.5rem;
 
   > textarea {
+    display: none;
+    position: absolute;
+    top: 100%;
+    width: 200%;
     padding: 0.5em;
+    border: none;
     font-size: 0.8rem;
     text-align: center;
+    border-radius: 0.1rem;
     resize: none;
-    border: none;
-    border-radius: 0.5rem;
-    display: none;
+    z-index: 10;
+    background-color: rgba(255, 255, 255, 0.8);
   }
 
   > span {
-    display: none;
-    flex: 1 0;
+    display: block;
+    position: absolute;
+    top: 100%;
+    width: 200%;
     padding: 0.5em;
     font-size: 0.8rem;
   }
 
   &.editing {
-    align-items: stretch;
-
     > textarea {
       display: block;
     }
 
     > span {
-      display: block;
+      display: none;
     }
   }
 }

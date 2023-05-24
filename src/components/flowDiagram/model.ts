@@ -2,8 +2,6 @@ const model = [
   {
     id: 'ja1lnjvx',
     type: 'Task',
-    width: 125,
-    height: 75,
     x: 50,
     y: 75,
     name: 'Gorilla',
@@ -55,8 +53,6 @@ const model = [
   {
     id: 'ja1lnkqu',
     type: 'Event',
-    width: 50,
-    height: 50,
     x: 450,
     y: 150,
     name: 'Toucan',
@@ -88,8 +84,6 @@ const model = [
   {
     id: 'ja1lnq90',
     type: 'Task',
-    width: 125,
-    height: 75,
     x: 150,
     y: 325,
     name: 'Zebra'
@@ -97,8 +91,6 @@ const model = [
   {
     id: 'ja1lnx2u',
     type: 'Task',
-    width: 125,
-    height: 75,
     x: 250,
     y: 175,
     name: 'Jiraffe'

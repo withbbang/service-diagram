@@ -4,16 +4,7 @@ import Task from './task/Task';
 import taskIcon from './task/icon';
 
 const config = {
-  entityTypes: {
-    Task: {
-      width: 125,
-      height: 75
-    },
-    Event: {
-      width: 50,
-      height: 50
-    }
-  },
+  entityTypes: {},
   gridSize: 25
 };
 
