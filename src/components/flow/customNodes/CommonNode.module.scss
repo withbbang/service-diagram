@@ -1,0 +1,21 @@
+.diamondNode {
+  background: linear-gradient(to top right, #fff 49.5%, transparent 50%) top
+      right,
+    linear-gradient(to top left, #fff 49.5%, transparent 50%) top left,
+    linear-gradient(to bottom right, #fff 49.5%, transparent 50%) bottom right,
+    linear-gradient(to bottom left, #fff 49.5%, transparent 50%) bottom left;
+  background-size: 50% 50%;
+  background-repeat: no-repeat;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  margin: 5px;
+
+  &::before {
+    content: '';
+    display: block;
+    padding-top: 57.73%;
+  }
+}

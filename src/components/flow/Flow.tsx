@@ -11,7 +11,10 @@ import ReactFlow, {
   useNodesState
 } from 'reactflow';
 import styles from './Flow.module.scss';
+import DiamondNode from './customNodes/DiamondNode';
 import 'reactflow/dist/style.css';
+
+const nodeTypes = { diamonNode: DiamondNode };
 
 const Flow = () => {
   const [id, setId] = useState<string>('-1');
@@ -20,12 +23,41 @@ const Flow = () => {
 
   const defaultViewport = { x: 0, y: 0, zoom: 1.5 };
 
-  const initialNodes = [
-    { id: '1', position: { x: 0, y: 0 }, data: { label: '1' } },
-    { id: '2', position: { x: 0, y: 100 }, data: { label: '2' } }
+  const initialNodes: Array<Node> = [
+    {
+      id: 'node-1',
+      type: 'diamonNode',
+      position: { x: 0, y: 0 },
+      data: { label: 's' }
+    },
+    {
+      id: 'node-2',
+      type: 'output',
+      position: { x: 0, y: 200 },
+      data: { label: 'node 2' }
+    },
+    {
+      id: 'node-3',
+      type: 'output',
+      position: { x: 200, y: 200 },
+      data: { label: 'node 3' }
+    }
   ];
-  const initialEdges = [
-    { id: 'e1-2', source: '1', target: '2', label: 'to the', type: 'step' }
+  const initialEdges: Array<Edge> = [
+    {
+      id: 'edge-1',
+      source: 'node-1',
+      target: 'node-2',
+      sourceHandle: 'a',
+      type: 'step'
+    },
+    {
+      id: 'edge-2',
+      source: 'node-1',
+      target: 'node-3',
+      sourceHandle: 'b',
+      type: 'step'
+    }
   ];
 
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
@@ -96,6 +128,8 @@ const Flow = () => {
         onNodeClick={onNodeClick}
         onEdgeClick={onEdgeClick}
         defaultViewport={defaultViewport}
+        nodeTypes={nodeTypes}
+        fitView
       >
         <Controls />
         <MiniMap />
