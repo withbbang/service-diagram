@@ -80,8 +80,8 @@ const Flow = () => {
     }
   ];
 
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [nodes, setNodes, handleNodesChange] = useNodesState(initialNodes);
+  const [edges, setEdges, handleEdgesChange] = useEdgesState(initialEdges);
 
   useEffect(() => {
     setNodes((nds) =>
@@ -117,12 +117,12 @@ const Flow = () => {
     );
   }, [edgeName, setEdges]);
 
-  const onConnect = useCallback(
+  const handleConnect = useCallback(
     (params: Edge | Connection) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
 
-  const onNodeDoubleClick = (
+  const handleNodeDoubleClick = (
     e: React.MouseEvent<Element, MouseEvent>,
     node: Node
   ) => {
@@ -133,7 +133,7 @@ const Flow = () => {
     edgeNameRef && edgeNameRef.current && edgeNameRef.current.blur();
   };
 
-  const onEdgeDoubleClick = (e: React.MouseEvent, edge: any) => {
+  const handleEdgeDoubleClick = (e: React.MouseEvent, edge: any) => {
     setNodeName('');
     setId(edge.id);
     edge.label ? setEdgeName(edge.label) : setEdgeName('');
@@ -141,12 +141,26 @@ const Flow = () => {
     nodeNameRef && nodeNameRef.current && nodeNameRef.current.blur();
   };
 
-  const onBlur = (type: string) => {
+  const handleBlur = (type: string) => {
     setId('');
     if (type === 'node' && nodeNameRef && nodeNameRef.current) {
       setNodeName('');
+      nodeNameRef.current.blur();
     } else if (type === 'edge' && edgeNameRef && edgeNameRef.current) {
       setEdgeName('');
+      edgeNameRef.current.blur();
+    }
+  };
+
+  const handleKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    type: string
+  ) => {
+    switch (e.key) {
+      case 'Enter':
+      case 'Escape':
+        handleBlur(type);
+        break;
     }
   };
 
@@ -155,13 +169,13 @@ const Flow = () => {
       <ReactFlow
         nodes={nodes}
         edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        onNodeDoubleClick={onNodeDoubleClick}
-        onEdgeDoubleClick={onEdgeDoubleClick}
-        defaultViewport={defaultViewport}
         nodeTypes={nodeTypes}
+        defaultViewport={defaultViewport}
+        onNodesChange={handleNodesChange}
+        onEdgesChange={handleEdgesChange}
+        onConnect={handleConnect}
+        onNodeDoubleClick={handleNodeDoubleClick}
+        onEdgeDoubleClick={handleEdgeDoubleClick}
         fitView
       >
         <Controls />
@@ -171,15 +185,17 @@ const Flow = () => {
           <label>Node Label:</label>
           <input
             value={nodeName}
+            onKeyDown={(e) => handleKeyDown(e, 'node')}
             onChange={(e) => setNodeName(e.target.value)}
-            onBlur={() => onBlur('node')}
+            onBlur={() => handleBlur('node')}
             ref={nodeNameRef}
           />
           <label>Edge Label:</label>
           <input
             value={edgeName}
+            onKeyDown={(e) => handleKeyDown(e, 'edge')}
             onChange={(e) => setEdgeName(e.target.value)}
-            onBlur={() => onBlur('edge')}
+            onBlur={() => handleBlur('edge')}
             ref={edgeNameRef}
           />
         </div>
