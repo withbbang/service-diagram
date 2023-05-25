@@ -11,14 +11,19 @@ import ReactFlow, {
   useNodesState,
   getIncomers,
   getOutgoers,
-  getConnectedEdges
+  getConnectedEdges,
+  MarkerType
 } from 'reactflow';
 import styles from './Flow.module.scss';
 import DiamondNode from './customNodes/DiamondNode';
 import RectangleNode from './customNodes/RectangleNode';
+import SelfConnectingEdge from './customEdges/SelfConnectingEdge';
 import 'reactflow/dist/style.css';
 
 const nodeTypes = { diamonNode: DiamondNode, rectangleNode: RectangleNode };
+const edgeTypes = {
+  selfConnectingEdge: SelfConnectingEdge
+};
 
 const Flow = () => {
   const [id, setId] = useState<string>('');
@@ -72,15 +77,43 @@ const Flow = () => {
       source: 'node-0',
       target: 'node-1',
       sourceHandle: 'a',
-      type: 'step'
+      type: 'step',
+      markerEnd: {
+        type: MarkerType.ArrowClosed
+      }
     },
     {
       id: 'edge-2',
       source: 'node-0',
       target: 'node-2',
       sourceHandle: 'b',
-      type: 'step'
+      type: 'step',
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+        width: 15,
+        height: 15,
+        color: '#FF0072'
+      },
+      style: {
+        strokeWidth: 2,
+        stroke: '#FF0072'
+      }
+    },
+    {
+      id: 'edge-self',
+      source: 'node-4',
+      target: 'node-4',
+      type: 'step',
+      markerEnd: { type: MarkerType.Arrow }
     }
+    // TODO: 방향마다 굽어지는 효과를 줘야함
+    // {
+    //   id: 'edge-self',
+    //   source: 'node-4',
+    //   target: 'node-4',
+    //   type: 'selfConnectingEdge',
+    //   markerEnd: { type: MarkerType.Arrow }
+    // }
   ];
 
   const [nodes, setNodes, handleNodesChange] = useNodesState(initialNodes);
@@ -120,13 +153,14 @@ const Flow = () => {
     );
   }, [edgeName, setEdges]);
 
-  // useEffect(() => {
-  //   initialNodes.push()
-  //   setNodes
-  // }, [setNodes])
-
   const handleConnect = useCallback(
-    (params: Edge | Connection) => setEdges((eds) => addEdge(params, eds)),
+    (params: Edge | Connection) =>
+      setEdges((edges) =>
+        addEdge(
+          { ...params, type: 'step', markerEnd: { type: MarkerType.Arrow } },
+          edges
+        )
+      ),
     [setEdges]
   );
 
@@ -224,6 +258,7 @@ const Flow = () => {
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         defaultViewport={defaultViewport}
         onNodesDelete={handleNodesDelete}
         onNodesChange={handleNodesChange}
