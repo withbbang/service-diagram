@@ -12,4 +12,20 @@
   <body>
     <div id="root"></div>
   </body>
+  <script>
+    /**************************************
+     * 런타임 리사이즈 에러 방지를 위한 코드
+     *************************************/
+    window.addEventListener('error', (e) => {
+      if (
+        e.message ===
+          'ResizeObserver loop completed with undelivered notifications.' ||
+        e.message === 'ResizeObserver loop limit exceeded'
+      ) {
+        e.stopImmediatePropagation();
+      }
+    });
+    /**************************************
+     *************************************/
+  </script>
 </html>
