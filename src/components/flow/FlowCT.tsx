@@ -1,10 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import ReactFlow, {
-  Background,
+import {
   Connection,
-  Controls,
   Edge,
-  MiniMap,
   Node,
   addEdge,
   useEdgesState,
@@ -14,24 +11,26 @@ import ReactFlow, {
   getConnectedEdges,
   MarkerType
 } from 'reactflow';
-import styles from './Flow.module.scss';
 import DiamondNode from './customNodes/DiamondNode';
 import RectangleNode from './customNodes/RectangleNode';
 import SelfConnectingEdge from './customEdges/SelfConnectingEdge';
-import 'reactflow/dist/style.css';
-import SVG from 'modules/SVG';
+import FlowPT from './FlowPT';
 
 const nodeTypes = { diamondNode: DiamondNode, rectangleNode: RectangleNode };
 const edgeTypes = {
   selfConnectingEdge: SelfConnectingEdge
 };
 
-const Flow = () => {
+const FlowCT = ({}: typeFlowCT) => {
   const [id, setId] = useState<string>('');
+  const [title, setTitle] = useState<string>('Test Flow Diagram');
   const [nodeName, setNodeName] = useState<string>('');
   const [edgeName, setEdgeName] = useState<string>('');
   const [addButtonType, setAddButtonType] = useState<string>('');
 
+  const titleNameRef = React.useRef(
+    null
+  ) as React.MutableRefObject<HTMLInputElement | null>;
   const nodeNameRef = React.useRef(
     null
   ) as React.MutableRefObject<HTMLInputElement | null>;
@@ -234,7 +233,9 @@ const Flow = () => {
 
   const handleBlur = (type: string) => {
     setId('');
-    if (type === 'node' && nodeNameRef && nodeNameRef.current) {
+    if (type === 'title' && titleNameRef && titleNameRef.current) {
+      titleNameRef.current.blur();
+    } else if (type === 'node' && nodeNameRef && nodeNameRef.current) {
       setNodeName('');
       nodeNameRef.current.blur();
     } else if (type === 'edge' && edgeNameRef && edgeNameRef.current) {
@@ -256,102 +257,35 @@ const Flow = () => {
   };
 
   return (
-    <div className={styles.wrap}>
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        nodeTypes={nodeTypes}
-        edgeTypes={edgeTypes}
-        onNodesDelete={handleNodesDelete}
-        onNodesChange={handleNodesChange}
-        onEdgesChange={handleEdgesChange}
-        onConnect={handleConnect}
-        onNodeDoubleClick={handleNodeDoubleClick}
-        onEdgeDoubleClick={handleEdgeDoubleClick}
-        fitView
-      >
-        <Controls />
-        <MiniMap />
-        <Background gap={12} size={1} />
-        <div className={styles.updatenode__controls}>
-          <label>Node Label:</label>
-          <input
-            value={nodeName}
-            onKeyDown={(e) => handleKeyDown(e, 'node')}
-            onChange={(e) => setNodeName(e.target.value)}
-            onBlur={() => handleBlur('node')}
-            ref={nodeNameRef}
-          />
-          <label>Edge Label:</label>
-          <input
-            value={edgeName}
-            onKeyDown={(e) => handleKeyDown(e, 'edge')}
-            onChange={(e) => setEdgeName(e.target.value)}
-            onBlur={() => handleBlur('edge')}
-            ref={edgeNameRef}
-          />
-          <button onClick={() => setAddButtonType('diamondNode')}>
-            Add Diamond Node
-          </button>
-          <button onClick={() => setAddButtonType('rectangleNode')}>
-            Add Rectangle Node
-          </button>
-        </div>
-      </ReactFlow>
-      {(addButtonType === 'rectangleNode' ||
-        addButtonType === 'diamondNode') && (
-        <div className={styles.addBackground}>
-          <div className={styles.close} onClick={() => setAddButtonType('')}>
-            <SVG type="close" width="40px" height="40px" fill={'#fff'} />
-          </div>
-          <div className={styles.modalBody}>
-            {[
-              'none',
-              'top',
-              'left',
-              'bottom',
-              'right',
-              'top-left',
-              'left-bottom',
-              'bottom-right',
-              'right-top',
-              'top-left-bottom',
-              'left-bottom-right',
-              'bottom-right-top',
-              'right-top-left',
-              'left-right',
-              'top-bottom',
-              'all'
-            ].map((type) => (
-              <span
-                key={type}
-                onClick={() => {
-                  handleAddNode(addButtonType, type);
-                  setAddButtonType('');
-                }}
-              >
-                <SVG
-                  type={addButtonType}
-                  fillTop={
-                    type.includes('top') || type === 'all' ? '#000' : '#aaa'
-                  }
-                  fillLeft={
-                    type.includes('left') || type === 'all' ? '#000' : '#aaa'
-                  }
-                  fillBottom={
-                    type.includes('bottom') || type === 'all' ? '#000' : '#aaa'
-                  }
-                  fillRight={
-                    type.includes('right') || type === 'all' ? '#000' : '#aaa'
-                  }
-                />
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
+    <FlowPT
+      title={title}
+      nodeName={nodeName}
+      edgeName={edgeName}
+      addButtonType={addButtonType}
+      titleNameRef={titleNameRef}
+      nodeNameRef={nodeNameRef}
+      edgeNameRef={edgeNameRef}
+      nodes={nodes}
+      edges={edges}
+      nodeTypes={nodeTypes}
+      edgeTypes={edgeTypes}
+      onSetTitle={setTitle}
+      onSetNodeName={setNodeName}
+      onSetEdgeName={setEdgeName}
+      onNodesDelete={handleNodesDelete}
+      onNodesChange={handleNodesChange}
+      onEdgesChange={handleEdgesChange}
+      onConnect={handleConnect}
+      onNodeDoubleClick={handleNodeDoubleClick}
+      onEdgeDoubleClick={handleEdgeDoubleClick}
+      onKeyDown={handleKeyDown}
+      onBlur={handleBlur}
+      onSetAddButtonType={setAddButtonType}
+      onAddNode={handleAddNode}
+    />
   );
 };
 
-export default Flow;
+interface typeFlowCT {}
+
+export default FlowCT;
