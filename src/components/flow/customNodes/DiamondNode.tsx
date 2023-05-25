@@ -15,33 +15,6 @@ function DiamondNode({ id, data, isConnectable, selected }: typeCustomNode) {
   const [width, setWitdh] = useState<number>(150);
   const [height, setHeight] = useState<number>(80);
 
-  /**************************************
-   * 런타임 리사이즈 에러 방지를 위한 코드
-   *************************************/
-  const node = document.querySelector(`[data-id=${id}]`);
-
-  const resizeObserver = new ResizeObserver(() => {
-    if (node) {
-      resizeObserver.unobserve(node);
-      resizeObserver.unobserve(node.children[0]);
-    }
-    resizeObserver.disconnect();
-
-    requestAnimationFrame(() => {
-      if (node) {
-        resizeObserver.observe(node);
-        resizeObserver.observe(node.children[0]);
-      }
-    });
-  });
-
-  if (node) {
-    resizeObserver.observe(node);
-    resizeObserver.observe(node.children[0]);
-  }
-  /**************************************
-   *************************************/
-
   const handleResize = (
     e: ResizeDragEvent,
     params: ResizeParamsWithDirection

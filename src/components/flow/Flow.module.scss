@@ -8,9 +8,15 @@
     top: 10px;
     z-index: 4;
     font-size: 12px;
+    display: flex;
+    flex-direction: column;
 
     > label {
       display: block;
+    }
+
+    > button {
+      margin-top: 10px;
     }
   }
 }

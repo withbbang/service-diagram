@@ -36,8 +36,14 @@ const Flow = () => {
 
   const initialNodes: Array<Node> = [
     {
-      id: 'node-1',
+      id: 'node-0',
       type: 'diamonNode',
+      position: { x: 0, y: 0 },
+      data: { label: 's' }
+    },
+    {
+      id: 'node-3',
+      type: 'rectangleNode',
       position: { x: 0, y: 0 },
       data: { label: 's' }
     },
@@ -48,19 +54,13 @@ const Flow = () => {
       data: { label: 's' }
     },
     {
-      id: 'node-5',
-      type: 'rectangleNode',
-      position: { x: 0, y: 0 },
-      data: { label: 's' }
-    },
-    {
-      id: 'node-2',
+      id: 'node-1',
       type: 'output',
       position: { x: 0, y: 200 },
       data: { label: 'node 2' }
     },
     {
-      id: 'node-3',
+      id: 'node-2',
       type: 'output',
       position: { x: 200, y: 200 },
       data: { label: 'node 3' }
@@ -69,15 +69,15 @@ const Flow = () => {
   const initialEdges: Array<Edge> = [
     {
       id: 'edge-1',
-      source: 'node-1',
-      target: 'node-2',
+      source: 'node-0',
+      target: 'node-1',
       sourceHandle: 'a',
       type: 'step'
     },
     {
       id: 'edge-2',
-      source: 'node-1',
-      target: 'node-3',
+      source: 'node-0',
+      target: 'node-2',
       sourceHandle: 'b',
       type: 'step'
     }
@@ -120,6 +120,11 @@ const Flow = () => {
     );
   }, [edgeName, setEdges]);
 
+  // useEffect(() => {
+  //   initialNodes.push()
+  //   setNodes
+  // }, [setNodes])
+
   const handleConnect = useCallback(
     (params: Edge | Connection) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
@@ -150,6 +155,25 @@ const Flow = () => {
       );
     },
     [nodes, edges]
+  );
+
+  const handleAddNode = useCallback(
+    (type: string) => {
+      const num = nodes.length;
+
+      setNodes((nodes: Array<Node>) => {
+        return [
+          ...nodes,
+          {
+            id: 'node-' + num,
+            type,
+            position: { x: 0, y: 0 },
+            data: { label: 'node ' + num }
+          }
+        ];
+      });
+    },
+    [nodes, setNodes]
   );
 
   const handleNodeDoubleClick = (
@@ -229,6 +253,15 @@ const Flow = () => {
             onBlur={() => handleBlur('edge')}
             ref={edgeNameRef}
           />
+          <button onClick={() => handleAddNode('output')}>
+            Add Output Node
+          </button>
+          <button onClick={() => handleAddNode('diamonNode')}>
+            Add Diamond Node
+          </button>
+          <button onClick={() => handleAddNode('rectangleNode')}>
+            Add Rectangle Node
+          </button>
         </div>
       </ReactFlow>
     </div>
