@@ -12,6 +12,7 @@ export interface typeIcon {
 }
 
 export interface typeCustomNode {
+  id: string;
   data: any;
   isConnectable: boolean;
   selected: boolean;

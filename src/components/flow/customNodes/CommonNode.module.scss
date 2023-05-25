@@ -9,7 +9,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 150px;
 
   &::before {
     content: '';
@@ -22,8 +21,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 150px;
-  height: 40px;
   background: #fff;
   border-radius: 10px;
   box-sizing: border-box;
