@@ -2,6 +2,90 @@ import { typeSVG } from './types';
 
 const SVG = (props: typeSVG): JSX.Element => {
   switch (props.type) {
+    case 'rectangleNode':
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="200"
+          height="140"
+          viewBox="0 0 200 140"
+        >
+          <rect
+            x="20"
+            y="20"
+            width="160"
+            height="100"
+            fill="none"
+            stroke="#000"
+            strokeWidth="1"
+          />
+          <circle
+            cx="100"
+            cy="20"
+            r="8"
+            fill={props.fillTop ? props.fillTop : '#aaa'}
+          />
+          <circle
+            cx="20"
+            cy="70"
+            r="8"
+            fill={props.fillLeft ? props.fillLeft : '#aaa'}
+          />
+          <circle
+            cx="100"
+            cy="120"
+            r="8"
+            fill={props.fillBottom ? props.fillBottom : '#aaa'}
+          />
+          <circle
+            cx="180"
+            cy="70"
+            r="8"
+            fill={props.fillRight ? props.fillRight : '#aaa'}
+          />
+        </svg>
+      );
+    case 'diamondNode':
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="160"
+          height="100"
+          viewBox="0 0 160 100"
+        >
+          <rect x="0" y="0" width="160" height="100" fill="none" />
+          <path
+            d="M20,50 L80,20 L140,50 L80,80 Z"
+            fill="#fff"
+            stroke="#000"
+            strokeWidth="1"
+          />
+          <circle
+            cx="80"
+            cy="20"
+            r="8"
+            fill={props.fillTop ? props.fillTop : '#aaa'}
+          />
+          <circle
+            cx="20"
+            cy="50"
+            r="8"
+            fill={props.fillLeft ? props.fillLeft : '#aaa'}
+          />
+          <circle
+            cx="80"
+            cy="80"
+            r="8"
+            fill={props.fillBottom ? props.fillBottom : '#aaa'}
+          />
+          <circle
+            cx="140"
+            cy="50"
+            r="8"
+            fill={props.fillRight ? props.fillRight : '#aaa'}
+          />
+        </svg>
+      );
     case 'close':
       return (
         <svg

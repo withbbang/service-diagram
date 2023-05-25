@@ -7,13 +7,15 @@ import {
   ResizeParamsWithDirection,
   ResizeParams
 } from 'reactflow';
-import { typeCustomNode } from 'modules/types';
+import { typeCustomHandle, typeCustomNode } from 'modules/types';
 import styles from './CommonNodeStyles.module.scss';
 
-function DiamondNode({ id, data, isConnectable, selected }: typeCustomNode) {
+function DiamondNode({ data, isConnectable, selected }: typeCustomNode) {
   // TODO: data에 추가 값을 넣어 실시간으로 Handle 타입정의 필요
   const [width, setWitdh] = useState<number>(150);
   const [height, setHeight] = useState<number>(80);
+
+  const { handleType }: { handleType: typeCustomHandle } = data;
 
   const handleResize = (
     e: ResizeDragEvent,
@@ -47,27 +49,70 @@ function DiamondNode({ id, data, isConnectable, selected }: typeCustomNode) {
         onResizeEnd={handleResizeEnd}
       />
       <Handle
-        type="target"
+        id="a"
+        type={
+          handleType.includes('top') || handleType === 'all'
+            ? 'target'
+            : 'source'
+        }
         position={Position.Top}
         isConnectable={isConnectable}
+        style={{
+          backgroundColor: `${
+            handleType.includes('top') || handleType === 'all' ? '#000' : '#aaa'
+          }`
+        }}
       />
       <Handle
-        type="source"
-        position={Position.Left}
-        id="a"
-        isConnectable={isConnectable}
-      />
-      <Handle
-        type="source"
-        position={Position.Bottom}
         id="b"
+        type={
+          handleType.includes('left') || handleType === 'all'
+            ? 'target'
+            : 'source'
+        }
+        position={Position.Left}
         isConnectable={isConnectable}
+        style={{
+          backgroundColor: `${
+            handleType.includes('left') || handleType === 'all'
+              ? '#000'
+              : '#aaa'
+          }`
+        }}
       />
       <Handle
-        type="source"
-        position={Position.Right}
         id="c"
+        type={
+          handleType.includes('bottom') || handleType === 'all'
+            ? 'target'
+            : 'source'
+        }
+        position={Position.Bottom}
         isConnectable={isConnectable}
+        style={{
+          backgroundColor: `${
+            handleType.includes('bottom') || handleType === 'all'
+              ? '#000'
+              : '#aaa'
+          }`
+        }}
+      />
+      <Handle
+        id="d"
+        type={
+          handleType.includes('right') || handleType === 'all'
+            ? 'target'
+            : 'source'
+        }
+        position={Position.Right}
+        isConnectable={isConnectable}
+        style={{
+          backgroundColor: `${
+            handleType.includes('right') || handleType === 'all'
+              ? '#000'
+              : '#aaa'
+          }`
+        }}
       />
       {data.label ? data.label : ''}
     </div>
