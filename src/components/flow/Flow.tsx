@@ -8,7 +8,10 @@ import ReactFlow, {
   Node,
   addEdge,
   useEdgesState,
-  useNodesState
+  useNodesState,
+  getIncomers,
+  getOutgoers,
+  getConnectedEdges
 } from 'reactflow';
 import styles from './Flow.module.scss';
 import DiamondNode from './customNodes/DiamondNode';
@@ -122,6 +125,33 @@ const Flow = () => {
     [setEdges]
   );
 
+  const handleNodesDelete = useCallback(
+    (deleted: Array<Node>) => {
+      setEdges(
+        deleted.reduce((acc: Array<Edge>, node: Node) => {
+          const incomers = getIncomers(node, nodes, edges);
+          const outgoers = getOutgoers(node, nodes, edges);
+          const connectedEdges = getConnectedEdges([node], edges);
+
+          const remainingEdges = acc.filter(
+            (edge) => !connectedEdges.includes(edge)
+          );
+
+          const createdEdges = incomers.flatMap(({ id: source }) =>
+            outgoers.map(({ id: target }) => ({
+              id: `${source}->${target}`,
+              source,
+              target
+            }))
+          );
+
+          return [...remainingEdges, ...createdEdges];
+        }, edges)
+      );
+    },
+    [nodes, edges]
+  );
+
   const handleNodeDoubleClick = (
     e: React.MouseEvent<Element, MouseEvent>,
     node: Node
@@ -171,6 +201,7 @@ const Flow = () => {
         edges={edges}
         nodeTypes={nodeTypes}
         defaultViewport={defaultViewport}
+        onNodesDelete={handleNodesDelete}
         onNodesChange={handleNodesChange}
         onEdgesChange={handleEdgesChange}
         onConnect={handleConnect}
