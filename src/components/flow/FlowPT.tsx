@@ -132,19 +132,16 @@ const FlowPT = ({
                 >
                   <SVG
                     type={addButtonType}
-                    fillTop={
-                      type.includes('top') || type === 'all' ? '#000' : '#aaa'
+                    etcType={type}
+                    top={type.includes('top') || type === 'all' ? true : false}
+                    left={
+                      type.includes('left') || type === 'all' ? true : false
                     }
-                    fillLeft={
-                      type.includes('left') || type === 'all' ? '#000' : '#aaa'
+                    bottom={
+                      type.includes('bottom') || type === 'all' ? true : false
                     }
-                    fillBottom={
-                      type.includes('bottom') || type === 'all'
-                        ? '#000'
-                        : '#aaa'
-                    }
-                    fillRight={
-                      type.includes('right') || type === 'all' ? '#000' : '#aaa'
+                    right={
+                      type.includes('right') || type === 'all' ? true : false
                     }
                   />
                 </span>

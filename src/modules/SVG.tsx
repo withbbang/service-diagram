@@ -2,142 +2,6 @@ import { typeSVG } from './types';
 
 const SVG = (props: typeSVG): JSX.Element => {
   switch (props.type) {
-    case 'arrowRectangleNode':
-      return (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="200"
-          height="140"
-          viewBox="0 0 200 140"
-        >
-          <rect
-            x="20"
-            y="20"
-            width="160"
-            height="100"
-            fill="none"
-            stroke="#000"
-            strokeWidth="1"
-          />
-          <marker
-            id="arrow"
-            viewBox="0 0 10 10"
-            refX="5"
-            refY="5"
-            markerWidth="4"
-            markerHeight="4"
-            orient="auto-start-reverse"
-          >
-            <path d="M 0 0 L 10 5 L 0 10 z" fill="black" />
-          </marker>
-
-          <line
-            x1="100"
-            y1="10"
-            x2="100"
-            y2="30"
-            stroke="black"
-            strokeWidth="2"
-            markerEnd="url(#arrow)"
-          />
-          <line
-            xmlns="http://www.w3.org/2000/svg"
-            x1="10"
-            y1="70"
-            x2="30"
-            y2="70"
-            stroke="black"
-            strokeWidth="2"
-            markerEnd="url(#arrow)"
-          />
-          <line
-            x1="100"
-            y1="130"
-            x2="100"
-            y2="110"
-            stroke="black"
-            strokeWidth="2"
-            markerEnd="url(#arrow)"
-          />
-          <line
-            xmlns="http://www.w3.org/2000/svg"
-            x1="190"
-            y1="70"
-            x2="170"
-            y2="70"
-            stroke="black"
-            strokeWidth="2"
-            markerEnd="url(#arrow)"
-          />
-        </svg>
-      );
-    case 'arrowDiamondNode':
-      return (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="160"
-          height="100"
-          viewBox="0 0 160 100"
-        >
-          <rect x="0" y="0" width="160" height="100" fill="none" />
-          <path
-            d="M20,50 L80,20 L140,50 L80,80 Z"
-            fill="#fff"
-            stroke="#000"
-            strokeWidth="1"
-          />
-          <marker
-            id="arrow"
-            viewBox="0 0 10 10"
-            refX="5"
-            refY="5"
-            markerWidth="4"
-            markerHeight="4"
-            orient="auto-start-reverse"
-          >
-            <path d="M 0 0 L 10 5 L 0 10 z" fill="black" />
-          </marker>
-
-          <line
-            x1="80"
-            y1="10"
-            x2="80"
-            y2="30"
-            stroke="black"
-            strokeWidth="2"
-            markerEnd="url(#arrow)"
-          />
-          <line
-            xmlns="http://www.w3.org/2000/svg"
-            x1="10"
-            y1="50"
-            x2="35"
-            y2="50"
-            stroke="black"
-            strokeWidth="2"
-            markerEnd="url(#arrow)"
-          />
-          <line
-            x1="80"
-            y1="90"
-            x2="80"
-            y2="70"
-            stroke="black"
-            strokeWidth="2"
-            markerEnd="url(#arrow)"
-          />
-          <line
-            xmlns="http://www.w3.org/2000/svg"
-            x1="150"
-            y1="50"
-            x2="125"
-            y2="50"
-            stroke="black"
-            strokeWidth="2"
-            markerEnd="url(#arrow)"
-          />
-        </svg>
-      );
     case 'rectangleNode':
       return (
         <svg
@@ -155,29 +19,99 @@ const SVG = (props: typeSVG): JSX.Element => {
             stroke="#000"
             strokeWidth="1"
           />
-          <circle
-            cx="100"
-            cy="20"
-            r="8"
-            fill={props.fillTop ? props.fillTop : '#aaa'}
+          <marker
+            id={`${props.etcType}1`}
+            viewBox="0 0 10 10"
+            refX="5"
+            refY="5"
+            markerWidth="5"
+            markerHeight="5"
+            orient="auto-start-reverse"
+          >
+            <path
+              d="M 0 0 L 10 5 L 0 10 z"
+              fill={props.top ? '#000' : '#aaa'}
+            />
+          </marker>
+          <marker
+            id={`${props.etcType}2`}
+            viewBox="0 0 10 10"
+            refX="5"
+            refY="5"
+            markerWidth="5"
+            markerHeight="5"
+            orient="auto-start-reverse"
+          >
+            <path
+              d="M 0 0 L 10 5 L 0 10 z"
+              fill={props.left ? '#000' : '#aaa'}
+            />
+          </marker>
+          <marker
+            id={`${props.etcType}3`}
+            viewBox="0 0 10 10"
+            refX="5"
+            refY="5"
+            markerWidth="5"
+            markerHeight="5"
+            orient="auto-start-reverse"
+          >
+            <path
+              d="M 0 0 L 10 5 L 0 10 z"
+              fill={props.bottom ? '#000' : '#aaa'}
+            />
+          </marker>
+          <marker
+            id={`${props.etcType}4`}
+            viewBox="0 0 10 10"
+            refX="5"
+            refY="5"
+            markerWidth="5"
+            markerHeight="5"
+            orient="auto-start-reverse"
+          >
+            <path
+              d="M 0 0 L 10 5 L 0 10 z"
+              fill={props.right ? '#000' : '#aaa'}
+            />
+          </marker>
+          <line
+            x1="100"
+            y1={props.top ? '10' : '30'}
+            x2="100"
+            y2={props.top ? '30' : '10'}
+            stroke={props.top ? '#000' : '#aaa'}
+            strokeWidth="2"
+            markerEnd={`url(#${props.etcType}1)`}
           />
-          <circle
-            cx="20"
-            cy="70"
-            r="8"
-            fill={props.fillLeft ? props.fillLeft : '#aaa'}
+          <line
+            xmlns="http://www.w3.org/2000/svg"
+            x1={props.left ? '10' : '30'}
+            y1="70"
+            x2={props.left ? '30' : '10'}
+            y2="70"
+            stroke={props.left ? '#000' : '#aaa'}
+            strokeWidth="2"
+            markerEnd={`url(#${props.etcType}2)`}
           />
-          <circle
-            cx="100"
-            cy="120"
-            r="8"
-            fill={props.fillBottom ? props.fillBottom : '#aaa'}
+          <line
+            x1="100"
+            y1={props.bottom ? '130' : '110'}
+            x2="100"
+            y2={props.bottom ? '110' : '130'}
+            stroke={props.bottom ? '#000' : '#aaa'}
+            strokeWidth="2"
+            markerEnd={`url(#${props.etcType}3)`}
           />
-          <circle
-            cx="180"
-            cy="70"
-            r="8"
-            fill={props.fillRight ? props.fillRight : '#aaa'}
+          <line
+            xmlns="http://www.w3.org/2000/svg"
+            x1={props.right ? '190' : '170'}
+            y1="70"
+            x2={props.right ? '170' : '190'}
+            y2="70"
+            stroke={props.right ? '#000' : '#aaa'}
+            strokeWidth="2"
+            markerEnd={`url(#${props.etcType}4)`}
           />
         </svg>
       );
@@ -196,32 +130,186 @@ const SVG = (props: typeSVG): JSX.Element => {
             stroke="#000"
             strokeWidth="1"
           />
-          <circle
-            cx="80"
-            cy="20"
-            r="8"
-            fill={props.fillTop ? props.fillTop : '#aaa'}
+          <marker
+            id={`${props.etcType}1`}
+            viewBox="0 0 10 10"
+            refX="5"
+            refY="5"
+            markerWidth="4"
+            markerHeight="4"
+            orient="auto-start-reverse"
+          >
+            <path
+              d="M 0 0 L 10 5 L 0 10 z"
+              fill={props.top ? '#000' : '#aaa'}
+            />
+          </marker>
+          <marker
+            id={`${props.etcType}2`}
+            viewBox="0 0 10 10"
+            refX="5"
+            refY="5"
+            markerWidth="4"
+            markerHeight="4"
+            orient="auto-start-reverse"
+          >
+            <path
+              d="M 0 0 L 10 5 L 0 10 z"
+              fill={props.left ? '#000' : '#aaa'}
+            />
+          </marker>
+          <marker
+            id={`${props.etcType}3`}
+            viewBox="0 0 10 10"
+            refX="5"
+            refY="5"
+            markerWidth="4"
+            markerHeight="4"
+            orient="auto-start-reverse"
+          >
+            <path
+              d="M 0 0 L 10 5 L 0 10 z"
+              fill={props.bottom ? '#000' : '#aaa'}
+            />
+          </marker>
+          <marker
+            id={`${props.etcType}4`}
+            viewBox="0 0 10 10"
+            refX="5"
+            refY="5"
+            markerWidth="4"
+            markerHeight="4"
+            orient="auto-start-reverse"
+          >
+            <path
+              d="M 0 0 L 10 5 L 0 10 z"
+              fill={props.right ? '#000' : '#aaa'}
+            />
+          </marker>
+          <line
+            x1="80"
+            y1={props.top ? '10' : '30'}
+            x2="80"
+            y2={props.top ? '30' : '10'}
+            stroke={props.top ? '#000' : '#aaa'}
+            strokeWidth="2"
+            markerEnd={`url(#${props.etcType}1)`}
           />
-          <circle
-            cx="20"
-            cy="50"
-            r="8"
-            fill={props.fillLeft ? props.fillLeft : '#aaa'}
+          <line
+            xmlns="http://www.w3.org/2000/svg"
+            x1={props.left ? '10' : '35'}
+            y1="50"
+            x2={props.left ? '35' : '10'}
+            y2="50"
+            stroke={props.left ? '#000' : '#aaa'}
+            strokeWidth="2"
+            markerEnd={`url(#${props.etcType}2)`}
           />
-          <circle
-            cx="80"
-            cy="80"
-            r="8"
-            fill={props.fillBottom ? props.fillBottom : '#aaa'}
+          <line
+            x1="80"
+            y1={props.bottom ? '90' : '70'}
+            x2="80"
+            y2={props.bottom ? '70' : '90'}
+            stroke={props.bottom ? '#000' : '#aaa'}
+            strokeWidth="2"
+            markerEnd={`url(#${props.etcType}3)`}
           />
-          <circle
-            cx="140"
-            cy="50"
-            r="8"
-            fill={props.fillRight ? props.fillRight : '#aaa'}
+          <line
+            xmlns="http://www.w3.org/2000/svg"
+            x1={props.right ? '150' : '125'}
+            y1="50"
+            x2={props.right ? '125' : '150'}
+            y2="50"
+            stroke={props.right ? '#000' : '#aaa'}
+            strokeWidth="2"
+            markerEnd={`url(#${props.etcType}4)`}
           />
         </svg>
       );
+    // case 'rectangleNode':
+    //   return (
+    //     <svg
+    //       xmlns="http://www.w3.org/2000/svg"
+    //       width="200"
+    //       height="140"
+    //       viewBox="0 0 200 140"
+    //     >
+    //       <rect
+    //         x="20"
+    //         y="20"
+    //         width="160"
+    //         height="100"
+    //         fill="none"
+    //         stroke="#000"
+    //         strokeWidth="1"
+    //       />
+    //       <circle
+    //         cx="100"
+    //         cy="20"
+    //         r="8"
+    //         fill={props.fillTop ? props.fillTop : '#aaa'}
+    //       />
+    //       <circle
+    //         cx="20"
+    //         cy="70"
+    //         r="8"
+    //         fill={props.fillLeft ? props.fillLeft : '#aaa'}
+    //       />
+    //       <circle
+    //         cx="100"
+    //         cy="120"
+    //         r="8"
+    //         fill={props.fillBottom ? props.fillBottom : '#aaa'}
+    //       />
+    //       <circle
+    //         cx="180"
+    //         cy="70"
+    //         r="8"
+    //         fill={props.fillRight ? props.fillRight : '#aaa'}
+    //       />
+    //     </svg>
+    //   );
+    // case 'diamondNode':
+    //   return (
+    //     <svg
+    //       xmlns="http://www.w3.org/2000/svg"
+    //       width="160"
+    //       height="100"
+    //       viewBox="0 0 160 100"
+    //     >
+    //       <rect x="0" y="0" width="160" height="100" fill="none" />
+    //       <path
+    //         d="M20,50 L80,20 L140,50 L80,80 Z"
+    //         fill="#fff"
+    //         stroke="#000"
+    //         strokeWidth="1"
+    //       />
+    //       <circle
+    //         cx="80"
+    //         cy="20"
+    //         r="8"
+    //         fill={props.fillTop ? props.fillTop : '#aaa'}
+    //       />
+    //       <circle
+    //         cx="20"
+    //         cy="50"
+    //         r="8"
+    //         fill={props.fillLeft ? props.fillLeft : '#aaa'}
+    //       />
+    //       <circle
+    //         cx="80"
+    //         cy="80"
+    //         r="8"
+    //         fill={props.fillBottom ? props.fillBottom : '#aaa'}
+    //       />
+    //       <circle
+    //         cx="140"
+    //         cy="50"
+    //         r="8"
+    //         fill={props.fillRight ? props.fillRight : '#aaa'}
+    //       />
+    //     </svg>
+    //   );
     case 'close':
       return (
         <svg

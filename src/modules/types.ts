@@ -1,17 +1,14 @@
 export interface typeSVG {
   type?: string;
+  etcType?: string;
   width?: string;
   height?: string;
   fill?: string;
   stroke?: string;
-  fillTop?: string;
-  fillLeft?: string;
-  fillBottom?: string;
-  fillRight?: string;
-  top?: string;
-  left?: string;
-  bottom?: string;
-  right?: string;
+  top?: boolean;
+  left?: boolean;
+  bottom?: boolean;
+  right?: boolean;
 }
 
 export interface typeIcon {
