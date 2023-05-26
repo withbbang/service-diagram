@@ -2,6 +2,142 @@ import { typeSVG } from './types';
 
 const SVG = (props: typeSVG): JSX.Element => {
   switch (props.type) {
+    case 'arrowRectangleNode':
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="200"
+          height="140"
+          viewBox="0 0 200 140"
+        >
+          <rect
+            x="20"
+            y="20"
+            width="160"
+            height="100"
+            fill="none"
+            stroke="#000"
+            strokeWidth="1"
+          />
+          <marker
+            id="arrow"
+            viewBox="0 0 10 10"
+            refX="5"
+            refY="5"
+            markerWidth="4"
+            markerHeight="4"
+            orient="auto-start-reverse"
+          >
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="black" />
+          </marker>
+
+          <line
+            x1="100"
+            y1="10"
+            x2="100"
+            y2="30"
+            stroke="black"
+            strokeWidth="2"
+            markerEnd="url(#arrow)"
+          />
+          <line
+            xmlns="http://www.w3.org/2000/svg"
+            x1="10"
+            y1="70"
+            x2="30"
+            y2="70"
+            stroke="black"
+            strokeWidth="2"
+            markerEnd="url(#arrow)"
+          />
+          <line
+            x1="100"
+            y1="130"
+            x2="100"
+            y2="110"
+            stroke="black"
+            strokeWidth="2"
+            markerEnd="url(#arrow)"
+          />
+          <line
+            xmlns="http://www.w3.org/2000/svg"
+            x1="190"
+            y1="70"
+            x2="170"
+            y2="70"
+            stroke="black"
+            strokeWidth="2"
+            markerEnd="url(#arrow)"
+          />
+        </svg>
+      );
+    case 'arrowDiamondNode':
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="160"
+          height="100"
+          viewBox="0 0 160 100"
+        >
+          <rect x="0" y="0" width="160" height="100" fill="none" />
+          <path
+            d="M20,50 L80,20 L140,50 L80,80 Z"
+            fill="#fff"
+            stroke="#000"
+            strokeWidth="1"
+          />
+          <marker
+            id="arrow"
+            viewBox="0 0 10 10"
+            refX="5"
+            refY="5"
+            markerWidth="4"
+            markerHeight="4"
+            orient="auto-start-reverse"
+          >
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="black" />
+          </marker>
+
+          <line
+            x1="80"
+            y1="10"
+            x2="80"
+            y2="30"
+            stroke="black"
+            strokeWidth="2"
+            markerEnd="url(#arrow)"
+          />
+          <line
+            xmlns="http://www.w3.org/2000/svg"
+            x1="10"
+            y1="50"
+            x2="35"
+            y2="50"
+            stroke="black"
+            strokeWidth="2"
+            markerEnd="url(#arrow)"
+          />
+          <line
+            x1="80"
+            y1="90"
+            x2="80"
+            y2="70"
+            stroke="black"
+            strokeWidth="2"
+            markerEnd="url(#arrow)"
+          />
+          <line
+            xmlns="http://www.w3.org/2000/svg"
+            x1="150"
+            y1="50"
+            x2="125"
+            y2="50"
+            stroke="black"
+            strokeWidth="2"
+            markerEnd="url(#arrow)"
+          />
+        </svg>
+      );
     case 'rectangleNode':
       return (
         <svg
