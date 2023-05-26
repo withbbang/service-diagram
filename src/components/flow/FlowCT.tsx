@@ -182,7 +182,8 @@ const FlowCT = ({}: typeFlowCT) => {
             outgoers.map(({ id: target }) => ({
               id: `${source}->${target}`,
               source,
-              target
+              target,
+              ...edgeOptions
             }))
           );
 
