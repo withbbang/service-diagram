@@ -8,6 +8,10 @@ export interface typeSVG {
   fillLeft?: string;
   fillBottom?: string;
   fillRight?: string;
+  top?: string;
+  left?: string;
+  bottom?: string;
+  right?: string;
 }
 
 export interface typeIcon {
