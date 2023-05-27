@@ -24,7 +24,7 @@ const edgeTypes = {
   selfConnectingEdge: SelfConnectingEdge
 };
 
-const FlowCT = ({}: typeReactFlow) => {
+const FlowCT = ({}: typeFlowCT) => {
   const [id, setId] = useState<string>('');
   const [title, setTitle] = useState<string>('Test Flow Diagram');
   const [nodeName, setNodeName] = useState<string>('');
@@ -348,12 +348,12 @@ const FlowCT = ({}: typeReactFlow) => {
   );
 };
 
-export default (props: typeReactFlow) => (
+export default (props: typeFlowCT) => (
   <ReactFlowProvider>
     <FlowCT {...props} />
   </ReactFlowProvider>
 );
 
-interface typeReactFlow extends CommonState {
+interface typeFlowCT extends CommonState {
   handleCodeMessage: (code: string, message: string) => void;
 }
