@@ -286,7 +286,6 @@ const FlowCT = ({}: typeFlowCT) => {
 
   const handleSave = useCallback(() => {
     if (rfInstance) {
-      console.log('visit?');
       const flow = rfInstance.toObject();
       localStorage.setItem(keyForTempFlowDiagrams, JSON.stringify(flow));
     }
