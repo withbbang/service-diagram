@@ -292,7 +292,7 @@ const FlowCT = ({}: typeFlowCT) => {
   }, [rfInstance]);
 
   const handleRestore = useCallback(() => {
-    const restoreFlow = async () => {
+    const restoreFlow = () => {
       const value = localStorage.getItem(keyForTempFlowDiagrams);
 
       if (value) {

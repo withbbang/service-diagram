@@ -11,7 +11,7 @@ const IndexPT = ({ onNavigate }: typeIndexPT): JSX.Element => {
         </button>
         <button onClick={() => onNavigate('flow')}>Flow Diagrams</button>
         <button onClick={() => onNavigate('erd')}>
-          Entity-Relation Diagrams
+          Entity-Relationship Diagrams
         </button>
       </div>
     </div>

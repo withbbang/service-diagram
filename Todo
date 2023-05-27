@@ -5,4 +5,4 @@
     1) Flow Diagrams -> JSON.stringfy()
     2) DB save
     3) Restore Flow Diagrams text from DB
-    4) Flow Diagrams -> JSON.parse()
+    4) Flow Diagrams text -> JSON.parse()

@@ -7,7 +7,6 @@ const CreateFlowDiagramPT = ({}: typeCreateFlowDiagramPT): JSX.Element => {
     <div className={styles.wrap}>
       <div className={styles.innerWrap}>
         <div className={styles.content}>
-          {/* <FlowDiagram /> */}
           <Flow />
         </div>
       </div>
