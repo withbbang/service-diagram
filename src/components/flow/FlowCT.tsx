@@ -9,7 +9,9 @@ import {
   getIncomers,
   getOutgoers,
   getConnectedEdges,
-  MarkerType
+  MarkerType,
+  useReactFlow,
+  ReactFlowProvider
 } from 'reactflow';
 import DiamondNode from './customNodes/DiamondNode';
 import RectangleNode from './customNodes/RectangleNode';
@@ -22,12 +24,17 @@ const edgeTypes = {
   selfConnectingEdge: SelfConnectingEdge
 };
 
-const FlowCT = ({}: typeFlowCT) => {
+const FlowCT = ({}: typeReactFlow) => {
   const [id, setId] = useState<string>('');
   const [title, setTitle] = useState<string>('Test Flow Diagram');
   const [nodeName, setNodeName] = useState<string>('');
   const [edgeName, setEdgeName] = useState<string>('');
   const [addButtonType, setAddButtonType] = useState<string>('');
+  const [rfInstance, setRfInstance] = useState<any>(null);
+
+  const { setViewport } = useReactFlow();
+
+  const keyForTempFlowDiagrams = 'tempFlowDiagrams';
 
   const titleNameRef = React.useRef(
     null
@@ -277,6 +284,36 @@ const FlowCT = ({}: typeFlowCT) => {
     }
   };
 
+  const handleSave = useCallback(() => {
+    if (rfInstance) {
+      console.log('visit?');
+      const flow = rfInstance.toObject();
+      localStorage.setItem(keyForTempFlowDiagrams, JSON.stringify(flow));
+    }
+  }, [rfInstance]);
+
+  const handleRestore = useCallback(() => {
+    const restoreFlow = async () => {
+      const value = localStorage.getItem(keyForTempFlowDiagrams);
+
+      if (value) {
+        const flow = JSON.parse(value);
+
+        if (flow) {
+          const { x = 0, y = 0, zoom = 1 } = flow.viewport;
+          setNodes(flow.nodes || []);
+          setEdges(flow.edges || []);
+          setViewport({ x, y, zoom });
+        }
+      } else {
+        alert('Nothing Restore');
+        return;
+      }
+    };
+
+    restoreFlow();
+  }, [setNodes, setViewport]);
+
   return (
     <FlowPT
       title={title}
@@ -304,12 +341,19 @@ const FlowCT = ({}: typeFlowCT) => {
       onBlur={handleBlur}
       onSetAddButtonType={setAddButtonType}
       onAddNode={handleAddNode}
+      onSave={handleSave}
+      onRestore={handleRestore}
+      onInit={setRfInstance}
     />
   );
 };
 
-interface typeFlowCT extends CommonState {
+export default (props: typeReactFlow) => (
+  <ReactFlowProvider>
+    <FlowCT {...props} />
+  </ReactFlowProvider>
+);
+
+interface typeReactFlow extends CommonState {
   handleCodeMessage: (code: string, message: string) => void;
 }
-
-export default FlowCT;

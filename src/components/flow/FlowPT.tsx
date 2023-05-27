@@ -42,7 +42,10 @@ const FlowPT = ({
   onKeyDown,
   onBlur,
   onSetAddButtonType,
-  onAddNode
+  onAddNode,
+  onSave,
+  onRestore,
+  onInit
 }: typeFlowPT) => {
   return (
     <>
@@ -58,6 +61,7 @@ const FlowPT = ({
           onConnect={onConnect}
           onNodeDoubleClick={onNodeDoubleClick}
           onEdgeDoubleClick={onEdgeDoubleClick}
+          onInit={onInit}
           fitView
         >
           <Controls />
@@ -93,6 +97,10 @@ const FlowPT = ({
             </button>
             <button onClick={() => onSetAddButtonType('rectangleNode')}>
               Add Rectangle Node
+            </button>
+            <button onClick={() => onSave()}>Temporarily Save Diagrams</button>
+            <button onClick={() => onRestore()}>
+              Restore Temporary Diagrams
             </button>
           </div>
         </ReactFlow>
@@ -178,6 +186,9 @@ interface typeFlowPT {
   onBlur: (type: string) => void;
   onSetAddButtonType: React.Dispatch<React.SetStateAction<string>>;
   onAddNode: (type: string, handleType: string) => void;
+  onSave: () => void;
+  onRestore: () => void;
+  onInit: React.Dispatch<any>;
 }
 
 export default FlowPT;
