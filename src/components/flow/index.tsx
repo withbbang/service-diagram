@@ -1,11 +1,11 @@
 import FlowCT from './FlowCT';
 import { connect } from 'react-redux';
 import { PropState } from 'middlewares/configureReducer';
+import { Action } from '@reduxjs/toolkit';
 import {
   CommonState,
   handleCodeMessage
 } from 'middlewares/reduxToolkits/commonSlice';
-import { Action } from '@reduxjs/toolkit';
 
 const mapStateToProps = (state: PropState): CommonState => {
   return { ...state.common };

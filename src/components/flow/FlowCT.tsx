@@ -15,6 +15,7 @@ import DiamondNode from './customNodes/DiamondNode';
 import RectangleNode from './customNodes/RectangleNode';
 import SelfConnectingEdge from './customEdges/SelfConnectingEdge';
 import FlowPT from './FlowPT';
+import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
 
 const nodeTypes = { diamondNode: DiamondNode, rectangleNode: RectangleNode };
 const edgeTypes = {
@@ -307,7 +308,7 @@ const FlowCT = ({}: typeFlowCT) => {
   );
 };
 
-interface typeFlowCT {
+interface typeFlowCT extends CommonState {
   handleCodeMessage: (code: string, message: string) => void;
 }
 
