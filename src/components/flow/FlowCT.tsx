@@ -38,6 +38,25 @@ const FlowCT = ({}: typeFlowCT) => {
     null
   ) as React.MutableRefObject<HTMLInputElement | null>;
 
+  const nodeHandleTargetDirections: Array<string> = [
+    'none',
+    'top',
+    'left',
+    'bottom',
+    'right',
+    'top-left',
+    'left-bottom',
+    'bottom-right',
+    'right-top',
+    'top-left-bottom',
+    'left-bottom-right',
+    'bottom-right-top',
+    'right-top-left',
+    'left-right',
+    'top-bottom',
+    'all'
+  ];
+
   const edgeOptions = {
     type: 'step',
     markerEnd: {
@@ -266,6 +285,7 @@ const FlowCT = ({}: typeFlowCT) => {
       titleNameRef={titleNameRef}
       nodeNameRef={nodeNameRef}
       edgeNameRef={edgeNameRef}
+      nodeHandleTargetDirections={nodeHandleTargetDirections}
       nodes={nodes}
       edges={edges}
       nodeTypes={nodeTypes}

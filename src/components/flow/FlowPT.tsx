@@ -25,6 +25,7 @@ const FlowPT = ({
   titleNameRef,
   nodeNameRef,
   edgeNameRef,
+  nodeHandleTargetDirections,
   nodes,
   edges,
   nodeTypes,
@@ -105,43 +106,40 @@ const FlowPT = ({
               <SVG type="close" width="40px" height="40px" fill={'#fff'} />
             </div>
             <div className={styles.modalBody}>
-              {[
-                'none',
-                'top',
-                'left',
-                'bottom',
-                'right',
-                'top-left',
-                'left-bottom',
-                'bottom-right',
-                'right-top',
-                'top-left-bottom',
-                'left-bottom-right',
-                'bottom-right-top',
-                'right-top-left',
-                'left-right',
-                'top-bottom',
-                'all'
-              ].map((type) => (
+              {nodeHandleTargetDirections.map((targetDirections) => (
                 <span
-                  key={type}
+                  key={targetDirections}
                   onClick={() => {
-                    onAddNode(addButtonType, type);
+                    onAddNode(addButtonType, targetDirections);
                     onSetAddButtonType('');
                   }}
                 >
                   <SVG
                     type={addButtonType}
-                    etcType={type}
-                    top={type.includes('top') || type === 'all' ? true : false}
+                    etcType={targetDirections}
+                    top={
+                      targetDirections.includes('top') ||
+                      targetDirections === 'all'
+                        ? true
+                        : false
+                    }
                     left={
-                      type.includes('left') || type === 'all' ? true : false
+                      targetDirections.includes('left') ||
+                      targetDirections === 'all'
+                        ? true
+                        : false
                     }
                     bottom={
-                      type.includes('bottom') || type === 'all' ? true : false
+                      targetDirections.includes('bottom') ||
+                      targetDirections === 'all'
+                        ? true
+                        : false
                     }
                     right={
-                      type.includes('right') || type === 'all' ? true : false
+                      targetDirections.includes('right') ||
+                      targetDirections === 'all'
+                        ? true
+                        : false
                     }
                   />
                 </span>
@@ -162,6 +160,7 @@ interface typeFlowPT {
   titleNameRef: React.MutableRefObject<HTMLInputElement | null>;
   nodeNameRef: React.MutableRefObject<HTMLInputElement | null>;
   edgeNameRef: React.MutableRefObject<HTMLInputElement | null>;
+  nodeHandleTargetDirections: Array<string>;
   nodes: Node<any, string | undefined>[];
   edges: Edge<any>[];
   nodeTypes: NodeTypes;
