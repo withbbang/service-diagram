@@ -307,6 +307,8 @@ const FlowCT = ({}: typeFlowCT) => {
   );
 };
 
-interface typeFlowCT {}
+interface typeFlowCT {
+  handleCodeMessage: (code: string, message: string) => void;
+}
 
 export default FlowCT;

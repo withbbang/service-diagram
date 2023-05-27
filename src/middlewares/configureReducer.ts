@@ -1,8 +1,10 @@
 import { combineReducers } from '@reduxjs/toolkit';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import common, { CommonState } from 'middlewares/reduxToolkits/commonSlice';
 
 const rootReducer = combineReducers({
+  common
   // add others...
 });
 
@@ -16,7 +18,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: [] // add others...
+  whitelist: ['common'] // add others...
 };
 
 /**
@@ -25,6 +27,7 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 interface PropState {
+  common: CommonState;
   // add others...
 }
 
