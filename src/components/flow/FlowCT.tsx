@@ -17,10 +17,7 @@ import DiamondNode from './customNodes/DiamondNode';
 import RectangleNode from './customNodes/RectangleNode';
 import SelfConnectingEdge from './customEdges/SelfConnectingEdge';
 import FlowPT from './FlowPT';
-import {
-  CommonState,
-  handleLoaderFalse
-} from 'middlewares/reduxToolkits/commonSlice';
+import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
 
 const nodeTypes = { diamondNode: DiamondNode, rectangleNode: RectangleNode };
 const edgeTypes = {
