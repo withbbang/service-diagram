@@ -17,14 +17,17 @@ import DiamondNode from './customNodes/DiamondNode';
 import RectangleNode from './customNodes/RectangleNode';
 import SelfConnectingEdge from './customEdges/SelfConnectingEdge';
 import FlowPT from './FlowPT';
-import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
+import {
+  CommonState,
+  handleLoaderFalse
+} from 'middlewares/reduxToolkits/commonSlice';
 
 const nodeTypes = { diamondNode: DiamondNode, rectangleNode: RectangleNode };
 const edgeTypes = {
   selfConnectingEdge: SelfConnectingEdge
 };
 
-const FlowCT = ({}: typeFlowCT) => {
+const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
   const [id, setId] = useState<string>('');
   const [title, setTitle] = useState<string>('Test Flow Diagram');
   const [nodeName, setNodeName] = useState<string>('');
@@ -286,8 +289,10 @@ const FlowCT = ({}: typeFlowCT) => {
 
   const handleSave = useCallback(() => {
     if (rfInstance) {
+      handleLoaderTrue();
       const flow = rfInstance.toObject();
       localStorage.setItem(keyForTempFlowDiagrams, JSON.stringify(flow));
+      handleLoaderFalse();
     }
   }, [rfInstance]);
 
@@ -296,6 +301,7 @@ const FlowCT = ({}: typeFlowCT) => {
       const value = localStorage.getItem(keyForTempFlowDiagrams);
 
       if (value) {
+        handleLoaderTrue();
         const flow = JSON.parse(value);
 
         if (flow) {
@@ -304,6 +310,7 @@ const FlowCT = ({}: typeFlowCT) => {
           setEdges(flow.edges || []);
           setViewport({ x, y, zoom });
         }
+        handleLoaderFalse();
       } else {
         alert('Nothing Restore');
         return;
@@ -355,4 +362,6 @@ export default (props: typeFlowCT) => (
 
 interface typeFlowCT extends CommonState {
   handleCodeMessage: (code: string, message: string) => void;
+  handleLoaderTrue: () => void;
+  handleLoaderFalse: () => void;
 }

@@ -23,6 +23,12 @@ const commonSlice = createSlice({
     handleCodeMessage(state: CommonState, action) {
       state.code = action.payload.code;
       state.message = action.payload.message;
+    },
+    handleLoaderTrue(state: CommonState) {
+      state.isFetching = true;
+    },
+    handleLoaderFalse(state: CommonState) {
+      state.isFetching = false;
     }
   },
   // API 리듀서들 비동기 상태값들 한번에 관리하기 위한 extraReducers 모음
@@ -31,6 +37,7 @@ const commonSlice = createSlice({
   }
 });
 
-export const { handleCodeMessage } = commonSlice.actions;
+export const { handleCodeMessage, handleLoaderTrue, handleLoaderFalse } =
+  commonSlice.actions;
 
 export default commonSlice.reducer;
