@@ -14,8 +14,8 @@ const DiagramsCT = (props: typeDiagramsCT): JSX.Element => {
       } else if (type === 'flow') {
         setTitle('Flow Diagrams');
         //TODO: flow diagram 불러오기
-      } else if (type === 'erd') {
-        setTitle('Entity-Relation Diagrams');
+      } else if (type === 'entity-relationship') {
+        setTitle('Entity-Relationship Diagrams');
         //TODO: erd diagram 불러오기
       }
     }

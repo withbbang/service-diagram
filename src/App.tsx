@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import CreateErdDiagram from 'screens/createErdDiagram';
+import CreateEntityRelationshipDiagram from 'screens/createEntityRelationshipdDiagram';
 import CreateFlowDiagram from 'screens/createFlowDiagram';
 import CreateSequencDiagram from 'screens/createSequenceDiagram';
 import Diagrams from 'screens/diagrams';
@@ -18,7 +18,10 @@ const App = (): JSX.Element => {
           element={<CreateSequencDiagram />}
         />
         <Route path="/diagram/flow/create" element={<CreateFlowDiagram />} />
-        <Route path="/diagram/erd/create" element={<CreateErdDiagram />} />
+        <Route
+          path="/diagram/entity-relationship/create"
+          element={<CreateEntityRelationshipDiagram />}
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CreateErdDiagramPT from './CreateErdDiagramPT';
+import CreateErdDiagramPT from './CreateEntityRelationshipDiagramPT';
 
 const CreateErdDiagramCT = (props: typeCreateErdDiagramCT): JSX.Element => {
   useEffect(() => {}, []);

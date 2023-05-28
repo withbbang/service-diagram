@@ -1,4 +1,4 @@
-import CreateErdDiagramCT from './CreateErdDiagramCT';
+import CreateErdDiagramCT from './CreateEntityRelationshipDiagramCT';
 import { connect } from 'react-redux';
 
 const mapStateToProps = () => {

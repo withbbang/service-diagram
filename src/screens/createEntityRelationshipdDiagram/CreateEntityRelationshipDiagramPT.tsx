@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './CreateErdDiagram.module.scss';
+import styles from './CreateEntityRelationshipDiagram.module.scss';
 
 const CreateErdDiagramPT = ({}: typeCreateErdDiagramPT): JSX.Element => {
   return (
