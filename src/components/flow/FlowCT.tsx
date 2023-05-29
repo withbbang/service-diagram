@@ -284,17 +284,29 @@ const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
     }
   };
 
+  /**
+   * 노드랑 엣지 그리고 각 객체들이 들고 있는 정보가 많을 경우
+   * 데이터를 stringify하는데 오래 걸릴 수 있으므로 async 비동기 처리로 넘긴다.
+   */
   const handleSave = useCallback(() => {
-    if (rfInstance) {
-      handleLoaderTrue();
-      const flow = rfInstance.toObject();
-      localStorage.setItem(keyForTempFlowDiagrams, JSON.stringify(flow));
-      handleLoaderFalse();
-    }
+    const saveFlow = async () => {
+      if (rfInstance) {
+        handleLoaderTrue();
+        const flow = rfInstance.toObject();
+        localStorage.setItem(keyForTempFlowDiagrams, JSON.stringify(flow));
+        handleLoaderFalse();
+      }
+    };
+
+    saveFlow();
   }, [rfInstance]);
 
+  /**
+   * 노드랑 엣지 그리고 각 객체들이 들고 있는 정보가 많을 경우
+   * 데이터를 파싱하는데 오래 걸릴 수 있으므로 async 비동기 처리로 넘긴다.
+   */
   const handleRestore = useCallback(() => {
-    const restoreFlow = () => {
+    const restoreFlow = async () => {
       const value = localStorage.getItem(keyForTempFlowDiagrams);
 
       if (value) {
