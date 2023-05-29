@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styles from './Diagrams.module.scss';
 import Card from 'components/card/Card';
 

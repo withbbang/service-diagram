@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Sequence from 'react-sequence-diagram';
 import styles from './CreateSequenceDiagram.module.scss';
 import SVG from 'modules/SVG';
