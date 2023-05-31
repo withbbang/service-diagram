@@ -2,230 +2,294 @@ import { typeSVG } from './types';
 
 const SVG = (props: typeSVG): JSX.Element => {
   switch (props.type) {
-    case 'rectangleNode':
+    case 'close':
       return (
         <svg
+          width={props.width ? props.width : '30px'}
+          height={props.height ? props.height : '30px'}
+          viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg"
-          width="200"
-          height="140"
-          viewBox="0 0 200 140"
         >
-          <rect
-            x="20"
-            y="20"
-            width="160"
-            height="100"
-            fill="none"
-            stroke="#000"
-            strokeWidth="1"
-          />
-          <marker
-            id={`${props.etcType}1`}
-            viewBox="0 0 10 10"
-            refX="5"
-            refY="5"
-            markerWidth="5"
-            markerHeight="5"
-            orient="auto-start-reverse"
-          >
+          <g id="Menu / Close_MD">
             <path
-              d="M 0 0 L 10 5 L 0 10 z"
-              fill={props.top ? '#000' : '#aaa'}
+              id="Vector"
+              d="M18 18L12 12M12 12L6 6M12 12L18 6M12 12L6 18"
+              stroke={props.fill ? props.fill : '#000'}
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
-          </marker>
-          <marker
-            id={`${props.etcType}2`}
-            viewBox="0 0 10 10"
-            refX="5"
-            refY="5"
-            markerWidth="5"
-            markerHeight="5"
-            orient="auto-start-reverse"
-          >
-            <path
-              d="M 0 0 L 10 5 L 0 10 z"
-              fill={props.left ? '#000' : '#aaa'}
-            />
-          </marker>
-          <marker
-            id={`${props.etcType}3`}
-            viewBox="0 0 10 10"
-            refX="5"
-            refY="5"
-            markerWidth="5"
-            markerHeight="5"
-            orient="auto-start-reverse"
-          >
-            <path
-              d="M 0 0 L 10 5 L 0 10 z"
-              fill={props.bottom ? '#000' : '#aaa'}
-            />
-          </marker>
-          <marker
-            id={`${props.etcType}4`}
-            viewBox="0 0 10 10"
-            refX="5"
-            refY="5"
-            markerWidth="5"
-            markerHeight="5"
-            orient="auto-start-reverse"
-          >
-            <path
-              d="M 0 0 L 10 5 L 0 10 z"
-              fill={props.right ? '#000' : '#aaa'}
-            />
-          </marker>
-          <line
-            x1="100"
-            y1={props.top ? '10' : '30'}
-            x2="100"
-            y2={props.top ? '30' : '10'}
-            stroke={props.top ? '#000' : '#aaa'}
-            strokeWidth="2"
-            markerEnd={`url(#${props.etcType}1)`}
-          />
-          <line
-            xmlns="http://www.w3.org/2000/svg"
-            x1={props.left ? '10' : '30'}
-            y1="70"
-            x2={props.left ? '30' : '10'}
-            y2="70"
-            stroke={props.left ? '#000' : '#aaa'}
-            strokeWidth="2"
-            markerEnd={`url(#${props.etcType}2)`}
-          />
-          <line
-            x1="100"
-            y1={props.bottom ? '130' : '110'}
-            x2="100"
-            y2={props.bottom ? '110' : '130'}
-            stroke={props.bottom ? '#000' : '#aaa'}
-            strokeWidth="2"
-            markerEnd={`url(#${props.etcType}3)`}
-          />
-          <line
-            xmlns="http://www.w3.org/2000/svg"
-            x1={props.right ? '190' : '170'}
-            y1="70"
-            x2={props.right ? '170' : '190'}
-            y2="70"
-            stroke={props.right ? '#000' : '#aaa'}
-            strokeWidth="2"
-            markerEnd={`url(#${props.etcType}4)`}
-          />
+          </g>
         </svg>
       );
-    case 'diamondNode':
+    case 'add':
       return (
         <svg
+          width={props.width ? props.width : '35px'}
+          height={props.height ? props.height : '35px'}
+          fill={props.fill ? props.fill : '#000'}
+          viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg"
-          width="160"
-          height="100"
-          viewBox="0 0 160 100"
         >
-          <rect x="0" y="0" width="160" height="100" fill="none" />
-          <path
-            d="M20,50 L80,20 L140,50 L80,80 Z"
-            fill="#fff"
-            stroke="#000"
-            strokeWidth="1"
-          />
-          <marker
-            id={`${props.etcType}1`}
-            viewBox="0 0 10 10"
-            refX="5"
-            refY="5"
-            markerWidth="4"
-            markerHeight="4"
-            orient="auto-start-reverse"
-          >
-            <path
-              d="M 0 0 L 10 5 L 0 10 z"
-              fill={props.top ? '#000' : '#aaa'}
-            />
-          </marker>
-          <marker
-            id={`${props.etcType}2`}
-            viewBox="0 0 10 10"
-            refX="5"
-            refY="5"
-            markerWidth="4"
-            markerHeight="4"
-            orient="auto-start-reverse"
-          >
-            <path
-              d="M 0 0 L 10 5 L 0 10 z"
-              fill={props.left ? '#000' : '#aaa'}
-            />
-          </marker>
-          <marker
-            id={`${props.etcType}3`}
-            viewBox="0 0 10 10"
-            refX="5"
-            refY="5"
-            markerWidth="4"
-            markerHeight="4"
-            orient="auto-start-reverse"
-          >
-            <path
-              d="M 0 0 L 10 5 L 0 10 z"
-              fill={props.bottom ? '#000' : '#aaa'}
-            />
-          </marker>
-          <marker
-            id={`${props.etcType}4`}
-            viewBox="0 0 10 10"
-            refX="5"
-            refY="5"
-            markerWidth="4"
-            markerHeight="4"
-            orient="auto-start-reverse"
-          >
-            <path
-              d="M 0 0 L 10 5 L 0 10 z"
-              fill={props.right ? '#000' : '#aaa'}
-            />
-          </marker>
-          <line
-            x1="80"
-            y1={props.top ? '10' : '30'}
-            x2="80"
-            y2={props.top ? '30' : '10'}
-            stroke={props.top ? '#000' : '#aaa'}
-            strokeWidth="2"
-            markerEnd={`url(#${props.etcType}1)`}
-          />
-          <line
-            xmlns="http://www.w3.org/2000/svg"
-            x1={props.left ? '10' : '35'}
-            y1="50"
-            x2={props.left ? '35' : '10'}
-            y2="50"
-            stroke={props.left ? '#000' : '#aaa'}
-            strokeWidth="2"
-            markerEnd={`url(#${props.etcType}2)`}
-          />
-          <line
-            x1="80"
-            y1={props.bottom ? '90' : '70'}
-            x2="80"
-            y2={props.bottom ? '70' : '90'}
-            stroke={props.bottom ? '#000' : '#aaa'}
-            strokeWidth="2"
-            markerEnd={`url(#${props.etcType}3)`}
-          />
-          <line
-            xmlns="http://www.w3.org/2000/svg"
-            x1={props.right ? '150' : '125'}
-            y1="50"
-            x2={props.right ? '125' : '150'}
-            y2="50"
-            stroke={props.right ? '#000' : '#aaa'}
-            strokeWidth="2"
-            markerEnd={`url(#${props.etcType}4)`}
-          />
+          <path d="M12,1A11,11,0,1,0,23,12,11.013,11.013,0,0,0,12,1Zm0,20a9,9,0,1,1,9-9A9.01,9.01,0,0,1,12,21Zm5-9a1,1,0,0,1-1,1H13v3a1,1,0,0,1-2,0V13H8a1,1,0,0,1,0-2h3V8a1,1,0,0,1,2,0v3h3A1,1,0,0,1,17,12Z" />
         </svg>
       );
+    case 'modify':
+      return (
+        <svg
+          width={props.width ? props.width : '30px'}
+          height={props.height ? props.height : '30px'}
+          viewBox="0 -1 119 119"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+        >
+          <g
+            fill={props.fill ? props.fill : '#000'}
+            fillRule="evenodd"
+            id="Page-1"
+            stroke="none"
+            strokeWidth="1"
+          >
+            <g fillRule="nonzero" id="edit">
+              <path
+                d="M114.2,108.3 L4.8,108.3 C2.5,108.3 0.7,110.2 0.7,112.4 C0.7,114.6 2.6,116.5 4.8,116.5 L114.3,116.5 C116.6,116.5 118.4,114.6 118.4,112.4 C118.4,110.2 116.5,108.3 114.2,108.3 Z"
+                fill={props.fill ? props.fill : '#000'}
+                id="Shape"
+              />
+              <path
+                d="M0.7,72 L0.6,91.5 C0.6,92.6 1,93.7 1.8,94.5 C2.6,95.3 3.6,95.7 4.7,95.7 L24.1,95.6 C25.2,95.6 26.2,95.2 27,94.4 L94,27.4 C95.6,25.8 95.6,23.2 94,21.5 L74.8,2.1 C73.2,0.5 70.6,0.5 68.9,2.1 L55.5,15.6 L1.9,69.1 C1.2,69.9 0.7,70.9 0.7,72 Z M71.9,10.9 L85.4,24.4 L77.8,32 L64.3,18.5 L71.9,10.9 Z M9,73.8 L58.4,24.4 L71.9,37.9 L22.5,87.2 L8.9,87.3 L9,73.8 Z"
+                fill={props.fill ? props.fill : '#000'}
+                id="Shape"
+              />
+            </g>
+          </g>
+        </svg>
+      );
+    // case 'rectangleNode':
+    //   return (
+    //     <svg
+    //       xmlns="http://www.w3.org/2000/svg"
+    //       width="200"
+    //       height="140"
+    //       viewBox="0 0 200 140"
+    //     >
+    //       <rect
+    //         x="20"
+    //         y="20"
+    //         width="160"
+    //         height="100"
+    //         fill="none"
+    //         stroke="#000"
+    //         strokeWidth="1"
+    //       />
+    //       <marker
+    //         id={`${props.etcType}1`}
+    //         viewBox="0 0 10 10"
+    //         refX="5"
+    //         refY="5"
+    //         markerWidth="5"
+    //         markerHeight="5"
+    //         orient="auto-start-reverse"
+    //       >
+    //         <path
+    //           d="M 0 0 L 10 5 L 0 10 z"
+    //           fill={props.top ? '#000' : '#aaa'}
+    //         />
+    //       </marker>
+    //       <marker
+    //         id={`${props.etcType}2`}
+    //         viewBox="0 0 10 10"
+    //         refX="5"
+    //         refY="5"
+    //         markerWidth="5"
+    //         markerHeight="5"
+    //         orient="auto-start-reverse"
+    //       >
+    //         <path
+    //           d="M 0 0 L 10 5 L 0 10 z"
+    //           fill={props.left ? '#000' : '#aaa'}
+    //         />
+    //       </marker>
+    //       <marker
+    //         id={`${props.etcType}3`}
+    //         viewBox="0 0 10 10"
+    //         refX="5"
+    //         refY="5"
+    //         markerWidth="5"
+    //         markerHeight="5"
+    //         orient="auto-start-reverse"
+    //       >
+    //         <path
+    //           d="M 0 0 L 10 5 L 0 10 z"
+    //           fill={props.bottom ? '#000' : '#aaa'}
+    //         />
+    //       </marker>
+    //       <marker
+    //         id={`${props.etcType}4`}
+    //         viewBox="0 0 10 10"
+    //         refX="5"
+    //         refY="5"
+    //         markerWidth="5"
+    //         markerHeight="5"
+    //         orient="auto-start-reverse"
+    //       >
+    //         <path
+    //           d="M 0 0 L 10 5 L 0 10 z"
+    //           fill={props.right ? '#000' : '#aaa'}
+    //         />
+    //       </marker>
+    //       <line
+    //         x1="100"
+    //         y1={props.top ? '10' : '30'}
+    //         x2="100"
+    //         y2={props.top ? '30' : '10'}
+    //         stroke={props.top ? '#000' : '#aaa'}
+    //         strokeWidth="2"
+    //         markerEnd={`url(#${props.etcType}1)`}
+    //       />
+    //       <line
+    //         xmlns="http://www.w3.org/2000/svg"
+    //         x1={props.left ? '10' : '30'}
+    //         y1="70"
+    //         x2={props.left ? '30' : '10'}
+    //         y2="70"
+    //         stroke={props.left ? '#000' : '#aaa'}
+    //         strokeWidth="2"
+    //         markerEnd={`url(#${props.etcType}2)`}
+    //       />
+    //       <line
+    //         x1="100"
+    //         y1={props.bottom ? '130' : '110'}
+    //         x2="100"
+    //         y2={props.bottom ? '110' : '130'}
+    //         stroke={props.bottom ? '#000' : '#aaa'}
+    //         strokeWidth="2"
+    //         markerEnd={`url(#${props.etcType}3)`}
+    //       />
+    //       <line
+    //         xmlns="http://www.w3.org/2000/svg"
+    //         x1={props.right ? '190' : '170'}
+    //         y1="70"
+    //         x2={props.right ? '170' : '190'}
+    //         y2="70"
+    //         stroke={props.right ? '#000' : '#aaa'}
+    //         strokeWidth="2"
+    //         markerEnd={`url(#${props.etcType}4)`}
+    //       />
+    //     </svg>
+    //   );
+    // case 'diamondNode':
+    //   return (
+    //     <svg
+    //       xmlns="http://www.w3.org/2000/svg"
+    //       width="160"
+    //       height="100"
+    //       viewBox="0 0 160 100"
+    //     >
+    //       <rect x="0" y="0" width="160" height="100" fill="none" />
+    //       <path
+    //         d="M20,50 L80,20 L140,50 L80,80 Z"
+    //         fill="#fff"
+    //         stroke="#000"
+    //         strokeWidth="1"
+    //       />
+    //       <marker
+    //         id={`${props.etcType}1`}
+    //         viewBox="0 0 10 10"
+    //         refX="5"
+    //         refY="5"
+    //         markerWidth="4"
+    //         markerHeight="4"
+    //         orient="auto-start-reverse"
+    //       >
+    //         <path
+    //           d="M 0 0 L 10 5 L 0 10 z"
+    //           fill={props.top ? '#000' : '#aaa'}
+    //         />
+    //       </marker>
+    //       <marker
+    //         id={`${props.etcType}2`}
+    //         viewBox="0 0 10 10"
+    //         refX="5"
+    //         refY="5"
+    //         markerWidth="4"
+    //         markerHeight="4"
+    //         orient="auto-start-reverse"
+    //       >
+    //         <path
+    //           d="M 0 0 L 10 5 L 0 10 z"
+    //           fill={props.left ? '#000' : '#aaa'}
+    //         />
+    //       </marker>
+    //       <marker
+    //         id={`${props.etcType}3`}
+    //         viewBox="0 0 10 10"
+    //         refX="5"
+    //         refY="5"
+    //         markerWidth="4"
+    //         markerHeight="4"
+    //         orient="auto-start-reverse"
+    //       >
+    //         <path
+    //           d="M 0 0 L 10 5 L 0 10 z"
+    //           fill={props.bottom ? '#000' : '#aaa'}
+    //         />
+    //       </marker>
+    //       <marker
+    //         id={`${props.etcType}4`}
+    //         viewBox="0 0 10 10"
+    //         refX="5"
+    //         refY="5"
+    //         markerWidth="4"
+    //         markerHeight="4"
+    //         orient="auto-start-reverse"
+    //       >
+    //         <path
+    //           d="M 0 0 L 10 5 L 0 10 z"
+    //           fill={props.right ? '#000' : '#aaa'}
+    //         />
+    //       </marker>
+    //       <line
+    //         x1="80"
+    //         y1={props.top ? '10' : '30'}
+    //         x2="80"
+    //         y2={props.top ? '30' : '10'}
+    //         stroke={props.top ? '#000' : '#aaa'}
+    //         strokeWidth="2"
+    //         markerEnd={`url(#${props.etcType}1)`}
+    //       />
+    //       <line
+    //         xmlns="http://www.w3.org/2000/svg"
+    //         x1={props.left ? '10' : '35'}
+    //         y1="50"
+    //         x2={props.left ? '35' : '10'}
+    //         y2="50"
+    //         stroke={props.left ? '#000' : '#aaa'}
+    //         strokeWidth="2"
+    //         markerEnd={`url(#${props.etcType}2)`}
+    //       />
+    //       <line
+    //         x1="80"
+    //         y1={props.bottom ? '90' : '70'}
+    //         x2="80"
+    //         y2={props.bottom ? '70' : '90'}
+    //         stroke={props.bottom ? '#000' : '#aaa'}
+    //         strokeWidth="2"
+    //         markerEnd={`url(#${props.etcType}3)`}
+    //       />
+    //       <line
+    //         xmlns="http://www.w3.org/2000/svg"
+    //         x1={props.right ? '150' : '125'}
+    //         y1="50"
+    //         x2={props.right ? '125' : '150'}
+    //         y2="50"
+    //         stroke={props.right ? '#000' : '#aaa'}
+    //         strokeWidth="2"
+    //         markerEnd={`url(#${props.etcType}4)`}
+    //       />
+    //     </svg>
+    //   );
     // case 'rectangleNode':
     //   return (
     //     <svg
@@ -310,70 +374,6 @@ const SVG = (props: typeSVG): JSX.Element => {
     //       />
     //     </svg>
     //   );
-    case 'close':
-      return (
-        <svg
-          width={props.width ? props.width : '30px'}
-          height={props.height ? props.height : '30px'}
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <g id="Menu / Close_MD">
-            <path
-              id="Vector"
-              d="M18 18L12 12M12 12L6 6M12 12L18 6M12 12L6 18"
-              stroke={props.fill ? props.fill : '#000'}
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </g>
-        </svg>
-      );
-    case 'add':
-      return (
-        <svg
-          width={props.width ? props.width : '35px'}
-          height={props.height ? props.height : '35px'}
-          fill={props.fill ? props.fill : '#000'}
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path d="M12,1A11,11,0,1,0,23,12,11.013,11.013,0,0,0,12,1Zm0,20a9,9,0,1,1,9-9A9.01,9.01,0,0,1,12,21Zm5-9a1,1,0,0,1-1,1H13v3a1,1,0,0,1-2,0V13H8a1,1,0,0,1,0-2h3V8a1,1,0,0,1,2,0v3h3A1,1,0,0,1,17,12Z" />
-        </svg>
-      );
-    case 'modify':
-      return (
-        <svg
-          width={props.width ? props.width : '30px'}
-          height={props.height ? props.height : '30px'}
-          viewBox="0 -1 119 119"
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          xmlnsXlink="http://www.w3.org/1999/xlink"
-        >
-          <g
-            fill={props.fill ? props.fill : '#000'}
-            fillRule="evenodd"
-            id="Page-1"
-            stroke="none"
-            strokeWidth="1"
-          >
-            <g fillRule="nonzero" id="edit">
-              <path
-                d="M114.2,108.3 L4.8,108.3 C2.5,108.3 0.7,110.2 0.7,112.4 C0.7,114.6 2.6,116.5 4.8,116.5 L114.3,116.5 C116.6,116.5 118.4,114.6 118.4,112.4 C118.4,110.2 116.5,108.3 114.2,108.3 Z"
-                fill={props.fill ? props.fill : '#000'}
-                id="Shape"
-              />
-              <path
-                d="M0.7,72 L0.6,91.5 C0.6,92.6 1,93.7 1.8,94.5 C2.6,95.3 3.6,95.7 4.7,95.7 L24.1,95.6 C25.2,95.6 26.2,95.2 27,94.4 L94,27.4 C95.6,25.8 95.6,23.2 94,21.5 L74.8,2.1 C73.2,0.5 70.6,0.5 68.9,2.1 L55.5,15.6 L1.9,69.1 C1.2,69.9 0.7,70.9 0.7,72 Z M71.9,10.9 L85.4,24.4 L77.8,32 L64.3,18.5 L71.9,10.9 Z M9,73.8 L58.4,24.4 L71.9,37.9 L22.5,87.2 L8.9,87.3 L9,73.8 Z"
-                fill={props.fill ? props.fill : '#000'}
-                id="Shape"
-              />
-            </g>
-          </g>
-        </svg>
-      );
     default:
       return (
         <svg

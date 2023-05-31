@@ -15,7 +15,6 @@ import ReactFlow, {
 } from 'reactflow';
 import styles from './Flow.module.scss';
 import 'reactflow/dist/style.css';
-import SVG from 'modules/SVG';
 
 const FlowPT = ({
   title,
