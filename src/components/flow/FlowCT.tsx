@@ -29,7 +29,6 @@ const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
   const [title, setTitle] = useState<string>('Test Flow Diagram');
   const [nodeName, setNodeName] = useState<string>('');
   const [edgeName, setEdgeName] = useState<string>('');
-  const [addButtonType, setAddButtonType] = useState<string>('');
   const [rfInstance, setRfInstance] = useState<any>(null);
 
   const { setViewport } = useReactFlow();
@@ -45,25 +44,6 @@ const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
   const edgeNameRef = React.useRef(
     null
   ) as React.MutableRefObject<HTMLInputElement | null>;
-
-  const nodeHandleTargetDirections: Array<string> = [
-    'none',
-    'top',
-    'left',
-    'bottom',
-    'right',
-    'top-left',
-    'left-bottom',
-    'bottom-right',
-    'right-top',
-    'top-left-bottom',
-    'left-bottom-right',
-    'bottom-right-top',
-    'right-top-left',
-    'left-right',
-    'top-bottom',
-    'all'
-  ];
 
   const edgeOptions = {
     type: 'step',
@@ -116,20 +96,21 @@ const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
       id: 'edge-1',
       source: 'node-0',
       target: 'node-3',
-      sourceHandle: 'c',
+      sourceHandle: 'bottom-source',
       ...edgeOptions
     },
     {
       id: 'edge-2',
       source: 'node-0',
       target: 'node-2',
-      sourceHandle: 'b',
+      sourceHandle: 'left-source',
       ...edgeOptions
     },
     {
       id: 'edge-self',
       source: 'node-4',
       target: 'node-4',
+      sourceHandle: 'right-source',
       ...edgeOptions
     }
     // TODO: 방향마다 굽어지는 효과를 줘야함
@@ -222,7 +203,7 @@ const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
   );
 
   const handleAddNode = useCallback(
-    (type: string, handleType: string) => {
+    (type: string) => {
       const num = nodes.length;
 
       setNodes((nodes: Array<Node>) => {
@@ -232,7 +213,7 @@ const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
             id: 'node-' + num,
             type,
             position: { x: 0, y: 0 },
-            data: { label: 'node ' + num, handleType }
+            data: { label: 'node ' + num }
           }
         ];
       });
@@ -334,11 +315,9 @@ const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
       title={title}
       nodeName={nodeName}
       edgeName={edgeName}
-      addButtonType={addButtonType}
       titleNameRef={titleNameRef}
       nodeNameRef={nodeNameRef}
       edgeNameRef={edgeNameRef}
-      nodeHandleTargetDirections={nodeHandleTargetDirections}
       nodes={nodes}
       edges={edges}
       nodeTypes={nodeTypes}
@@ -354,7 +333,6 @@ const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
       onEdgeDoubleClick={handleEdgeDoubleClick}
       onKeyDown={handleKeyDown}
       onBlur={handleBlur}
-      onSetAddButtonType={setAddButtonType}
       onAddNode={handleAddNode}
       onSave={handleSave}
       onRestore={handleRestore}

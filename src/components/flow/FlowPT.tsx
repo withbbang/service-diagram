@@ -21,11 +21,9 @@ const FlowPT = ({
   title,
   nodeName,
   edgeName,
-  addButtonType,
   titleNameRef,
   nodeNameRef,
   edgeNameRef,
-  nodeHandleTargetDirections,
   nodes,
   edges,
   nodeTypes,
@@ -41,7 +39,6 @@ const FlowPT = ({
   onEdgeDoubleClick,
   onKeyDown,
   onBlur,
-  onSetAddButtonType,
   onAddNode,
   onSave,
   onRestore,
@@ -92,10 +89,10 @@ const FlowPT = ({
               onBlur={() => onBlur('edge')}
               ref={edgeNameRef}
             />
-            <button onClick={() => onSetAddButtonType('diamondNode')}>
+            <button onClick={() => onAddNode('diamondNode')}>
               Add Diamond Node
             </button>
-            <button onClick={() => onSetAddButtonType('rectangleNode')}>
+            <button onClick={() => onAddNode('rectangleNode')}>
               Add Rectangle Node
             </button>
             <button onClick={() => onSave()}>Temporarily Save Diagrams</button>
@@ -104,57 +101,6 @@ const FlowPT = ({
             </button>
           </div>
         </ReactFlow>
-        {(addButtonType === 'rectangleNode' ||
-          addButtonType === 'diamondNode') && (
-          <div className={styles.addBackground}>
-            <div
-              className={styles.close}
-              onClick={() => onSetAddButtonType('')}
-            >
-              <SVG type="close" width="40px" height="40px" fill={'#fff'} />
-            </div>
-            <div className={styles.modalBody}>
-              {nodeHandleTargetDirections.map((targetDirections) => (
-                <span
-                  key={targetDirections}
-                  onClick={() => {
-                    onAddNode(addButtonType, targetDirections);
-                    onSetAddButtonType('');
-                  }}
-                >
-                  <SVG
-                    type={addButtonType}
-                    etcType={targetDirections}
-                    top={
-                      targetDirections.includes('top') ||
-                      targetDirections === 'all'
-                        ? true
-                        : false
-                    }
-                    left={
-                      targetDirections.includes('left') ||
-                      targetDirections === 'all'
-                        ? true
-                        : false
-                    }
-                    bottom={
-                      targetDirections.includes('bottom') ||
-                      targetDirections === 'all'
-                        ? true
-                        : false
-                    }
-                    right={
-                      targetDirections.includes('right') ||
-                      targetDirections === 'all'
-                        ? true
-                        : false
-                    }
-                  />
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </>
   );
@@ -164,11 +110,9 @@ interface typeFlowPT {
   title: string;
   nodeName: string;
   edgeName: string;
-  addButtonType: string;
   titleNameRef: React.MutableRefObject<HTMLInputElement | null>;
   nodeNameRef: React.MutableRefObject<HTMLInputElement | null>;
   edgeNameRef: React.MutableRefObject<HTMLInputElement | null>;
-  nodeHandleTargetDirections: Array<string>;
   nodes: Node<any, string | undefined>[];
   edges: Edge<any>[];
   nodeTypes: NodeTypes;
@@ -184,8 +128,7 @@ interface typeFlowPT {
   onEdgeDoubleClick: EdgeMouseHandler;
   onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>, type: string) => void;
   onBlur: (type: string) => void;
-  onSetAddButtonType: React.Dispatch<React.SetStateAction<string>>;
-  onAddNode: (type: string, handleType: string) => void;
+  onAddNode: (type: string) => void;
   onSave: () => void;
   onRestore: () => void;
   onInit: React.Dispatch<any>;

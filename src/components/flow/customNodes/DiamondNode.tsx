@@ -49,70 +49,60 @@ function DiamondNode({ data, isConnectable, selected }: typeCustomNode) {
         onResizeEnd={handleResizeEnd}
       />
       <Handle
-        id="a"
-        type={
-          handleType.includes('top') || handleType === 'all'
-            ? 'target'
-            : 'source'
-        }
+        id="top-target"
+        type={'target'}
         position={Position.Top}
         isConnectable={isConnectable}
-        style={{
-          backgroundColor: `${
-            handleType.includes('top') || handleType === 'all' ? '#000' : '#aaa'
-          }`
-        }}
+        style={{ backgroundColor: '#aaa' }}
       />
       <Handle
-        id="b"
-        type={
-          handleType.includes('left') || handleType === 'all'
-            ? 'target'
-            : 'source'
-        }
+        id="top-source"
+        type={'source'}
+        position={Position.Top}
+        isConnectable={isConnectable}
+        style={{ backgroundColor: '#aaa' }}
+      />
+      <Handle
+        id="left-target"
+        type={'target'}
         position={Position.Left}
         isConnectable={isConnectable}
-        style={{
-          backgroundColor: `${
-            handleType.includes('left') || handleType === 'all'
-              ? '#000'
-              : '#aaa'
-          }`
-        }}
+        style={{ backgroundColor: '#aaa' }}
       />
       <Handle
-        id="c"
-        type={
-          handleType.includes('bottom') || handleType === 'all'
-            ? 'target'
-            : 'source'
-        }
+        id="left-source"
+        type={'source'}
+        position={Position.Left}
+        isConnectable={isConnectable}
+        style={{ backgroundColor: '#aaa' }}
+      />
+      <Handle
+        id="bottom-target"
+        type={'target'}
         position={Position.Bottom}
         isConnectable={isConnectable}
-        style={{
-          backgroundColor: `${
-            handleType.includes('bottom') || handleType === 'all'
-              ? '#000'
-              : '#aaa'
-          }`
-        }}
+        style={{ backgroundColor: '#aaa' }}
       />
       <Handle
-        id="d"
-        type={
-          handleType.includes('right') || handleType === 'all'
-            ? 'target'
-            : 'source'
-        }
+        id="bottom-source"
+        type={'source'}
+        position={Position.Bottom}
+        isConnectable={isConnectable}
+        style={{ backgroundColor: '#aaa' }}
+      />
+      <Handle
+        id="right-target"
+        type={'target'}
         position={Position.Right}
         isConnectable={isConnectable}
-        style={{
-          backgroundColor: `${
-            handleType.includes('right') || handleType === 'all'
-              ? '#000'
-              : '#aaa'
-          }`
-        }}
+        style={{ backgroundColor: '#aaa' }}
+      />
+      <Handle
+        id="right-source"
+        type={'source'}
+        position={Position.Right}
+        isConnectable={isConnectable}
+        style={{ backgroundColor: '#aaa' }}
       />
       {data.label ? data.label : ''}
     </div>
