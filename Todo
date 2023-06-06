@@ -1,7 +1,6 @@
 [TODO]
-1. Flow Diagram에서 노드와 엣지를 연결하는 점들의 타입을 동적으로 변경할 수 있도록 하기
-2. self connecting edge의 경우 방향바다 굽어지는 정도를 동적으로 변경할 수 있도록 하기
-3. 일시저장 및 가져오기 아이디어로 DB에도 동일하게 저장하기 (대신 다이어그램이 클 수록 stringfy, parse 부하가 많음)
+1. self connecting edge의 경우 방향바다 굽어지는 정도를 동적으로 변경할 수 있도록 하기
+2. 일시저장 및 가져오기 아이디어로 DB에도 동일하게 저장하기 (대신 다이어그램이 클 수록 stringfy, parse 부하가 많음)
     1) Flow Diagrams -> JSON.stringfy()
     2) DB save
     3) Restore Flow Diagrams text from DB
