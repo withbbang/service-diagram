@@ -16,8 +16,8 @@ import {
 import DiamondNode from './customNodes/DiamondNode';
 import RectangleNode from './customNodes/RectangleNode';
 import SelfConnectingEdge from './customEdges/SelfConnectingEdge';
-import FlowPT from './FlowPT';
 import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
+import FlowPT from './FlowPT';
 
 const nodeTypes = { diamondNode: DiamondNode, rectangleNode: RectangleNode };
 const edgeTypes = {
@@ -124,6 +124,7 @@ const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
       sourceHandle: 'left-source',
       targetHandle: 'left-target',
       type: 'selfConnectingEdge',
+      label: 'self edge',
       ...edgeOptions
     }
   ];
