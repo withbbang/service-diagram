@@ -24,21 +24,3 @@ export interface typeCustomNode {
   xPos: number;
   yPos: number;
 }
-
-export type typeCustomHandle =
-  | 'none'
-  | 'top'
-  | 'left'
-  | 'bottom'
-  | 'right'
-  | 'top-left'
-  | 'left-bottom'
-  | 'bottom-right'
-  | 'right-top'
-  | 'top-left-bottom'
-  | 'left-bottom-right'
-  | 'bottom-right-top'
-  | 'right-top-left'
-  | 'left-right'
-  | 'top-bottom'
-  | 'all';

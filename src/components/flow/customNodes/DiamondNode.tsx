@@ -7,15 +7,13 @@ import {
   ResizeParamsWithDirection,
   ResizeParams
 } from 'reactflow';
-import { typeCustomHandle, typeCustomNode } from 'modules/types';
+import { typeCustomNode } from 'modules/types';
 import styles from './CommonNodeStyles.module.scss';
 
 function DiamondNode({ data, isConnectable, selected }: typeCustomNode) {
   // TODO: data에 추가 값을 넣어 실시간으로 Handle 타입정의 필요
   const [width, setWitdh] = useState<number>(150);
   const [height, setHeight] = useState<number>(80);
-
-  const { handleType }: { handleType: typeCustomHandle } = data;
 
   const handleResize = (
     e: ResizeDragEvent,

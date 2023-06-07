@@ -64,19 +64,19 @@ const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
       id: 'node-0',
       type: 'diamondNode',
       position: { x: 500, y: 500 },
-      data: { label: 'diamond', handleType: 'top' }
+      data: { label: 'diamond' }
     },
     {
       id: 'node-3',
       type: 'rectangleNode',
       position: { x: 300, y: 300 },
-      data: { label: '', handleType: 'top-left' }
+      data: { label: '' }
     },
     {
       id: 'node-4',
       type: 'rectangleNode',
       position: { x: 0, y: 0 },
-      data: { label: '', handleType: 'left-right' }
+      data: { label: 'node 4' }
     },
     {
       id: 'node-1',
@@ -91,6 +91,7 @@ const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
       data: { label: 'node 3' }
     }
   ];
+
   const initialEdges: Array<Edge> = [
     {
       id: 'edge-1',
