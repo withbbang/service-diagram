@@ -113,15 +113,26 @@ const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
       target: 'node-4',
       sourceHandle: 'right-source',
       ...edgeOptions
-    }
+    },
     // TODO: 방향마다 굽어지는 효과를 줘야함
-    // {
-    //   id: 'edge-self',
-    //   source: 'node-4',
-    //   target: 'node-4',
-    //   type: 'selfConnectingEdge',
-    //   markerEnd: { type: MarkerType.Arrow }
-    // }
+    {
+      id: 'self-edge',
+      source: 'node-4',
+      target: 'node-4',
+      sourceHandle: 'left-source',
+      targetHandle: 'left-target',
+      type: 'selfConnectingEdge',
+      markerEnd: {
+        type: MarkerType.Arrow,
+        width: 15,
+        height: 15,
+        color: '#74c3f0'
+      },
+      style: {
+        strokeWidth: 2,
+        stroke: '#74c3f0'
+      }
+    }
   ];
 
   const [nodes, setNodes, handleNodesChange] = useNodesState(initialNodes);

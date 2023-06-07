@@ -3,19 +3,73 @@ import { BaseEdge, BezierEdge, EdgeProps } from 'reactflow';
 
 const SelfConnecting = (props: EdgeProps): JSX.Element => {
   // we are using the default bezier edge when source and target ids are different
-  if (props.source !== props.target) {
+  if (props.sourcePosition !== props.targetPosition) {
     return <BezierEdge {...props} />;
   }
 
-  // TODO: 방향마다 굽어지는 효과를 줘야함
-  const { sourceX, sourceY, targetX, targetY, id, markerEnd } = props;
-  const radiusX = (sourceX - targetX) * 0.6;
-  const radiusY = 50;
-  const edgePath = `M ${sourceX - 5} ${sourceY} A ${radiusX} ${radiusY} 0 1 0 ${
-    targetX + 2
-  } ${targetY}`;
+  const { sourceX, sourceY, sourcePosition, style, markerEnd } = props;
 
-  return <BaseEdge path={edgePath} markerEnd={markerEnd} />;
+  const handlePath = (position: string) => {
+    let startX = 0,
+      startY = 0,
+      radiusX = 0,
+      radiusY = 0,
+      isTopRight = 0,
+      endX = 0,
+      endY = 0;
+
+    switch (position) {
+      case 'top':
+        startX = sourceX - 3;
+        startY = sourceY;
+        radiusX = 50;
+        radiusY = 20;
+        isTopRight = 1;
+        endX = sourceX + 3;
+        endY = sourceY;
+        break;
+      case 'left':
+        startX = sourceX;
+        startY = sourceY - 3;
+        radiusX = 20;
+        radiusY = 30;
+        isTopRight = 0;
+        endX = sourceX;
+        endY = sourceY + 3;
+        break;
+      case 'bottom':
+        startX = sourceX - 3;
+        startY = sourceY;
+        radiusX = 50;
+        radiusY = 20;
+        isTopRight = 0;
+        endX = sourceX + 3;
+        endY = sourceY;
+        break;
+      case 'right':
+        startX = sourceX;
+        startY = sourceY - 3;
+        radiusX = 20;
+        radiusY = 30;
+        isTopRight = 1;
+        endX = sourceX;
+        endY = sourceY + 3;
+        break;
+      default:
+        break;
+    }
+
+    return `M ${startX}
+    ${startY} A ${radiusX} ${radiusY} 0 1 ${isTopRight} ${endX} ${endY}`;
+  };
+
+  return (
+    <BaseEdge
+      path={handlePath(sourcePosition)}
+      markerEnd={markerEnd}
+      style={style}
+    />
+  );
 };
 
 export default SelfConnecting;
