@@ -46,7 +46,7 @@ const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
   ) as React.MutableRefObject<HTMLInputElement | null>;
 
   const edgeOptions = {
-    type: 'step',
+    // animated: true,
     markerEnd: {
       type: MarkerType.Arrow,
       width: 15,
@@ -98,6 +98,7 @@ const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
       source: 'node-0',
       target: 'node-3',
       sourceHandle: 'bottom-source',
+      type: 'step',
       ...edgeOptions
     },
     {
@@ -105,6 +106,7 @@ const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
       source: 'node-0',
       target: 'node-2',
       sourceHandle: 'left-source',
+      type: 'step',
       ...edgeOptions
     },
     {
@@ -112,9 +114,9 @@ const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
       source: 'node-4',
       target: 'node-4',
       sourceHandle: 'right-source',
+      type: 'step',
       ...edgeOptions
     },
-    // TODO: 방향마다 굽어지는 효과를 줘야함
     {
       id: 'self-edge',
       source: 'node-4',
@@ -122,16 +124,7 @@ const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
       sourceHandle: 'left-source',
       targetHandle: 'left-target',
       type: 'selfConnectingEdge',
-      markerEnd: {
-        type: MarkerType.Arrow,
-        width: 15,
-        height: 15,
-        color: '#74c3f0'
-      },
-      style: {
-        strokeWidth: 2,
-        stroke: '#74c3f0'
-      }
+      ...edgeOptions
     }
   ];
 
@@ -173,16 +166,21 @@ const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
   }, [edgeName, setEdges]);
 
   const handleConnect = useCallback(
-    (params: Edge | Connection) =>
+    (params: Edge | Connection) => {
+      const sourcePos = params.sourceHandle?.split('-')[0];
+      const targetPos = params.targetHandle?.split('-')[0];
+
       setEdges((edges) =>
         addEdge(
           {
             ...params,
-            ...edgeOptions
+            ...edgeOptions,
+            type: sourcePos === targetPos ? 'selfConnectingEdge' : 'step'
           },
           edges
         )
-      ),
+      );
+    },
     [setEdges]
   );
 

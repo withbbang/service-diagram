@@ -10,50 +10,40 @@ const SelfConnecting = (props: EdgeProps): JSX.Element => {
   const { sourceX, sourceY, sourcePosition, style, markerEnd } = props;
 
   const handlePath = (position: string) => {
-    let startX = 0,
-      startY = 0,
+    let startX = sourceX,
+      startY = sourceY,
       radiusX = 0,
       radiusY = 0,
       isTopRight = 0,
-      endX = 0,
-      endY = 0;
+      endX = sourceX,
+      endY = sourceY;
 
     switch (position) {
       case 'top':
-        startX = sourceX - 3;
-        startY = sourceY;
+        startX -= 3;
         radiusX = 50;
         radiusY = 20;
         isTopRight = 1;
-        endX = sourceX + 3;
-        endY = sourceY;
+        endX += 3;
         break;
       case 'left':
-        startX = sourceX;
-        startY = sourceY - 3;
+        startY -= 3;
         radiusX = 20;
         radiusY = 30;
-        isTopRight = 0;
-        endX = sourceX;
-        endY = sourceY + 3;
+        endY += 3;
         break;
       case 'bottom':
-        startX = sourceX - 3;
-        startY = sourceY;
+        startX -= 3;
         radiusX = 50;
         radiusY = 20;
-        isTopRight = 0;
-        endX = sourceX + 3;
-        endY = sourceY;
+        endX += 3;
         break;
       case 'right':
-        startX = sourceX;
-        startY = sourceY - 3;
+        startY -= 3;
         radiusX = 20;
         radiusY = 30;
         isTopRight = 1;
-        endX = sourceX;
-        endY = sourceY + 3;
+        endY += 3;
         break;
       default:
         break;
