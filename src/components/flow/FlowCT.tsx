@@ -167,6 +167,7 @@ const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
 
   const handleConnect = useCallback(
     (params: Edge | Connection) => {
+      const { source, target } = params;
       const sourcePos = params.sourceHandle?.split('-')[0];
       const targetPos = params.targetHandle?.split('-')[0];
 
@@ -175,7 +176,10 @@ const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
           {
             ...params,
             ...edgeOptions,
-            type: sourcePos === targetPos ? 'selfConnectingEdge' : 'step'
+            type:
+              source === target && sourcePos === targetPos
+                ? 'selfConnectingEdge'
+                : 'step'
           },
           edges
         )
