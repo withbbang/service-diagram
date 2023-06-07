@@ -11,10 +11,10 @@ import { typeCustomNode } from 'modules/types';
 import styles from './CommonNodeStyles.module.scss';
 
 function RectangleNode({ data, isConnectable, selected }: typeCustomNode) {
-  // TODO: data에 추가 값을 넣어 실시간으로 타입정의 필요
-  const [width, setWitdh] = useState<number>(150);
-  const [height, setHeight] = useState<number>(40);
+  const [width, setWitdh] = useState<number>(data.width);
+  const [height, setHeight] = useState<number>(data.height);
 
+  //TODO: 상위에서 노드 사이즈 저장 필요
   const handleResize = (
     e: ResizeDragEvent,
     params: ResizeParamsWithDirection
@@ -23,6 +23,7 @@ function RectangleNode({ data, isConnectable, selected }: typeCustomNode) {
     setHeight(params.height);
   };
 
+  //TODO: 상위에서 노드 사이즈 저장 필요
   const handleResizeEnd = (e: ResizeDragEvent, params: ResizeParams) => {
     setWitdh(params.width);
     setHeight(params.height);

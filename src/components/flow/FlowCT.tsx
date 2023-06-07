@@ -132,6 +132,14 @@ const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
   const [nodes, setNodes, handleNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, handleEdgesChange] = useEdgesState(initialEdges);
 
+  const handleInitNodeSize = (type: string) => {
+    if (type === 'diamondNode') {
+      return { width: 150, height: 80 };
+    } else if (type === 'rectangleNode') {
+      return { width: 150, height: 40 };
+    }
+  };
+
   useEffect(() => {
     setNodes((nds) =>
       nds.map((node) => {
@@ -228,7 +236,7 @@ const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
             id: 'node-' + num,
             type,
             position: { x: 0, y: 0 },
-            data: { label: 'node ' + num }
+            data: { label: 'node ' + num, ...handleInitNodeSize(type) }
           }
         ];
       });
