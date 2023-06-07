@@ -6,6 +6,7 @@ import {
   EdgeProps,
   getBezierPath
 } from 'reactflow';
+import styles from './CommonEdgeStyles.module.scss';
 
 const SelfConnecting = (props: EdgeProps): JSX.Element => {
   // we are using the default bezier edge when source and target ids are different
@@ -125,7 +126,7 @@ const SelfConnecting = (props: EdgeProps): JSX.Element => {
             fontSize: 11,
             pointerEvents: 'all'
           }}
-          className="nodrag nopan"
+          className={label ? styles.labelBox : ''}
         >
           {label ? label : ''}
         </div>
