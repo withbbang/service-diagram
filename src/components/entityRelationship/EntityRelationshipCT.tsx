@@ -246,7 +246,7 @@ const EntityRelationshipCT = ({
         if (flow) {
           const { x = 0, y = 0, zoom = 1 } = flow.viewport;
           setTables(
-            flow.tables.map((table: Node) => {
+            flow.nodes.map((table: Node) => {
               const { data, width, height } = table;
               return { ...table, data: { ...data, width, height } };
             }) || []
