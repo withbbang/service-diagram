@@ -18,27 +18,27 @@ import 'reactflow/dist/style.css';
 
 const EntityRelationshipPT = ({
   title,
-  nodeName,
+  tableName,
   edgeName,
   titleNameRef,
-  nodeNameRef,
+  tableNameRef,
   edgeNameRef,
-  nodes,
+  tables,
   edges,
-  nodeTypes,
+  tableTypes,
   edgeTypes,
   onSetTitle,
-  onSetNodeName,
+  onSetTableName,
   onSetEdgeName,
-  onNodesDelete,
-  onNodesChange,
+  onTablesDelete,
+  onTablesChange,
   onEdgesChange,
   onConnect,
-  onNodeDoubleClick,
+  onTableDoubleClick,
   onEdgeDoubleClick,
   onKeyDown,
   onBlur,
-  onAddNode,
+  onAddTable,
   onSave,
   onRestore,
   onInit
@@ -47,15 +47,15 @@ const EntityRelationshipPT = ({
     <>
       <div className={styles.wrap}>
         <ReactFlow
-          nodes={nodes}
+          nodes={tables}
           edges={edges}
-          nodeTypes={nodeTypes}
+          nodeTypes={tableTypes}
           edgeTypes={edgeTypes}
-          onNodesDelete={onNodesDelete}
-          onNodesChange={onNodesChange}
+          onNodesDelete={onTablesDelete}
+          onNodesChange={onTablesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
-          onNodeDoubleClick={onNodeDoubleClick}
+          onNodeDoubleClick={onTableDoubleClick}
           onEdgeDoubleClick={onEdgeDoubleClick}
           onInit={onInit}
           fitView
@@ -63,7 +63,7 @@ const EntityRelationshipPT = ({
           <Controls />
           <MiniMap />
           <Background gap={12} size={1} />
-          <div className={styles.updatenode__controls}>
+          <div className={styles.updatetable__controls}>
             <label>Title Label:</label>
             <input
               value={title}
@@ -72,13 +72,13 @@ const EntityRelationshipPT = ({
               onBlur={() => onBlur('title')}
               ref={titleNameRef}
             />
-            <label>Node Label:</label>
+            <label>Table Label:</label>
             <input
-              value={nodeName}
-              onKeyDown={(e) => onKeyDown(e, 'node')}
-              onChange={(e) => onSetNodeName(e.target.value)}
-              onBlur={() => onBlur('node')}
-              ref={nodeNameRef}
+              value={tableName}
+              onKeyDown={(e) => onKeyDown(e, 'table')}
+              onChange={(e) => onSetTableName(e.target.value)}
+              onBlur={() => onBlur('table')}
+              ref={tableNameRef}
             />
             <label>Edge Label:</label>
             <input
@@ -88,7 +88,7 @@ const EntityRelationshipPT = ({
               onBlur={() => onBlur('edge')}
               ref={edgeNameRef}
             />
-            <button>Add Node</button>
+            <button>Add Table</button>
             <button onClick={() => onSave()}>Temporarily Save Diagrams</button>
             <button onClick={() => onRestore()}>
               Restore Temporary Diagrams
@@ -102,27 +102,27 @@ const EntityRelationshipPT = ({
 
 interface typeEntityRelationshipPT {
   title: string;
-  nodeName: string;
+  tableName: string;
   edgeName: string;
   titleNameRef: React.MutableRefObject<HTMLInputElement | null>;
-  nodeNameRef: React.MutableRefObject<HTMLInputElement | null>;
+  tableNameRef: React.MutableRefObject<HTMLInputElement | null>;
   edgeNameRef: React.MutableRefObject<HTMLInputElement | null>;
-  nodes: Node<any, string | undefined>[];
+  tables: Node<any, string | undefined>[];
   edges: Edge<any>[];
-  nodeTypes: NodeTypes;
+  tableTypes: NodeTypes;
   edgeTypes: EdgeTypes;
   onSetTitle: React.Dispatch<React.SetStateAction<string>>;
-  onSetNodeName: React.Dispatch<React.SetStateAction<string>>;
+  onSetTableName: React.Dispatch<React.SetStateAction<string>>;
   onSetEdgeName: React.Dispatch<React.SetStateAction<string>>;
-  onNodesDelete: (deleted: Array<Node>) => void;
-  onNodesChange: OnNodesChange;
+  onTablesDelete: (deleted: Array<Node>) => void;
+  onTablesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
-  onNodeDoubleClick: NodeMouseHandler;
+  onTableDoubleClick: NodeMouseHandler;
   onEdgeDoubleClick: EdgeMouseHandler;
   onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>, type: string) => void;
   onBlur: (type: string) => void;
-  onAddNode: (type: string) => void;
+  onAddTable: (type: string) => void;
   onSave: () => void;
   onRestore: () => void;
   onInit: React.Dispatch<any>;

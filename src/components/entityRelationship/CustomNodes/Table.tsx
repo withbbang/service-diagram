@@ -10,15 +10,11 @@ import {
 import { typeCustomNode } from 'modules/types';
 import styles from './CommonNodeStyles.module.scss';
 
-function DiamondNode({ data, isConnectable, selected }: typeCustomNode) {
-  const initWidth = 150,
-    initHeight = 80;
+function Table({ data, isConnectable, selected }: typeCustomNode): JSX.Element {
+  const initWidth = 150;
 
   const [width, setWitdh] = useState<number>(
     data.width ? data.width : initWidth
-  );
-  const [height, setHeight] = useState<number>(
-    data.height ? data.height : initHeight
   );
 
   const handleResize = (
@@ -26,29 +22,24 @@ function DiamondNode({ data, isConnectable, selected }: typeCustomNode) {
     params: ResizeParamsWithDirection
   ) => {
     setWitdh(params.width);
-    setHeight(params.height);
   };
 
   const handleResizeEnd = (e: ResizeDragEvent, params: ResizeParams) => {
     setWitdh(params.width);
-    setHeight(params.height);
   };
 
   return (
     <div
-      className={styles.diamondNode}
+      className={styles.tableWrap}
       style={{
         minWidth: `${initWidth}px`,
-        minHeight: `${initHeight}px`,
-        width: `${width}px`,
-        height: `${height}px`
+        width: `${width}px`
       }}
     >
       <NodeResizer
         color="#ff0071"
         isVisible={selected}
         minWidth={initWidth}
-        minHeight={initHeight}
         onResize={handleResize}
         onResizeEnd={handleResizeEnd}
       />
@@ -113,4 +104,4 @@ function DiamondNode({ data, isConnectable, selected }: typeCustomNode) {
   );
 }
 
-export default memo(DiamondNode);
+export default memo(Table);

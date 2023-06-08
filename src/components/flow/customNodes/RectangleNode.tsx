@@ -21,7 +21,6 @@ function RectangleNode({ data, isConnectable, selected }: typeCustomNode) {
     data.height ? data.height : initHeight
   );
 
-  //TODO: 상위에서 노드 사이즈 저장 필요
   const handleResize = (
     e: ResizeDragEvent,
     params: ResizeParamsWithDirection
@@ -30,7 +29,6 @@ function RectangleNode({ data, isConnectable, selected }: typeCustomNode) {
     setHeight(params.height);
   };
 
-  //TODO: 상위에서 노드 사이즈 저장 필요
   const handleResizeEnd = (e: ResizeDragEvent, params: ResizeParams) => {
     setWitdh(params.width);
     setHeight(params.height);
