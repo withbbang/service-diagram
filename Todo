@@ -4,4 +4,4 @@
     2) DB save
     3) Restore Flow Diagrams text from DB
     4) Flow Diagrams text -> JSON.parse()
-2. 노드 사이즈 수정 후 일시저장하고 불러오기 할 경우 수정된 노드 사이즈를 불러올 수 없다.
+2. 테이블 핸들 위치 마다 동적 추가 기능

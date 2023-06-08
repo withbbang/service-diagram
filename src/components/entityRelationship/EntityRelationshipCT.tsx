@@ -14,9 +14,10 @@ import {
   getConnectedEdges
 } from 'reactflow';
 import EntityRelationshipPT from './EntityRelationshipPT';
+import Table from './CustomNodes/Table';
 
 const keyForTempERDiagrams = 'tempERDiagrams'; // 로컬 스토리지에 일시 저장할 키값
-const tableTypes = {}; // 커스텀 테이블 타입들
+const tableTypes = { table: Table }; // 커스텀 테이블 타입들
 const edgeTypes = {}; // 커스텀 엣지 타입들
 const edgeOptions = {
   // animated: true,
@@ -65,8 +66,8 @@ const EntityRelationshipCT = ({
 
   // 테이블 변경 적용을 위한 useEffect. 현재는 테이블 내 data 객체의 label만 수정가능
   useEffect(() => {
-    setTables((nds) =>
-      nds.map((table) => {
+    setTables((tbls) =>
+      tbls.map((table) => {
         if (table.id === id) {
           table.data = {
             ...table.data,
@@ -152,7 +153,11 @@ const EntityRelationshipCT = ({
             id: 'table-' + num,
             type,
             position: { x: 0, y: 0 },
-            data: { label: 'table ' + num },
+            data: {
+              label: 'table ' + num,
+              handleCount: 0,
+              onAddHandle: handleAddHandle
+            },
             selected: true
           }
         ];
@@ -259,6 +264,21 @@ const EntityRelationshipCT = ({
     restoreFlow();
   }, [setTables, setViewport]);
 
+  const handleAddHandle = useCallback(() => {
+    setTables((tbls) =>
+      tbls.map((table) => {
+        if (table.selected) {
+          table.data = {
+            ...table.data,
+            handleCount: ++table.data.handleCount
+          };
+        }
+
+        return table;
+      })
+    );
+  }, [tables, setTables]);
+
   return (
     <EntityRelationshipPT
       title={title}
@@ -286,6 +306,7 @@ const EntityRelationshipCT = ({
       onSave={handleSave}
       onRestore={handleRestore}
       onInit={setRfInstance}
+      onAddHandle={handleAddHandle}
     />
   );
 };

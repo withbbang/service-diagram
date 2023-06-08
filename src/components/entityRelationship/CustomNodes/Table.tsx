@@ -11,10 +11,14 @@ import { typeCustomNode } from 'modules/types';
 import styles from './CommonNodeStyles.module.scss';
 
 function Table({ data, isConnectable, selected }: typeCustomNode): JSX.Element {
-  const initWidth = 150;
+  const initWidth = 100,
+    initHeight = 500;
 
   const [width, setWitdh] = useState<number>(
     data.width ? data.width : initWidth
+  );
+  const [height, setHeight] = useState<number>(
+    data.height ? data.height : initHeight
   );
 
   const handleResize = (
@@ -22,10 +26,12 @@ function Table({ data, isConnectable, selected }: typeCustomNode): JSX.Element {
     params: ResizeParamsWithDirection
   ) => {
     setWitdh(params.width);
+    setHeight(params.height);
   };
 
   const handleResizeEnd = (e: ResizeDragEvent, params: ResizeParams) => {
     setWitdh(params.width);
+    setHeight(params.height);
   };
 
   return (
@@ -33,17 +39,20 @@ function Table({ data, isConnectable, selected }: typeCustomNode): JSX.Element {
       className={styles.tableWrap}
       style={{
         minWidth: `${initWidth}px`,
-        width: `${width}px`
+        minHeight: `${initHeight}px`,
+        width: `${width}px`,
+        height: `${height}px`
       }}
     >
       <NodeResizer
         color="#ff0071"
         isVisible={selected}
         minWidth={initWidth}
+        minHeight={initHeight}
         onResize={handleResize}
         onResizeEnd={handleResizeEnd}
       />
-      <Handle
+      {/* <Handle
         id="top-target"
         type={'target'}
         position={Position.Top}
@@ -98,8 +107,35 @@ function Table({ data, isConnectable, selected }: typeCustomNode): JSX.Element {
         position={Position.Right}
         isConnectable={isConnectable}
         style={{ backgroundColor: '#aaa' }}
-      />
-      {data.label ? data.label : ''}
+      /> */}
+      {data.handleCount > 0 &&
+        Array(data.handleCount)
+          .fill(1)
+          .map((_, idx) => (
+            <div key={idx}>
+              <Handle
+                id={`right-target-${idx + 1}`}
+                type={'target'}
+                position={Position.Right}
+                isConnectable={isConnectable}
+                style={{
+                  backgroundColor: '#aaa',
+                  top: `${((idx + 1) * 100) / (data.handleCount + 1)}%`
+                }}
+              />
+              <Handle
+                id={`right-source-${idx + 1}`}
+                type={'source'}
+                position={Position.Right}
+                isConnectable={isConnectable}
+                style={{
+                  backgroundColor: '#aaa',
+                  top: `${((idx + 1) * 100) / (data.handleCount + 1)}%`
+                }}
+              />
+            </div>
+          ))}
+      <div onClick={data.onAddHandle}>{data.label ? data.label : ''}</div>
     </div>
   );
 }

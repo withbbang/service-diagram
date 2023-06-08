@@ -41,7 +41,8 @@ const EntityRelationshipPT = ({
   onAddTable,
   onSave,
   onRestore,
-  onInit
+  onInit,
+  onAddHandle
 }: typeEntityRelationshipPT): JSX.Element => {
   return (
     <>
@@ -88,11 +89,12 @@ const EntityRelationshipPT = ({
               onBlur={() => onBlur('edge')}
               ref={edgeNameRef}
             />
-            <button>Add Table</button>
+            <button onClick={() => onAddTable('table')}>Add Table</button>
             <button onClick={() => onSave()}>Temporarily Save Diagrams</button>
             <button onClick={() => onRestore()}>
               Restore Temporary Diagrams
             </button>
+            <button onClick={() => onAddHandle()}>Add Handle</button>
           </div>
         </ReactFlow>
       </div>
@@ -126,6 +128,7 @@ interface typeEntityRelationshipPT {
   onSave: () => void;
   onRestore: () => void;
   onInit: React.Dispatch<any>;
+  onAddHandle: () => void;
 }
 
 export default EntityRelationshipPT;
