@@ -60,85 +60,77 @@ const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
   };
 
   const initialNodes: Array<Node> = [
-    {
-      id: 'node-0',
-      type: 'diamondNode',
-      position: { x: 500, y: 500 },
-      data: { label: 'diamond' }
-    },
-    {
-      id: 'node-3',
-      type: 'rectangleNode',
-      position: { x: 300, y: 300 },
-      data: { label: '' }
-    },
-    {
-      id: 'node-4',
-      type: 'rectangleNode',
-      position: { x: 0, y: 0 },
-      data: { label: 'node 4' }
-    },
-    {
-      id: 'node-1',
-      type: 'output',
-      position: { x: 0, y: 200 },
-      data: { label: 'node 2' }
-    },
-    {
-      id: 'node-2',
-      type: 'output',
-      position: { x: 200, y: 200 },
-      data: { label: 'node 3' }
-    }
+    // {
+    //   id: 'node-0',
+    //   type: 'diamondNode',
+    //   position: { x: 500, y: 500 },
+    //   data: { label: 'diamond' }
+    // },
+    // {
+    //   id: 'node-3',
+    //   type: 'rectangleNode',
+    //   position: { x: 300, y: 300 },
+    //   data: { label: 'node 3' }
+    // },
+    // {
+    //   id: 'node-4',
+    //   type: 'rectangleNode',
+    //   position: { x: 0, y: 0 },
+    //   data: { label: 'node 4' }
+    // },
+    // {
+    //   id: 'node-1',
+    //   type: 'output',
+    //   position: { x: 0, y: 200 },
+    //   data: { label: 'node 2' }
+    // },
+    // {
+    //   id: 'node-2',
+    //   type: 'output',
+    //   position: { x: 200, y: 200 },
+    //   data: { label: 'node 2' }
+    // }
   ];
 
   const initialEdges: Array<Edge> = [
-    {
-      id: 'edge-1',
-      source: 'node-0',
-      target: 'node-3',
-      sourceHandle: 'bottom-source',
-      type: 'step',
-      ...edgeOptions
-    },
-    {
-      id: 'edge-2',
-      source: 'node-0',
-      target: 'node-2',
-      sourceHandle: 'left-source',
-      type: 'step',
-      ...edgeOptions
-    },
-    {
-      id: 'edge-self',
-      source: 'node-4',
-      target: 'node-4',
-      sourceHandle: 'right-source',
-      type: 'step',
-      ...edgeOptions
-    },
-    {
-      id: 'self-edge',
-      source: 'node-4',
-      target: 'node-4',
-      sourceHandle: 'left-source',
-      targetHandle: 'left-target',
-      type: 'selfConnectingEdge',
-      label: 'self edge',
-      ...edgeOptions
-    }
+    // {
+    //   id: 'edge-1',
+    //   source: 'node-0',
+    //   target: 'node-3',
+    //   sourceHandle: 'bottom-source',
+    //   type: 'step',
+    //   ...edgeOptions
+    // },
+    // {
+    //   id: 'edge-2',
+    //   source: 'node-0',
+    //   target: 'node-2',
+    //   sourceHandle: 'left-source',
+    //   type: 'step',
+    //   ...edgeOptions
+    // },
+    // {
+    //   id: 'edge-self',
+    //   source: 'node-4',
+    //   target: 'node-4',
+    //   sourceHandle: 'right-source',
+    //   type: 'step',
+    //   ...edgeOptions
+    // },
+    // {
+    //   id: 'self-edge',
+    //   source: 'node-4',
+    //   target: 'node-4',
+    //   sourceHandle: 'left-source',
+    //   targetHandle: 'left-target',
+    //   type: 'selfConnectingEdge',
+    //   label: 'self edge',
+    //   ...edgeOptions
+    // }
   ];
 
   const [nodes, setNodes, handleNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, handleEdgesChange] = useEdgesState(initialEdges);
-
-  const handleInitNodeSize = (type: string) => {
-    if (type === 'diamondNode') {
-      return { width: 150, height: 80 };
-    } else if (type === 'rectangleNode') {
-      return { width: 150, height: 40 };
-    }
-  };
 
   useEffect(() => {
     setNodes((nds) =>
@@ -236,7 +228,7 @@ const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
             id: 'node-' + num,
             type,
             position: { x: 0, y: 0 },
-            data: { label: 'node ' + num, ...handleInitNodeSize(type) }
+            data: { label: 'node ' + num }
           }
         ];
       });
@@ -319,13 +311,18 @@ const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
 
         if (flow) {
           const { x = 0, y = 0, zoom = 1 } = flow.viewport;
-          setNodes(flow.nodes || []);
+          setNodes(
+            flow.nodes.map((node: Node) => {
+              const { data, width, height } = node;
+              return { ...node, data: { ...data, width, height } };
+            }) || []
+          );
           setEdges(flow.edges || []);
           setViewport({ x, y, zoom });
         }
         handleLoaderFalse();
       } else {
-        alert('Nothing Restore');
+        alert('Nothing Restored');
         return;
       }
     };

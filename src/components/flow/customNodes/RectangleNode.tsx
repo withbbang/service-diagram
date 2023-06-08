@@ -11,8 +11,15 @@ import { typeCustomNode } from 'modules/types';
 import styles from './CommonNodeStyles.module.scss';
 
 function RectangleNode({ data, isConnectable, selected }: typeCustomNode) {
-  const [width, setWitdh] = useState<number>(data.width);
-  const [height, setHeight] = useState<number>(data.height);
+  const initWidth = 150,
+    initHeight = 40;
+
+  const [width, setWitdh] = useState<number>(
+    data.width ? data.width : initWidth
+  );
+  const [height, setHeight] = useState<number>(
+    data.height ? data.height : initHeight
+  );
 
   //TODO: 상위에서 노드 사이즈 저장 필요
   const handleResize = (
@@ -33,8 +40,8 @@ function RectangleNode({ data, isConnectable, selected }: typeCustomNode) {
     <div
       className={styles.rectangleNode}
       style={{
-        minWidth: '150px',
-        minHeight: '40px',
+        minWidth: `${initWidth}px`,
+        minHeight: `${initHeight}px`,
         width: `${width}px`,
         height: `${height}px`
       }}
@@ -42,8 +49,8 @@ function RectangleNode({ data, isConnectable, selected }: typeCustomNode) {
       <NodeResizer
         color="#ff0071"
         isVisible={selected}
-        minWidth={150}
-        minHeight={40}
+        minWidth={initWidth}
+        minHeight={initHeight}
         onResize={handleResize}
         onResizeEnd={handleResizeEnd}
       />
