@@ -20,13 +20,13 @@ const keyForTempERDiagrams = 'tempERDiagrams'; // 로컬 스토리지에 일시 
 const tableTypes = { table: Table }; // 커스텀 테이블 타입들
 const edgeTypes = {}; // 커스텀 엣지 타입들
 const edgeOptions = {
-  // animated: true,
-  markerEnd: {
-    type: MarkerType.Arrow,
-    width: 15,
-    height: 15,
-    color: '#74c3f0'
-  },
+  // // animated: true,
+  // markerEnd: {
+  //   type: MarkerType.Arrow,
+  //   width: 15,
+  //   height: 15,
+  //   color: '#74c3f0'
+  // },
   style: {
     strokeWidth: 2,
     stroke: '#74c3f0'
@@ -264,6 +264,7 @@ const EntityRelationshipCT = ({
     restoreFlow();
   }, [setTables, setViewport]);
 
+  // 핸들 추가하기
   const handleAddHandle = useCallback(() => {
     setTables((tbls) =>
       tbls.map((table) => {
@@ -278,6 +279,9 @@ const EntityRelationshipCT = ({
       })
     );
   }, [tables, setTables]);
+
+  // 핸들 제거하기
+  const handleDeleteHandle = useCallback(() => {}, [tables, setTables]);
 
   return (
     <EntityRelationshipPT

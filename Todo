@@ -5,3 +5,4 @@
     3) Restore Flow Diagrams text from DB
     4) Flow Diagrams text -> JSON.parse()
 2. 테이블 핸들 위치 마다 동적 추가 기능
+3. 핸들 추가 직후 엣지 생성 불가 오류, 엣지 연결 후 핸들 추가시 엣지가 따라가지 못 하는 오류

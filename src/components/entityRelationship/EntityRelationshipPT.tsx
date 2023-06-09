@@ -11,7 +11,8 @@ import ReactFlow, {
   OnEdgesChange,
   OnConnect,
   NodeMouseHandler,
-  EdgeMouseHandler
+  EdgeMouseHandler,
+  OnConnectStartParams
 } from 'reactflow';
 import styles from './EntityRelationship.module.scss';
 import 'reactflow/dist/style.css';
@@ -44,6 +45,13 @@ const EntityRelationshipPT = ({
   onInit,
   onAddHandle
 }: typeEntityRelationshipPT): JSX.Element => {
+  const onConnectStart: any = (
+    event: React.MouseEvent,
+    params: OnConnectStartParams
+  ) => {
+    console.log(event, params);
+  };
+
   return (
     <>
       <div className={styles.wrap}>
@@ -60,6 +68,7 @@ const EntityRelationshipPT = ({
           onEdgeDoubleClick={onEdgeDoubleClick}
           onInit={onInit}
           fitView
+          onConnectStart={onConnectStart}
         >
           <Controls />
           <MiniMap />

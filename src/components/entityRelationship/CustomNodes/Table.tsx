@@ -17,7 +17,7 @@ function Table({ data, isConnectable, selected }: typeCustomNode): JSX.Element {
   const [width, setWitdh] = useState<number>(
     data.width ? data.width : initWidth
   );
-  const [height, setHeight] = useState<number>(
+  const [height, setHeight] = useState<number | string>(
     data.height ? data.height : initHeight
   );
 
@@ -112,15 +112,14 @@ function Table({ data, isConnectable, selected }: typeCustomNode): JSX.Element {
         Array(data.handleCount)
           .fill(1)
           .map((_, idx) => (
-            <div key={idx}>
+            <div className={styles.column} key={idx}>
               <Handle
                 id={`right-target-${idx + 1}`}
                 type={'target'}
                 position={Position.Right}
                 isConnectable={isConnectable}
                 style={{
-                  backgroundColor: '#aaa',
-                  top: `${((idx + 1) * 100) / (data.handleCount + 1)}%`
+                  backgroundColor: '#aaa'
                 }}
               />
               <Handle
@@ -129,13 +128,11 @@ function Table({ data, isConnectable, selected }: typeCustomNode): JSX.Element {
                 position={Position.Right}
                 isConnectable={isConnectable}
                 style={{
-                  backgroundColor: '#aaa',
-                  top: `${((idx + 1) * 100) / (data.handleCount + 1)}%`
+                  backgroundColor: '#aaa'
                 }}
               />
             </div>
           ))}
-      <div onClick={data.onAddHandle}>{data.label ? data.label : ''}</div>
     </div>
   );
 }
