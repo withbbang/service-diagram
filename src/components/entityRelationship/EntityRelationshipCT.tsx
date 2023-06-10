@@ -11,7 +11,8 @@ import {
   Connection,
   getIncomers,
   getOutgoers,
-  getConnectedEdges
+  getConnectedEdges,
+  useUpdateNodeInternals
 } from 'reactflow';
 import EntityRelationshipPT from './EntityRelationshipPT';
 import Table from './CustomNodes/Table';
@@ -63,6 +64,8 @@ const EntityRelationshipCT = ({
 
   const [tables, setTables, handleTablesChange] = useNodesState(initialTables); // 테이블 수정 hook
   const [edges, setEdges, handleEdgesChange] = useEdgesState(initialEdges); // 엣지 수정 hook
+
+  const updateNodeInternals = useUpdateNodeInternals(); // 동적 핸들 추가시 필요한 객체
 
   // 테이블 변경 적용을 위한 useEffect. 현재는 테이블 내 data 객체의 label만 수정가능
   useEffect(() => {
@@ -273,6 +276,8 @@ const EntityRelationshipCT = ({
             ...table.data,
             handleCount: ++table.data.handleCount
           };
+
+          updateNodeInternals(table.id);
         }
 
         return table;
