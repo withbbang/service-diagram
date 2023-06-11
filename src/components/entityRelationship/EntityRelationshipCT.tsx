@@ -9,9 +9,6 @@ import {
   useNodesState,
   useEdgesState,
   Connection,
-  getIncomers,
-  getOutgoers,
-  getConnectedEdges,
   useUpdateNodeInternals
 } from 'reactflow';
 import EntityRelationshipPT from './EntityRelationshipPT';
@@ -31,8 +28,7 @@ const edgeOptions = {
   style: {
     strokeWidth: 2,
     stroke: '#74c3f0'
-  },
-  type: 'step'
+  }
 }; // 엣지 공통 옵션
 
 const initialTables: Array<Node> = []; // 테이블 초기화
@@ -115,35 +111,6 @@ const EntityRelationshipCT = ({
     [setEdges]
   );
 
-  // backspace로 테이블 삭제하는 메소드
-  const handleTablesDelete = useCallback(
-    (deleted: Array<Node>) => {
-      setEdges(
-        deleted.reduce((acc: Array<Edge>, table: Node) => {
-          const incomers = getIncomers(table, tables, edges);
-          const outgoers = getOutgoers(table, tables, edges);
-          const connectedEdges = getConnectedEdges([table], edges);
-
-          const remainingEdges = acc.filter(
-            (edge) => !connectedEdges.includes(edge)
-          );
-
-          const createdEdges = incomers.flatMap(({ id: source }) =>
-            outgoers.map(({ id: target }) => ({
-              id: `${source}->${target}`,
-              source,
-              target,
-              ...edgeOptions
-            }))
-          );
-
-          return [...remainingEdges, ...createdEdges];
-        }, edges)
-      );
-    },
-    [tables, edges]
-  );
-
   // 테이블 추가 메소드
   const handleAddTable = useCallback(
     (type: string) => {
@@ -158,8 +125,7 @@ const EntityRelationshipCT = ({
             position: { x: 0, y: 0 },
             data: {
               label: 'table ' + num,
-              handleCount: 0,
-              onAddHandle: handleAddHandle
+              handleCount: 0
             },
             selected: true
           }
@@ -272,6 +238,7 @@ const EntityRelationshipCT = ({
     setTables((tbls) =>
       tbls.map((table) => {
         if (table.selected) {
+          console.log(table.data);
           table.data = {
             ...table.data,
             handleCount: ++table.data.handleCount
@@ -303,7 +270,6 @@ const EntityRelationshipCT = ({
       onSetTitle={setTitle}
       onSetTableName={setTableName}
       onSetEdgeName={setEdgeName}
-      onTablesDelete={handleTablesDelete}
       onTablesChange={handleTablesChange}
       onEdgesChange={handleEdgesChange}
       onConnect={handleConnect}

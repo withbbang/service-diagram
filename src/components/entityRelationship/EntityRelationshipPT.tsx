@@ -31,7 +31,6 @@ const EntityRelationshipPT = ({
   onSetTitle,
   onSetTableName,
   onSetEdgeName,
-  onTablesDelete,
   onTablesChange,
   onEdgesChange,
   onConnect,
@@ -60,7 +59,6 @@ const EntityRelationshipPT = ({
           edges={edges}
           nodeTypes={tableTypes}
           edgeTypes={edgeTypes}
-          onNodesDelete={onTablesDelete}
           onNodesChange={onTablesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
@@ -125,7 +123,6 @@ interface typeEntityRelationshipPT {
   onSetTitle: React.Dispatch<React.SetStateAction<string>>;
   onSetTableName: React.Dispatch<React.SetStateAction<string>>;
   onSetEdgeName: React.Dispatch<React.SetStateAction<string>>;
-  onTablesDelete: (deleted: Array<Node>) => void;
   onTablesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;

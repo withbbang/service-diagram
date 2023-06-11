@@ -11,10 +11,29 @@ div {
   border-radius: 10px;
   box-sizing: border-box;
 
+  .tableName {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9em;
+    border-bottom: solid 0.5px #aaa;
+
+    &.nothing {
+      border-bottom: none;
+    }
+  }
+
   .column {
     position: relative;
     width: 100%;
     height: 20px;
     display: flex;
+    box-sizing: border-box;
+    border-bottom: solid 0.5px #aaa;
+
+    &.isLast {
+      border-bottom: none;
+    }
   }
 }
