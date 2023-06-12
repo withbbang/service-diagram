@@ -238,7 +238,6 @@ const EntityRelationshipCT = ({
     setTables((tbls) =>
       tbls.map((table) => {
         if (table.selected) {
-          console.log(table.data);
           table.data = {
             ...table.data,
             handleCount: ++table.data.handleCount

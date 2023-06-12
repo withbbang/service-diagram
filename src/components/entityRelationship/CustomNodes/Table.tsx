@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import {
   Handle,
   Position,
@@ -13,43 +13,45 @@ import styles from './CommonNodeStyles.module.scss';
 function Table({ data, isConnectable, selected }: typeCustomNode): JSX.Element {
   const initWidth = 100,
     initHeight = 30,
-    columeHeight = 20;
+    columeHeight = 20,
+    ratio = initHeight + data.handleCount * columeHeight;
 
-  const [width, setWitdh] = useState<number>(
-    data.width ? data.width : initWidth
-  );
-  const [height, setHeight] = useState<number>(
-    data.height ? data.height : initHeight
-  );
+  const [width, setWitdh] = useState<number>(initWidth);
+  const [height, setHeight] = useState<number>(initHeight);
+
+  useEffect(() => {
+    setHeight(height + handleRatio('column') * height);
+  }, [data.handleCount]);
+
+  const handleRatio = (div: string) =>
+    div === 'tableName' ? initHeight / ratio : columeHeight / ratio;
 
   const handleResize = (
     e: ResizeDragEvent,
     params: ResizeParamsWithDirection
   ) => {
     setWitdh(params.width);
-    setHeight(params.height + data.handleCount * columeHeight);
+    setHeight(params.height);
   };
 
   const handleResizeEnd = (e: ResizeDragEvent, params: ResizeParams) => {
     setWitdh(params.width);
-    setHeight(params.height + data.handleCount * columeHeight);
+    setHeight(params.height);
   };
 
   return (
     <div
       className={styles.tableWrap}
       style={{
-        minWidth: `${initWidth}px`,
-        minHeight: `${initHeight}px`,
         width: `${width}px`,
-        height: `${height + data.handleCount * columeHeight}px`
+        height: `${height}px`
       }}
     >
       <NodeResizer
         color="#ff0071"
         isVisible={selected}
         minWidth={initWidth}
-        minHeight={initHeight}
+        minHeight={ratio}
         onResize={handleResize}
         onResizeEnd={handleResizeEnd}
       />
@@ -115,6 +117,7 @@ function Table({ data, isConnectable, selected }: typeCustomNode): JSX.Element {
             ? [styles.tableName, styles.nothing].join(' ')
             : styles.tableName
         }
+        style={{ height: `${handleRatio('tableName') * height}px` }}
       >
         {data.label ? data.label : ''}
       </div>
@@ -128,6 +131,7 @@ function Table({ data, isConnectable, selected }: typeCustomNode): JSX.Element {
                   ? [styles.column, styles.isLast].join(' ')
                   : styles.column
               }
+              style={{ height: `${handleRatio('column') * height}px` }}
               key={idx}
             >
               <Handle
