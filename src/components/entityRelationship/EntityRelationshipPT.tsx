@@ -22,6 +22,7 @@ import Column from './Column';
 const EntityRelationshipPT = ({
   title,
   tableName,
+  tableComment,
   edgeName,
   isAddTablePopup,
   columns,
@@ -32,14 +33,15 @@ const EntityRelationshipPT = ({
   edges,
   tableTypes,
   edgeTypes,
-  columnInputRefs,
   onSetTitle,
   onSetTableName,
+  onSetTableComment,
   onSetEdgeName,
   onTablesChange,
   onEdgesChange,
   onColumnInputChange,
   onAddColumn,
+  onAddTable,
   onRemoveColumn,
   onConnect,
   onTableDoubleClick,
@@ -80,14 +82,14 @@ const EntityRelationshipPT = ({
               onBlur={() => onBlur('title')}
               ref={titleNameRef}
             />
-            <label>Table Label:</label>
+            {/* <label>Table Label:</label>
             <input
               value={tableName}
               onKeyDown={(e) => onKeyDown(e, 'table')}
               onChange={(e) => onSetTableName(e.target.value)}
               onBlur={() => onBlur('table')}
               ref={tableNameRef}
-            />
+            /> */}
             <label>Edge Label:</label>
             <input
               value={edgeName}
@@ -112,11 +114,17 @@ const EntityRelationshipPT = ({
             <div className={styles.modalBody}>
               <div className={styles.inputDiv}>
                 <span>Table Name:</span>
-                <input />
+                <input
+                  value={tableName}
+                  onChange={(e) => onSetTableName(e.target.value)}
+                />
               </div>
               <div className={styles.inputDiv}>
                 <span>Table Comment:</span>
-                <input />
+                <input
+                  value={tableComment}
+                  onChange={(e) => onSetTableComment(e.target.value)}
+                />
               </div>
               <div className={styles.columnsDiv}>
                 {Array.isArray(columns) &&
@@ -126,7 +134,6 @@ const EntityRelationshipPT = ({
                       <Column
                         idx={idx}
                         column={column}
-                        columnInputRefs={columnInputRefs}
                         onColumnInputChange={onColumnInputChange}
                         onAddColumn={onAddColumn}
                         onRemoveColumn={onRemoveColumn}
@@ -136,7 +143,7 @@ const EntityRelationshipPT = ({
               </div>
               <div className={styles.btnsDiv}>
                 <button onClick={onAddTablePopup}>Cancel</button>
-                <button>Commit</button>
+                <button onClick={onAddTable}>Commit</button>
               </div>
             </div>
           </div>
@@ -149,6 +156,7 @@ const EntityRelationshipPT = ({
 interface typeEntityRelationshipPT {
   title: string;
   tableName: string;
+  tableComment: string;
   edgeName: string;
   isAddTablePopup: boolean;
   columns: Array<typeColumn>;
@@ -159,9 +167,9 @@ interface typeEntityRelationshipPT {
   edges: Edge<any>[];
   tableTypes: NodeTypes;
   edgeTypes: EdgeTypes;
-  columnInputRefs: React.MutableRefObject<any>;
   onSetTitle: React.Dispatch<React.SetStateAction<string>>;
   onSetTableName: React.Dispatch<React.SetStateAction<string>>;
+  onSetTableComment: React.Dispatch<React.SetStateAction<string>>;
   onSetEdgeName: React.Dispatch<React.SetStateAction<string>>;
   onTablesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
@@ -171,6 +179,7 @@ interface typeEntityRelationshipPT {
     e: ChangeEvent<HTMLInputElement>
   ) => void;
   onAddColumn: (tableId?: string) => void;
+  onAddTable: () => void;
   onRemoveColumn: (idx: number, tableId?: string) => void;
   onConnect: OnConnect;
   onTableDoubleClick: NodeMouseHandler;

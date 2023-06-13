@@ -5,7 +5,6 @@ import { ChangeEvent } from 'react';
 function Column({
   idx,
   column,
-  columnInputRefs,
   onColumnInputChange,
   onAddColumn,
   onRemoveColumn
@@ -18,7 +17,6 @@ function Column({
           <input
             value={column.name}
             onChange={(e) => onColumnInputChange(idx, 'name', e)}
-            // ref={(el) => (columnInputRefs.current['name' + idx] = el)}
           />
         </div>
         <div className={styles.inputDiv}>
@@ -26,7 +24,6 @@ function Column({
           <input
             value={column.type}
             onChange={(e) => onColumnInputChange(idx, 'type', e)}
-            // ref={(el) => (columnInputRefs.current['type' + idx] = el)}
           />
         </div>
         <div className={styles.inputDiv}>
@@ -34,7 +31,6 @@ function Column({
           <input
             value={column.comment}
             onChange={(e) => onColumnInputChange(idx, 'comment', e)}
-            // ref={(el) => (columnInputRefs.current['comment' + idx] = el)}
           />
         </div>
         <div className={styles.inputDiv}>
@@ -42,46 +38,45 @@ function Column({
           <input
             value={column.default}
             onChange={(e) => onColumnInputChange(idx, 'default', e)}
-            // ref={(el) => (columnInputRefs.current['default' + idx] = el)}
           />
         </div>
       </div>
       <div className={styles.checkBoxes}>
         <div className={styles.inputDiv}>
           <input
+            id={`primary_${idx}`}
             type="checkbox"
             checked={column.primary}
             onChange={(e) => onColumnInputChange(idx, 'primary', e)}
-            // ref={(el) => (columnInputRefs.current['primary' + idx] = el)}
           />
-          <span>Primary</span>
+          <label htmlFor={`primary_${idx}`}>Primary</label>
         </div>
         <div className={styles.inputDiv}>
           <input
+            id={`unique_${idx}`}
             type="checkbox"
             checked={column.unique}
             onChange={(e) => onColumnInputChange(idx, 'unique', e)}
-            // ref={(el) => (columnInputRefs.current['unique' + idx] = el)}
           />
-          <span>Unique</span>
+          <label htmlFor={`unique_${idx}`}>Unique</label>
         </div>
         <div className={styles.inputDiv}>
           <input
+            id={`notNull_${idx}`}
             type="checkbox"
             checked={column.notNull}
             onChange={(e) => onColumnInputChange(idx, 'notNull', e)}
-            // ref={(el) => (columnInputRefs.current['notNull' + idx] = el)}
           />
-          <span>Not Null</span>
+          <label htmlFor={`notNull_${idx}`}>Not Null</label>
         </div>
         <div className={styles.inputDiv}>
           <input
+            id={`autoIncrement_${idx}`}
             type="checkbox"
             checked={column.autoIncrement}
             onChange={(e) => onColumnInputChange(idx, 'autoIncrement', e)}
-            // ref={(el) => (columnInputRefs.current['autoIncrement' + idx] = el)}
           />
-          <span>Auto Increment</span>
+          <label htmlFor={`autoIncrement_${idx}`}>Auto Increment</label>
         </div>
       </div>
       <div className={styles.buttons}>
@@ -95,7 +90,6 @@ function Column({
 interface typeColumnComponent {
   idx: number;
   column: typeColumn;
-  columnInputRefs: React.MutableRefObject<any>;
   onColumnInputChange: (
     idx: number,
     type: string,

@@ -32,6 +32,9 @@ export interface typeTable {
 }
 
 export interface typeColumn {
+  // TODO: (공부하기) 개체 유형에 인덱스 서명 추가
+  // Error: No index signature with a parameter of type 'string' was found on type 'someType'
+  [key: string]: string | boolean;
   name: string;
   type: string;
   comment: string;

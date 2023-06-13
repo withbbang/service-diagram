@@ -13,18 +13,18 @@ import styles from './CommonNodeStyles.module.scss';
 function Table({ data, isConnectable, selected }: typeCustomNode): JSX.Element {
   const initWidth = 100,
     initHeight = 30,
-    columeHeight = 20,
-    ratio = initHeight + data.handleCount * columeHeight;
+    columeHeight = 20;
+  // ratio = initHeight + data.handleCount * columeHeight;
 
   const [width, setWitdh] = useState<number>(initWidth);
   const [height, setHeight] = useState<number>(initHeight);
 
-  useEffect(() => {
-    setHeight(height + handleRatio('column') * height);
-  }, [data.handleCount]);
+  // useEffect(() => {
+  //   setHeight(height + handleRatio('column') * height);
+  // }, [data.handleCount]);
 
-  const handleRatio = (div: string) =>
-    div === 'tableName' ? initHeight / ratio : columeHeight / ratio;
+  // const handleRatio = (div: string) =>
+  //   div === 'tableName' ? initHeight / ratio : columeHeight / ratio;
 
   const handleResize = (
     e: ResizeDragEvent,
@@ -51,7 +51,7 @@ function Table({ data, isConnectable, selected }: typeCustomNode): JSX.Element {
         color="#ff0071"
         isVisible={selected}
         minWidth={initWidth}
-        minHeight={ratio}
+        minHeight={initHeight}
         onResize={handleResize}
         onResizeEnd={handleResizeEnd}
       />
@@ -117,7 +117,7 @@ function Table({ data, isConnectable, selected }: typeCustomNode): JSX.Element {
             ? [styles.tableName, styles.nothing].join(' ')
             : styles.tableName
         }
-        style={{ height: `${handleRatio('tableName') * height}px` }}
+        // style={{ height: `${handleRatio('tableName') * height}px` }}
       >
         {data.label ? data.label : ''}
       </div>
@@ -131,7 +131,7 @@ function Table({ data, isConnectable, selected }: typeCustomNode): JSX.Element {
                   ? [styles.column, styles.isLast].join(' ')
                   : styles.column
               }
-              style={{ height: `${handleRatio('column') * height}px` }}
+              // style={{ height: `${handleRatio('column') * height}px` }}
               key={idx}
             >
               <Handle
