@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState
+} from 'react';
 import {
   ReactFlowProvider,
   useReactFlow,
@@ -13,7 +19,6 @@ import {
 } from 'reactflow';
 import EntityRelationshipPT from './EntityRelationshipPT';
 import Table from './CustomNodes/Table';
-import styles from 'components/functionPopup/FunctionPopup.module.scss';
 import { typeColumn } from 'modules/types';
 
 const keyForTempERDiagrams = 'tempERDiagrams'; // 로컬 스토리지에 일시 저장할 키값
@@ -32,7 +37,7 @@ const edgeOptions = {
     stroke: '#74c3f0'
   }
 }; // 엣지 공통 옵션
-const defaultColumn: typeColumn = {
+const initColumn: typeColumn = {
   name: 'id',
   type: 'INTEGER',
   comment: '',
@@ -42,6 +47,16 @@ const defaultColumn: typeColumn = {
   notNull: true,
   autoIncrement: true
 }; // 초기 테이블 컬럼
+const defaultColumn: typeColumn = {
+  name: '',
+  type: '',
+  comment: '',
+  default: '',
+  primary: false,
+  unique: false,
+  notNull: false,
+  autoIncrement: false
+}; // 컬럼 추가시 생성되는 컬럼
 
 const initialTables: Array<Node> = []; // 테이블 초기화
 const initialEdges: Array<Edge> = []; // 엣지 초기화
@@ -57,7 +72,7 @@ const EntityRelationshipCT = ({
   const [isAddTablePopup, setIsAddTablePopup] = useState<boolean>(false); // 테이블 생성 팝업 관리
   const [rfInstance, setRfInstance] = useState<any>(null); // 로컬스토리지 일시 저장용 다이어그램 인스턴스
   const { setViewport } = useReactFlow(); // 전체젹인 뷰 관련 객체
-  const [columns, setColumns] = useState<Array<typeColumn>>([defaultColumn]); // 테이블 컬럼 배열
+  const [columns, setColumns] = useState<Array<typeColumn>>([initColumn]); // 테이블 컬럼 배열
 
   // 다이어그램 제목 input 참조 객체
   const titleNameRef = useRef(
@@ -71,6 +86,8 @@ const EntityRelationshipCT = ({
   const edgeNameRef = useRef(
     null
   ) as React.MutableRefObject<HTMLInputElement | null>;
+
+  const columnInputRefs = useRef({}) as React.MutableRefObject<any>;
 
   const [tables, setTables, handleTablesChange] = useNodesState(initialTables); // 테이블 수정 hook
   const [edges, setEdges, handleEdgesChange] = useEdgesState(initialEdges); // 엣지 수정 hook
@@ -108,6 +125,70 @@ const EntityRelationshipCT = ({
       })
     );
   }, [edgeName, setEdges]);
+
+  // 수정할 컬럼 input ref 접근
+  const handleColumnInputChange = (
+    idx: number,
+    type: string,
+    e: ChangeEvent<HTMLInputElement>
+  ) => {
+    setColumns((columns: Array<typeColumn>) => {
+      return columns.map((column: typeColumn, index) => {
+        if (index === idx) {
+          const value: any = e.target.value;
+          /* TODO: 개씨발 존나 열받는 에러 수정 필요 개 좆같은 새끼 이거 죽여버리고 싶네 */
+          column['name'] = value;
+        }
+
+        return column;
+      });
+    });
+  };
+
+  // 새 컬럼 생성
+  const handleAddColumn = useCallback(
+    (tableId?: string) => {
+      // tableId ? setTables((tbls) => {
+      //   return tbls.map(table => {
+      //     if(tableId === table.id) {
+      //       table.data = {
+      //         ...table.data,
+      //         columns: [...table.data.columns, ]
+      //       };
+      //     }
+
+      //     return table;
+      //   });
+      // }) : setColumns([...columns, defaultColumn])
+
+      setColumns([
+        ...columns,
+        { ...defaultColumn, name: `New Column ${columns.length}` }
+      ]);
+    },
+    [columns]
+  );
+
+  // 컬럼 제거
+  const handleRemoveColumn = useCallback(
+    (idx: number, tableId?: string) => {
+      // tableId ? setTables((tbls) => {
+      //   return tbls.map(table => {
+      //     if(tableId === table.id) {
+      //       table.data = {
+      //         ...table.data,
+      //         columns: [...table.data.columns, ]
+      //       };
+      //     }
+
+      //     return table;
+      //   });
+      // }) : setColumns([...columns, defaultColumn])
+
+      setColumns(columns.filter((_, index) => index !== idx));
+    },
+    [columns]
+  );
 
   // 엣지로 테이블과 연결하는 순간 동작하는 메소드
   const handleConnect = useCallback(
@@ -151,6 +232,7 @@ const EntityRelationshipCT = ({
 
   // 테이블 생성 팝업 제어 메소드
   const handleAddTablePopup = () => {
+    isAddTablePopup && setColumns([initColumn]);
     setIsAddTablePopup(!isAddTablePopup);
   };
 
@@ -287,11 +369,15 @@ const EntityRelationshipCT = ({
       edges={edges}
       tableTypes={tableTypes}
       edgeTypes={edgeTypes}
+      columnInputRefs={columnInputRefs}
       onSetTitle={setTitle}
       onSetTableName={setTableName}
       onSetEdgeName={setEdgeName}
       onTablesChange={handleTablesChange}
       onEdgesChange={handleEdgesChange}
+      onColumnInputChange={handleColumnInputChange}
+      onAddColumn={handleAddColumn}
+      onRemoveColumn={handleRemoveColumn}
       onConnect={handleConnect}
       onTableDoubleClick={handleTableDoubleClick}
       onEdgeDoubleClick={handleEdgeDoubleClick}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import ReactFlow, {
   Background,
   Controls,
@@ -17,6 +17,7 @@ import styles from './EntityRelationship.module.scss';
 import 'reactflow/dist/style.css';
 import SVG from 'modules/SVG';
 import { typeColumn } from 'modules/types';
+import Column from './Column';
 
 const EntityRelationshipPT = ({
   title,
@@ -31,11 +32,15 @@ const EntityRelationshipPT = ({
   edges,
   tableTypes,
   edgeTypes,
+  columnInputRefs,
   onSetTitle,
   onSetTableName,
   onSetEdgeName,
   onTablesChange,
   onEdgesChange,
+  onColumnInputChange,
+  onAddColumn,
+  onRemoveColumn,
   onConnect,
   onTableDoubleClick,
   onEdgeDoubleClick,
@@ -118,49 +123,14 @@ const EntityRelationshipPT = ({
                   columns.length > 0 &&
                   columns.map((column: typeColumn, idx) => (
                     <div key={idx} className={styles.column}>
-                      <div className={styles.inputs}>
-                        <div className={styles.inputDiv}>
-                          <span>Name</span>
-                          <input value={column.name} />
-                        </div>
-                        <div className={styles.inputDiv}>
-                          <span>Type</span>
-                          <input value={column.type} />
-                        </div>
-                        <div className={styles.inputDiv}>
-                          <span>Comment</span>
-                          <input value={column.comment} />
-                        </div>
-                        <div className={styles.inputDiv}>
-                          <span>Default</span>
-                          <input value={column.default} />
-                        </div>
-                      </div>
-                      <div className={styles.checkBoxes}>
-                        <div className={styles.inputDiv}>
-                          <input type="checkbox" checked={column.primary} />
-                          <span>Primary</span>
-                        </div>
-                        <div className={styles.inputDiv}>
-                          <input type="checkbox" checked={column.unique} />
-                          <span>Unique</span>
-                        </div>
-                        <div className={styles.inputDiv}>
-                          <input type="checkbox" checked={column.notNull} />
-                          <span>Not Null</span>
-                        </div>
-                        <div className={styles.inputDiv}>
-                          <input
-                            type="checkbox"
-                            checked={column.autoIncrement}
-                          />
-                          <span>Auto Increment</span>
-                        </div>
-                      </div>
-                      <div className={styles.buttons}>
-                        <button>Remove Column</button>
-                        <button>Add Column</button>
-                      </div>
+                      <Column
+                        idx={idx}
+                        column={column}
+                        columnInputRefs={columnInputRefs}
+                        onColumnInputChange={onColumnInputChange}
+                        onAddColumn={onAddColumn}
+                        onRemoveColumn={onRemoveColumn}
+                      />
                     </div>
                   ))}
               </div>
@@ -189,11 +159,19 @@ interface typeEntityRelationshipPT {
   edges: Edge<any>[];
   tableTypes: NodeTypes;
   edgeTypes: EdgeTypes;
+  columnInputRefs: React.MutableRefObject<any>;
   onSetTitle: React.Dispatch<React.SetStateAction<string>>;
   onSetTableName: React.Dispatch<React.SetStateAction<string>>;
   onSetEdgeName: React.Dispatch<React.SetStateAction<string>>;
   onTablesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
+  onColumnInputChange: (
+    idx: number,
+    type: string,
+    e: ChangeEvent<HTMLInputElement>
+  ) => void;
+  onAddColumn: (tableId?: string) => void;
+  onRemoveColumn: (idx: number, tableId?: string) => void;
   onConnect: OnConnect;
   onTableDoubleClick: NodeMouseHandler;
   onEdgeDoubleClick: EdgeMouseHandler;
