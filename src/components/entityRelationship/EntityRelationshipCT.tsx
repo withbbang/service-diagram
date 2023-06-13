@@ -13,6 +13,8 @@ import {
 } from 'reactflow';
 import EntityRelationshipPT from './EntityRelationshipPT';
 import Table from './CustomNodes/Table';
+import styles from 'components/functionPopup/FunctionPopup.module.scss';
+import { typeColumn } from 'modules/types';
 
 const keyForTempERDiagrams = 'tempERDiagrams'; // 로컬 스토리지에 일시 저장할 키값
 const tableTypes = { table: Table }; // 커스텀 테이블 타입들
@@ -30,6 +32,16 @@ const edgeOptions = {
     stroke: '#74c3f0'
   }
 }; // 엣지 공통 옵션
+const defaultColumn: typeColumn = {
+  name: 'id',
+  type: 'INTEGER',
+  comment: '',
+  default: '',
+  primary: true,
+  unique: true,
+  notNull: true,
+  autoIncrement: true
+}; // 초기 테이블 컬럼
 
 const initialTables: Array<Node> = []; // 테이블 초기화
 const initialEdges: Array<Edge> = []; // 엣지 초기화
@@ -42,8 +54,10 @@ const EntityRelationshipCT = ({
   const [title, setTitle] = useState<string>(''); // 다이어그램 제목
   const [tableName, setTableName] = useState<string>(''); // 테이블 이름
   const [edgeName, setEdgeName] = useState<string>(''); // 엣지 이름
+  const [isAddTablePopup, setIsAddTablePopup] = useState<boolean>(false); // 테이블 생성 팝업 관리
   const [rfInstance, setRfInstance] = useState<any>(null); // 로컬스토리지 일시 저장용 다이어그램 인스턴스
   const { setViewport } = useReactFlow(); // 전체젹인 뷰 관련 객체
+  const [columns, setColumns] = useState<Array<typeColumn>>([defaultColumn]); // 테이블 컬럼 배열
 
   // 다이어그램 제목 input 참조 객체
   const titleNameRef = useRef(
@@ -112,28 +126,33 @@ const EntityRelationshipCT = ({
   );
 
   // 테이블 추가 메소드
-  const handleAddTable = useCallback(
-    (type: string) => {
-      const num = tables.length;
+  // const handleAddTable = useCallback(
+  //   (type: string) => {
+  //     const num = tables.length;
 
-      setTables((tables: Array<Node>) => {
-        return [
-          ...tables.map((table) => ({ ...table, selected: false })),
-          {
-            id: 'table-' + num,
-            type,
-            position: { x: 0, y: 0 },
-            data: {
-              label: 'table ' + num,
-              handleCount: 0
-            },
-            selected: true
-          }
-        ];
-      });
-    },
-    [tables, setTables]
-  );
+  //     setTables((tables: Array<Node>) => {
+  //       return [
+  //         ...tables.map((table) => ({ ...table, selected: false })),
+  //         {
+  //           id: 'table-' + num,
+  //           type,
+  //           position: { x: 0, y: 0 },
+  //           data: {
+  //             label: 'table ' + num,
+  //             handleCount: 0
+  //           },
+  //           selected: true
+  //         }
+  //       ];
+  //     });
+  //   },
+  //   [tables, setTables]
+  // );
+
+  // 테이블 생성 팝업 제어 메소드
+  const handleAddTablePopup = () => {
+    setIsAddTablePopup(!isAddTablePopup);
+  };
 
   // 테이블 더블 클릭 -> 테이블 이름 input 포커싱
   const handleTableDoubleClick = (
@@ -259,6 +278,8 @@ const EntityRelationshipCT = ({
       title={title}
       tableName={tableName}
       edgeName={edgeName}
+      isAddTablePopup={isAddTablePopup}
+      columns={columns}
       titleNameRef={titleNameRef}
       tableNameRef={tableNameRef}
       edgeNameRef={edgeNameRef}
@@ -276,7 +297,7 @@ const EntityRelationshipCT = ({
       onEdgeDoubleClick={handleEdgeDoubleClick}
       onKeyDown={handleKeyDown}
       onBlur={handleBlur}
-      onAddTable={handleAddTable}
+      onAddTablePopup={handleAddTablePopup}
       onSave={handleSave}
       onRestore={handleRestore}
       onInit={setRfInstance}

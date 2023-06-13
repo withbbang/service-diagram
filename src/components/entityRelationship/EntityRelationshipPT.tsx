@@ -11,16 +11,19 @@ import ReactFlow, {
   OnEdgesChange,
   OnConnect,
   NodeMouseHandler,
-  EdgeMouseHandler,
-  OnConnectStartParams
+  EdgeMouseHandler
 } from 'reactflow';
 import styles from './EntityRelationship.module.scss';
 import 'reactflow/dist/style.css';
+import SVG from 'modules/SVG';
+import { typeColumn } from 'modules/types';
 
 const EntityRelationshipPT = ({
   title,
   tableName,
   edgeName,
+  isAddTablePopup,
+  columns,
   titleNameRef,
   tableNameRef,
   edgeNameRef,
@@ -38,19 +41,12 @@ const EntityRelationshipPT = ({
   onEdgeDoubleClick,
   onKeyDown,
   onBlur,
-  onAddTable,
+  onAddTablePopup,
   onSave,
   onRestore,
   onInit,
   onAddHandle
 }: typeEntityRelationshipPT): JSX.Element => {
-  const onConnectStart: any = (
-    event: React.MouseEvent,
-    params: OnConnectStartParams
-  ) => {
-    console.log(event, params);
-  };
-
   return (
     <>
       <div className={styles.wrap}>
@@ -66,7 +62,6 @@ const EntityRelationshipPT = ({
           onEdgeDoubleClick={onEdgeDoubleClick}
           onInit={onInit}
           fitView
-          onConnectStart={onConnectStart}
         >
           <Controls />
           <MiniMap />
@@ -96,7 +91,7 @@ const EntityRelationshipPT = ({
               onBlur={() => onBlur('edge')}
               ref={edgeNameRef}
             />
-            <button onClick={() => onAddTable('table')}>Add Table</button>
+            <button onClick={onAddTablePopup}>Add Table</button>
             <button onClick={() => onSave()}>Temporarily Save Diagrams</button>
             <button onClick={() => onRestore()}>
               Restore Temporary Diagrams
@@ -104,6 +99,78 @@ const EntityRelationshipPT = ({
             <button onClick={() => onAddHandle()}>Add Handle</button>
           </div>
         </ReactFlow>
+        {isAddTablePopup && (
+          <div className={styles.background}>
+            <div className={styles.close} onClick={onAddTablePopup}>
+              <SVG type="close" width="40px" height="40px" fill={'#fff'} />
+            </div>
+            <div className={styles.modalBody}>
+              <div className={styles.inputDiv}>
+                <span>Table Name:</span>
+                <input />
+              </div>
+              <div className={styles.inputDiv}>
+                <span>Table Comment:</span>
+                <input />
+              </div>
+              <div className={styles.columnsDiv}>
+                {Array.isArray(columns) &&
+                  columns.length > 0 &&
+                  columns.map((column: typeColumn, idx) => (
+                    <div key={idx} className={styles.column}>
+                      <div className={styles.inputs}>
+                        <div className={styles.inputDiv}>
+                          <span>Name</span>
+                          <input value={column.name} />
+                        </div>
+                        <div className={styles.inputDiv}>
+                          <span>Type</span>
+                          <input value={column.type} />
+                        </div>
+                        <div className={styles.inputDiv}>
+                          <span>Comment</span>
+                          <input value={column.comment} />
+                        </div>
+                        <div className={styles.inputDiv}>
+                          <span>Default</span>
+                          <input value={column.default} />
+                        </div>
+                      </div>
+                      <div className={styles.checkBoxes}>
+                        <div className={styles.inputDiv}>
+                          <input type="checkbox" checked={column.primary} />
+                          <span>Primary</span>
+                        </div>
+                        <div className={styles.inputDiv}>
+                          <input type="checkbox" checked={column.unique} />
+                          <span>Unique</span>
+                        </div>
+                        <div className={styles.inputDiv}>
+                          <input type="checkbox" checked={column.notNull} />
+                          <span>Not Null</span>
+                        </div>
+                        <div className={styles.inputDiv}>
+                          <input
+                            type="checkbox"
+                            checked={column.autoIncrement}
+                          />
+                          <span>Auto Increment</span>
+                        </div>
+                      </div>
+                      <div className={styles.buttons}>
+                        <button>Remove Column</button>
+                        <button>Add Column</button>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+              <div className={styles.btnsDiv}>
+                <button onClick={onAddTablePopup}>Cancel</button>
+                <button>Commit</button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
@@ -113,6 +180,8 @@ interface typeEntityRelationshipPT {
   title: string;
   tableName: string;
   edgeName: string;
+  isAddTablePopup: boolean;
+  columns: Array<typeColumn>;
   titleNameRef: React.MutableRefObject<HTMLInputElement | null>;
   tableNameRef: React.MutableRefObject<HTMLInputElement | null>;
   edgeNameRef: React.MutableRefObject<HTMLInputElement | null>;
@@ -130,7 +199,7 @@ interface typeEntityRelationshipPT {
   onEdgeDoubleClick: EdgeMouseHandler;
   onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>, type: string) => void;
   onBlur: (type: string) => void;
-  onAddTable: (type: string) => void;
+  onAddTablePopup: () => void;
   onSave: () => void;
   onRestore: () => void;
   onInit: React.Dispatch<any>;

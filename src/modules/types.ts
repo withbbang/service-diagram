@@ -24,3 +24,20 @@ export interface typeCustomNode {
   xPos: number;
   yPos: number;
 }
+
+export interface typeTable {
+  name: string;
+  comment: string;
+  columns: Array<typeColumn>;
+}
+
+export interface typeColumn {
+  name: string;
+  type: string;
+  comment: string;
+  default: string;
+  primary: boolean;
+  unique: boolean;
+  notNull: boolean;
+  autoIncrement: boolean;
+}
