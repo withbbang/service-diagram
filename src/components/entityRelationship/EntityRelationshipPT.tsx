@@ -24,10 +24,9 @@ const EntityRelationshipPT = ({
   tableName,
   tableComment,
   edgeName,
-  isAddUpdateTablePopup,
+  selectedTableIdx,
   columns,
   titleNameRef,
-  tableNameRef,
   edgeNameRef,
   tables,
   edges,
@@ -44,14 +43,13 @@ const EntityRelationshipPT = ({
   onDragStart,
   onDragEnd,
   onDragOver,
-  onAddTable,
+  onSetSelectedTableIdx,
+  onAddUpdateTable,
   onRemoveColumn,
   onConnect,
-  onTableDoubleClick,
   onEdgeDoubleClick,
   onKeyDown,
   onBlur,
-  onAddUpdateTablePopup,
   onSave,
   onRestore,
   onInit,
@@ -68,7 +66,6 @@ const EntityRelationshipPT = ({
           onNodesChange={onTablesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
-          onNodeDoubleClick={onTableDoubleClick}
           onEdgeDoubleClick={onEdgeDoubleClick}
           onInit={onInit}
           fitView
@@ -85,14 +82,6 @@ const EntityRelationshipPT = ({
               onBlur={() => onBlur('title')}
               ref={titleNameRef}
             />
-            {/* <label>Table Label:</label>
-            <input
-              value={tableName}
-              onKeyDown={(e) => onKeyDown(e, 'table')}
-              onChange={(e) => onSetTableName(e.target.value)}
-              onBlur={() => onBlur('table')}
-              ref={tableNameRef}
-            /> */}
             <label>Edge Label:</label>
             <input
               value={edgeName}
@@ -101,62 +90,64 @@ const EntityRelationshipPT = ({
               onBlur={() => onBlur('edge')}
               ref={edgeNameRef}
             />
-            <button onClick={() => onAddUpdateTablePopup()}>Add Table</button>
+            <button onClick={() => onSetSelectedTableIdx(-1)}>Add Table</button>
             <button onClick={() => onSave()}>Temporarily Save Diagrams</button>
             <button onClick={() => onRestore()}>
               Restore Temporary Diagrams
             </button>
             <button onClick={() => onAddHandle()}>Add Handle</button>
           </div>
+          {selectedTableIdx !== null && (
+            <div className={styles.background}>
+              <div
+                className={styles.close}
+                onClick={() => onSetSelectedTableIdx(null)}
+              >
+                <SVG type="close" width="40px" height="40px" fill={'#fff'} />
+              </div>
+              <div className={styles.modalBody}>
+                <div className={styles.inputDiv}>
+                  <span>Table Name:</span>
+                  <input
+                    value={tableName}
+                    onChange={(e) => onSetTableName(e.target.value)}
+                  />
+                </div>
+                <div className={styles.inputDiv}>
+                  <span>Table Comment:</span>
+                  <input
+                    value={tableComment}
+                    onChange={(e) => onSetTableComment(e.target.value)}
+                  />
+                </div>
+                <div className={styles.columnsDiv}>
+                  {Array.isArray(columns) &&
+                    columns.length > 0 &&
+                    columns.map((column: typeColumn, idx) => (
+                      <div key={idx} className={styles.column}>
+                        <Column
+                          idx={idx}
+                          column={column}
+                          onColumnInputChange={onColumnInputChange}
+                          onAddColumn={onAddColumn}
+                          onRemoveColumn={onRemoveColumn}
+                          onDragStart={onDragStart}
+                          onDragEnd={onDragEnd}
+                          onDragOver={onDragOver}
+                        />
+                      </div>
+                    ))}
+                </div>
+                <div className={styles.btnsDiv}>
+                  <button onClick={() => onSetSelectedTableIdx(null)}>
+                    Cancel
+                  </button>
+                  <button onClick={onAddUpdateTable}>Commit</button>
+                </div>
+              </div>
+            </div>
+          )}
         </ReactFlow>
-        {isAddUpdateTablePopup && (
-          <div className={styles.background}>
-            <div
-              className={styles.close}
-              onClick={() => onAddUpdateTablePopup()}
-            >
-              <SVG type="close" width="40px" height="40px" fill={'#fff'} />
-            </div>
-            <div className={styles.modalBody}>
-              <div className={styles.inputDiv}>
-                <span>Table Name:</span>
-                <input
-                  value={tableName}
-                  onChange={(e) => onSetTableName(e.target.value)}
-                />
-              </div>
-              <div className={styles.inputDiv}>
-                <span>Table Comment:</span>
-                <input
-                  value={tableComment}
-                  onChange={(e) => onSetTableComment(e.target.value)}
-                />
-              </div>
-              <div className={styles.columnsDiv}>
-                {Array.isArray(columns) &&
-                  columns.length > 0 &&
-                  columns.map((column: typeColumn, idx) => (
-                    <div key={idx} className={styles.column}>
-                      <Column
-                        idx={idx}
-                        column={column}
-                        onColumnInputChange={onColumnInputChange}
-                        onAddColumn={onAddColumn}
-                        onRemoveColumn={onRemoveColumn}
-                        onDragStart={onDragStart}
-                        onDragEnd={onDragEnd}
-                        onDragOver={onDragOver}
-                      />
-                    </div>
-                  ))}
-              </div>
-              <div className={styles.btnsDiv}>
-                <button onClick={() => onAddUpdateTablePopup()}>Cancel</button>
-                <button onClick={onAddTable}>Commit</button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </>
   );
@@ -167,10 +158,9 @@ interface typeEntityRelationshipPT {
   tableName: string;
   tableComment: string;
   edgeName: string;
-  isAddUpdateTablePopup: boolean;
+  selectedTableIdx: number | null;
   columns: Array<typeColumn>;
   titleNameRef: React.MutableRefObject<HTMLInputElement | null>;
-  tableNameRef: React.MutableRefObject<HTMLInputElement | null>;
   edgeNameRef: React.MutableRefObject<HTMLInputElement | null>;
   tables: Node<any, string | undefined>[];
   edges: Edge<any>[];
@@ -187,18 +177,17 @@ interface typeEntityRelationshipPT {
     type: string,
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => void;
+  onSetSelectedTableIdx: React.Dispatch<React.SetStateAction<number | null>>;
   onAddColumn: (tableId?: string) => void;
   onDragStart: (e: React.DragEvent<HTMLDivElement>, idx: number) => void;
   onDragEnd: (e: React.DragEvent<HTMLDivElement>, idx: number) => void;
   onDragOver: (e: React.DragEvent<HTMLDivElement>, idx: number) => void;
-  onAddTable: () => void;
+  onAddUpdateTable: () => void;
   onRemoveColumn: (idx: number, tableId?: string) => void;
   onConnect: OnConnect;
-  onTableDoubleClick: NodeMouseHandler;
   onEdgeDoubleClick: EdgeMouseHandler;
   onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>, type: string) => void;
   onBlur: (type: string) => void;
-  onAddUpdateTablePopup: (idx?: number) => void;
   onSave: () => void;
   onRestore: () => void;
   onInit: React.Dispatch<any>;

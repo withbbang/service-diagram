@@ -13,6 +13,7 @@ div {
   box-sizing: border-box;
 
   .tableName {
+    position: relative;
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -20,10 +21,13 @@ div {
     font-size: 0.9em;
     border-bottom: solid 0.5px #ddd;
     box-sizing: border-box;
-    padding: 15px 10px;
+    padding: 20px 10px 15px 10px;
 
     .floatBtns {
+      position: absolute;
       display: none;
+      top: 8px;
+      right: 10px;
 
       > span {
         display: flex;
@@ -46,7 +50,7 @@ div {
     font-size: 0.1em;
     border-bottom: solid 0.5px #ddd;
     box-sizing: border-box;
-    padding: 15px 10px;
+    padding: 8px;
 
     &.nothing {
       border-bottom: none;

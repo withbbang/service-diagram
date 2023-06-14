@@ -16,11 +16,11 @@ function Table({
       <div className={styles.tableName}>
         {data.tableName}
         <div className={styles.floatBtns}>
-          <span onClick={() => data.onAddUpdateTablePopup(data.idx)}>
-            <SVG type="modify" width="14px" height="14px" />
+          <span onClick={() => data.onSetSelectedTableIdx(data.idx)}>
+            <SVG type="modify" width="10px" height="10px" />
           </span>
           <span>
-            <SVG type="trash" width="15px" height="15px" />
+            <SVG type="trash" width="10px" height="10px" />
           </span>
         </div>
       </div>

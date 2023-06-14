@@ -21,6 +21,7 @@ import {
 import EntityRelationshipPT from './EntityRelationshipPT';
 import Table from './CustomNodes/Table';
 import { typeColumn } from 'modules/types';
+import { handleRandomString } from 'modules/utils';
 
 const keyForTempERDiagrams = 'tempERDiagrams'; // 로컬 스토리지에 일시 저장할 키값
 const edgeTypes = {}; // 커스텀 엣지 타입들
@@ -61,6 +62,8 @@ const defaultColumn: typeColumn = {
 const initialTables: Array<Node> = []; // 테이블 초기화
 const initialEdges: Array<Edge> = []; // 엣지 초기화
 
+const initTableName: string = 'New Table';
+
 const EntityRelationshipCT = ({
   handleLoaderTrue,
   handleLoaderFalse
@@ -69,24 +72,18 @@ const EntityRelationshipCT = ({
 
   const [id, setId] = useState<string>(''); // 포커싱된 테이블 및 엣지 id
   const [title, setTitle] = useState<string>(''); // 다이어그램 제목
-  const [tableName, setTableName] = useState<string>('New Table'); // 테이블 이름
+  const [tableName, setTableName] = useState<string>(initTableName); // 테이블 이름
   const [tableComment, setTableComment] = useState<string>(''); // 테이블 설명
   const [edgeName, setEdgeName] = useState<string>(''); // 엣지 이름
-  const [isAddUpdateTablePopup, setIsAddUpdateTablePopup] =
-    useState<boolean>(false); // 테이블 생성 팝업 관리
   const [rfInstance, setRfInstance] = useState<any>(null); // 로컬스토리지 일시 저장용 다이어그램 인스턴스
   const { setViewport } = useReactFlow(); // 전체젹인 뷰 관련 객체
   const [columns, setColumns] = useState<Array<typeColumn>>([initColumn]); // 테이블 컬럼 배열
-  const [selectedTableIdx, setSelectedTableIdx] = useState<number>(-1); // 선택된 테이블 인덱스
+  const [selectedTableIdx, setSelectedTableIdx] = useState<number | null>(null); // 선택된 테이블 인덱스
   const [isDragging, setIsDragging] = useState<boolean>(false); // 드래그 여부
   const [draggingIdx, setDraggingIdx] = useState<number>(-1); // 드래그 중인 컬럼 인덱스
 
   // 다이어그램 제목 input 참조 객체
   const titleNameRef = useRef(
-    null
-  ) as React.MutableRefObject<HTMLInputElement | null>;
-  // 포커싱된 테이블 이름 input 참조 객체
-  const tableNameRef = useRef(
     null
   ) as React.MutableRefObject<HTMLInputElement | null>;
   // 포커싱된 엣지 이름 input 참조 객체
@@ -130,6 +127,22 @@ const EntityRelationshipCT = ({
       })
     );
   }, [edgeName, setEdges]);
+
+  useEffect(() => {
+    if (selectedTableIdx === null) {
+    } else if (selectedTableIdx === -1) {
+      setTableName(initTableName);
+      setTableComment('');
+      setColumns([initColumn]);
+    } else {
+      const { tableName, tableComment, columns } =
+        tables[selectedTableIdx].data;
+
+      setTableName(tableName);
+      setTableComment(tableComment);
+      setColumns(columns);
+    }
+  }, [selectedTableIdx]);
 
   // 수정할 컬럼 input 접근
   const handleColumnInputChange = useCallback(
@@ -229,56 +242,55 @@ const EntityRelationshipCT = ({
     setDraggingIdx(idx);
   };
 
-  // 테이블 추가 메소드
-  const handleAddTable = useCallback(() => {
+  // 테이블 추가/수정 메소드
+  const handleAddUpdateTable = useCallback(() => {
     setTables((tables: Array<Node>) => {
-      const num = tables.length;
-      return [
-        ...tables.map((table) => ({ ...table, selected: false })),
-        {
-          id: 'table-' + num,
-          type: 'table',
-          position: { x: 0, y: 0 },
-          selected: true,
-          data: {
-            idx: tables.length,
-            tableName,
-            tableComment,
-            columns,
-            onAddUpdateTablePopup: handleAddUpdateTablePopup,
-            onDeleteTable: handleDeleteTable
-          }
+      let returnArr: Array<Node> = [];
+      if (selectedTableIdx !== null) {
+        if (selectedTableIdx > -1) {
+          returnArr = [
+            ...tables.map((table, idx) => {
+              if (selectedTableIdx === idx) {
+                table.data = {
+                  ...table.data,
+                  columns
+                };
+              }
+
+              return table;
+            })
+          ];
+        } else {
+          returnArr = [
+            ...tables.map((table) => ({ ...table, selected: false })),
+            {
+              id: 'table-' + handleRandomString(),
+              type: 'table',
+              position: { x: 0, y: 0 },
+              selected: true,
+              data: {
+                idx: tables.length,
+                tableName,
+                tableComment,
+                columns,
+                onSetSelectedTableIdx: setSelectedTableIdx,
+                onDeleteTable: handleDeleteTable
+              }
+            }
+          ];
         }
-      ];
+      }
+
+      return returnArr;
     });
 
-    handleAddUpdateTablePopup();
-  }, [tables, columns, isAddUpdateTablePopup]);
+    setSelectedTableIdx(null);
+  }, [tables, columns]);
 
   // 테이블 삭제 메소드
   const handleDeleteTable = useCallback(
     (id: string, idx: number) => {},
     [tables, edges, columns]
-  );
-
-  // 테이블 생성/업데이트 팝업 on/off
-  const handleAddUpdateTablePopup = useCallback(
-    (idx?: number) => {
-      console.log(tables);
-      if (isAddUpdateTablePopup) {
-        setSelectedTableIdx(-1);
-        setColumns([initColumn]);
-      } else {
-        if (idx !== undefined) {
-          setSelectedTableIdx(idx);
-          setColumns([...tables[idx].data.columns]);
-        }
-      }
-
-      // TODO: 기존 setIsAddUpdateTablePopup(!isAddUpdateTablePopup) 이렇게 실행하면 안된 이유 공부하기
-      setIsAddUpdateTablePopup((prevState) => !prevState);
-    },
-    [tables, columns, isAddUpdateTablePopup]
   );
 
   // 엣지로 테이블과 연결하는 순간 동작하는 메소드
@@ -297,25 +309,12 @@ const EntityRelationshipCT = ({
     [setEdges]
   );
 
-  // 테이블 더블 클릭 -> 테이블 이름 input 포커싱
-  const handleTableDoubleClick = (
-    e: React.MouseEvent<Element, MouseEvent>,
-    table: Node
-  ) => {
-    setEdgeName('');
-    setId(table.id);
-    setTableName(table.data.label);
-    tableNameRef && tableNameRef.current && tableNameRef.current.focus();
-    edgeNameRef && edgeNameRef.current && edgeNameRef.current.blur();
-  };
-
   // 엣지 더블 클릭 -> 엣지 이름 input 포커싱
   const handleEdgeDoubleClick = (e: React.MouseEvent, edge: any) => {
     setTableName('');
     setId(edge.id);
     edge.label ? setEdgeName(edge.label) : setEdgeName('');
     edgeNameRef && edgeNameRef.current && edgeNameRef.current.focus();
-    tableNameRef && tableNameRef.current && tableNameRef.current.blur();
   };
 
   // input 포커싱 해제
@@ -323,9 +322,6 @@ const EntityRelationshipCT = ({
     setId('');
     if (type === 'title' && titleNameRef && titleNameRef.current) {
       titleNameRef.current.blur();
-    } else if (type === 'table' && tableNameRef && tableNameRef.current) {
-      setTableName('');
-      tableNameRef.current.blur();
     } else if (type === 'edge' && edgeNameRef && edgeNameRef.current) {
       setEdgeName('');
       edgeNameRef.current.blur();
@@ -422,10 +418,9 @@ const EntityRelationshipCT = ({
       tableName={tableName}
       tableComment={tableComment}
       edgeName={edgeName}
-      isAddUpdateTablePopup={isAddUpdateTablePopup}
+      selectedTableIdx={selectedTableIdx}
       columns={columns}
       titleNameRef={titleNameRef}
-      tableNameRef={tableNameRef}
       edgeNameRef={edgeNameRef}
       tables={tables}
       edges={edges}
@@ -438,18 +433,17 @@ const EntityRelationshipCT = ({
       onTablesChange={handleTablesChange}
       onEdgesChange={handleEdgesChange}
       onColumnInputChange={handleColumnInputChange}
+      onSetSelectedTableIdx={setSelectedTableIdx}
       onAddColumn={handleAddColumn}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       onDragOver={handleDragOver}
-      onAddTable={handleAddTable}
+      onAddUpdateTable={handleAddUpdateTable}
       onRemoveColumn={handleRemoveColumn}
       onConnect={handleConnect}
-      onTableDoubleClick={handleTableDoubleClick}
       onEdgeDoubleClick={handleEdgeDoubleClick}
       onKeyDown={handleKeyDown}
       onBlur={handleBlur}
-      onAddUpdateTablePopup={handleAddUpdateTablePopup}
       onSave={handleSave}
       onRestore={handleRestore}
       onInit={setRfInstance}
