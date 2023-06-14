@@ -22,6 +22,32 @@ div {
     box-sizing: border-box;
     padding: 15px 10px;
 
+    .floatBtns {
+      display: none;
+
+      > span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+
+        &:last-child {
+          margin-left: 5px;
+        }
+      }
+    }
+  }
+
+  .tableComment {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.1em;
+    border-bottom: solid 0.5px #ddd;
+    box-sizing: border-box;
+    padding: 15px 10px;
+
     &.nothing {
       border-bottom: none;
     }
@@ -51,8 +77,20 @@ div {
       }
     }
 
+    > span {
+      color: #aaa;
+    }
+
     &.isLast {
       border-bottom: none;
+    }
+  }
+
+  &:hover {
+    .tableName {
+      .floatBtns {
+        display: flex;
+      }
     }
   }
 }

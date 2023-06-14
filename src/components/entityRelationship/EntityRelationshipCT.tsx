@@ -2,6 +2,7 @@ import React, {
   ChangeEvent,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState
 } from 'react';
@@ -22,7 +23,6 @@ import Table from './CustomNodes/Table';
 import { typeColumn } from 'modules/types';
 
 const keyForTempERDiagrams = 'tempERDiagrams'; // 로컬 스토리지에 일시 저장할 키값
-const tableTypes = { table: Table }; // 커스텀 테이블 타입들
 const edgeTypes = {}; // 커스텀 엣지 타입들
 const edgeOptions = {
   // // animated: true,
@@ -65,17 +65,21 @@ const EntityRelationshipCT = ({
   handleLoaderTrue,
   handleLoaderFalse
 }: typeEntityRelationshipCT): JSX.Element => {
+  const tableTypes = useMemo(() => ({ table: Table }), []); // 커스텀 테이블 타입들
+
   const [id, setId] = useState<string>(''); // 포커싱된 테이블 및 엣지 id
   const [title, setTitle] = useState<string>(''); // 다이어그램 제목
   const [tableName, setTableName] = useState<string>('New Table'); // 테이블 이름
   const [tableComment, setTableComment] = useState<string>(''); // 테이블 설명
   const [edgeName, setEdgeName] = useState<string>(''); // 엣지 이름
-  const [isAddTablePopup, setIsAddTablePopup] = useState<boolean>(false); // 테이블 생성 팝업 관리
+  const [isAddUpdateTablePopup, setIsAddUpdateTablePopup] =
+    useState<boolean>(false); // 테이블 생성 팝업 관리
   const [rfInstance, setRfInstance] = useState<any>(null); // 로컬스토리지 일시 저장용 다이어그램 인스턴스
   const { setViewport } = useReactFlow(); // 전체젹인 뷰 관련 객체
   const [columns, setColumns] = useState<Array<typeColumn>>([initColumn]); // 테이블 컬럼 배열
-  const [isDragging, setIsDragging] = useState<boolean>(false);
-  const [draggingIdx, setDraggingIdx] = useState<number>(-1);
+  const [selectedTableIdx, setSelectedTableIdx] = useState<number>(-1); // 선택된 테이블 인덱스
+  const [isDragging, setIsDragging] = useState<boolean>(false); // 드래그 여부
+  const [draggingIdx, setDraggingIdx] = useState<number>(-1); // 드래그 중인 컬럼 인덱스
 
   // 다이어그램 제목 input 참조 객체
   const titleNameRef = useRef(
@@ -127,7 +131,7 @@ const EntityRelationshipCT = ({
     );
   }, [edgeName, setEdges]);
 
-  // 수정할 컬럼 input ref 접근
+  // 수정할 컬럼 input 접근
   const handleColumnInputChange = useCallback(
     (
       idx: number,
@@ -237,22 +241,45 @@ const EntityRelationshipCT = ({
           position: { x: 0, y: 0 },
           selected: true,
           data: {
+            idx: tables.length,
             tableName,
             tableComment,
-            columns
+            columns,
+            onAddUpdateTablePopup: handleAddUpdateTablePopup,
+            onDeleteTable: handleDeleteTable
           }
         }
       ];
     });
 
-    handleAddTablePopup();
-  }, [tables, columns, isAddTablePopup]);
+    handleAddUpdateTablePopup();
+  }, [tables, columns, isAddUpdateTablePopup]);
 
-  // 테이블 생성 팝업 on/off
-  const handleAddTablePopup = () => {
-    isAddTablePopup && setColumns([initColumn]);
-    setIsAddTablePopup(!isAddTablePopup);
-  };
+  // 테이블 삭제 메소드
+  const handleDeleteTable = useCallback(
+    (id: string, idx: number) => {},
+    [tables, edges, columns]
+  );
+
+  // 테이블 생성/업데이트 팝업 on/off
+  const handleAddUpdateTablePopup = useCallback(
+    (idx?: number) => {
+      console.log(tables);
+      if (isAddUpdateTablePopup) {
+        setSelectedTableIdx(-1);
+        setColumns([initColumn]);
+      } else {
+        if (idx !== undefined) {
+          setSelectedTableIdx(idx);
+          setColumns([...tables[idx].data.columns]);
+        }
+      }
+
+      // TODO: 기존 setIsAddUpdateTablePopup(!isAddUpdateTablePopup) 이렇게 실행하면 안된 이유 공부하기
+      setIsAddUpdateTablePopup((prevState) => !prevState);
+    },
+    [tables, columns, isAddUpdateTablePopup]
+  );
 
   // 엣지로 테이블과 연결하는 순간 동작하는 메소드
   const handleConnect = useCallback(
@@ -395,7 +422,7 @@ const EntityRelationshipCT = ({
       tableName={tableName}
       tableComment={tableComment}
       edgeName={edgeName}
-      isAddTablePopup={isAddTablePopup}
+      isAddUpdateTablePopup={isAddUpdateTablePopup}
       columns={columns}
       titleNameRef={titleNameRef}
       tableNameRef={tableNameRef}
@@ -422,7 +449,7 @@ const EntityRelationshipCT = ({
       onEdgeDoubleClick={handleEdgeDoubleClick}
       onKeyDown={handleKeyDown}
       onBlur={handleBlur}
-      onAddTablePopup={handleAddTablePopup}
+      onAddUpdateTablePopup={handleAddUpdateTablePopup}
       onSave={handleSave}
       onRestore={handleRestore}
       onInit={setRfInstance}

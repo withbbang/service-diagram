@@ -4,17 +4,37 @@ import { typeColumn, typeCustomNode } from 'modules/types';
 import styles from './CommonNodeStyles.module.scss';
 import SVG from 'modules/SVG';
 
-function Table({ data, isConnectable }: typeCustomNode): JSX.Element {
+function Table({
+  id,
+  data,
+  isConnectable,
+  selected
+}: typeCustomNode): JSX.Element {
+  console.log(data);
   return (
     <div className={styles.tableWrap}>
+      <div className={styles.tableName}>
+        {data.tableName}
+        <div className={styles.floatBtns}>
+          <span onClick={() => data.onAddUpdateTablePopup(data.idx)}>
+            <SVG type="modify" width="14px" height="14px" />
+          </span>
+          <span>
+            <SVG type="trash" width="15px" height="15px" />
+          </span>
+        </div>
+      </div>
       <div
         className={
           data.columns && data.columns.length > 0
-            ? styles.tableName
-            : [styles.tableName, styles.nothing].join(' ')
+            ? styles.tableComment
+            : [styles.tableComment, styles.nothing].join(' ')
+        }
+        style={
+          data.tableComment === '' ? { fontStyle: 'italic', color: '#aaa' } : {}
         }
       >
-        {data.tableName}
+        {data.tableComment ? data.tableComment : '(No Comment)'}
       </div>
       {data.columns &&
         data.columns.length > 0 &&

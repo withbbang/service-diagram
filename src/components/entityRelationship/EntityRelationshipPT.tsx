@@ -24,7 +24,7 @@ const EntityRelationshipPT = ({
   tableName,
   tableComment,
   edgeName,
-  isAddTablePopup,
+  isAddUpdateTablePopup,
   columns,
   titleNameRef,
   tableNameRef,
@@ -51,7 +51,7 @@ const EntityRelationshipPT = ({
   onEdgeDoubleClick,
   onKeyDown,
   onBlur,
-  onAddTablePopup,
+  onAddUpdateTablePopup,
   onSave,
   onRestore,
   onInit,
@@ -101,7 +101,7 @@ const EntityRelationshipPT = ({
               onBlur={() => onBlur('edge')}
               ref={edgeNameRef}
             />
-            <button onClick={onAddTablePopup}>Add Table</button>
+            <button onClick={() => onAddUpdateTablePopup()}>Add Table</button>
             <button onClick={() => onSave()}>Temporarily Save Diagrams</button>
             <button onClick={() => onRestore()}>
               Restore Temporary Diagrams
@@ -109,9 +109,12 @@ const EntityRelationshipPT = ({
             <button onClick={() => onAddHandle()}>Add Handle</button>
           </div>
         </ReactFlow>
-        {isAddTablePopup && (
+        {isAddUpdateTablePopup && (
           <div className={styles.background}>
-            <div className={styles.close} onClick={onAddTablePopup}>
+            <div
+              className={styles.close}
+              onClick={() => onAddUpdateTablePopup()}
+            >
               <SVG type="close" width="40px" height="40px" fill={'#fff'} />
             </div>
             <div className={styles.modalBody}>
@@ -148,7 +151,7 @@ const EntityRelationshipPT = ({
                   ))}
               </div>
               <div className={styles.btnsDiv}>
-                <button onClick={onAddTablePopup}>Cancel</button>
+                <button onClick={() => onAddUpdateTablePopup()}>Cancel</button>
                 <button onClick={onAddTable}>Commit</button>
               </div>
             </div>
@@ -164,7 +167,7 @@ interface typeEntityRelationshipPT {
   tableName: string;
   tableComment: string;
   edgeName: string;
-  isAddTablePopup: boolean;
+  isAddUpdateTablePopup: boolean;
   columns: Array<typeColumn>;
   titleNameRef: React.MutableRefObject<HTMLInputElement | null>;
   tableNameRef: React.MutableRefObject<HTMLInputElement | null>;
@@ -195,7 +198,7 @@ interface typeEntityRelationshipPT {
   onEdgeDoubleClick: EdgeMouseHandler;
   onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>, type: string) => void;
   onBlur: (type: string) => void;
-  onAddTablePopup: () => void;
+  onAddUpdateTablePopup: (idx?: number) => void;
   onSave: () => void;
   onRestore: () => void;
   onInit: React.Dispatch<any>;
