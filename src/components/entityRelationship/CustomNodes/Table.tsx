@@ -10,7 +10,7 @@ function Table({
   isConnectable,
   selected
 }: typeCustomNode): JSX.Element {
-  console.log(data);
+  // console.log(data);
   return (
     <div className={styles.tableWrap}>
       <div className={styles.tableName}>

@@ -38,7 +38,7 @@ const edgeOptions = {
     stroke: '#74c3f0'
   }
 }; // 엣지 공통 옵션
-const initColumn: typeColumn = {
+const initColumn: typeColumn = Object.freeze({
   name: 'id',
   type: 'INTEGER',
   comment: '',
@@ -47,8 +47,8 @@ const initColumn: typeColumn = {
   unique: true,
   notNull: true,
   autoIncrement: true
-}; // 초기 테이블 컬럼
-const defaultColumn: typeColumn = {
+}); // 초기 테이블 컬럼
+const defaultColumn: typeColumn = Object.freeze({
   name: '',
   type: '',
   comment: '',
@@ -57,7 +57,7 @@ const defaultColumn: typeColumn = {
   unique: false,
   notNull: false,
   autoIncrement: false
-}; // 컬럼 추가시 생성되는 컬럼
+}); // 컬럼 추가시 생성되는 컬럼
 
 const initialTables: Array<Node> = []; // 테이블 초기화
 const initialEdges: Array<Edge> = []; // 엣지 초기화
@@ -79,7 +79,6 @@ const EntityRelationshipCT = ({
   const { setViewport } = useReactFlow(); // 전체젹인 뷰 관련 객체
   const [columns, setColumns] = useState<Array<typeColumn>>([initColumn]); // 테이블 컬럼 배열
   const [selectedTableIdx, setSelectedTableIdx] = useState<number | null>(null); // 선택된 테이블 인덱스
-  const [isDragging, setIsDragging] = useState<boolean>(false); // 드래그 여부
   const [draggingIdx, setDraggingIdx] = useState<number>(-1); // 드래그 중인 컬럼 인덱스
 
   // 다이어그램 제목 input 참조 객체
@@ -133,7 +132,7 @@ const EntityRelationshipCT = ({
     } else if (selectedTableIdx === -1) {
       setTableName(initTableName);
       setTableComment('');
-      setColumns([initColumn]);
+      setColumns([{ ...initColumn }]);
     } else {
       const { tableName, tableComment, columns } =
         tables[selectedTableIdx].data;
@@ -216,7 +215,6 @@ const EntityRelationshipCT = ({
 
   // 컬럼 드래그 시작 콜백
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>, idx: number) => {
-    setIsDragging(true);
     setDraggingIdx(idx);
     e.currentTarget.style.opacity = '0.4';
   };
@@ -225,7 +223,6 @@ const EntityRelationshipCT = ({
   const handleDragEnd = (e: React.DragEvent<HTMLDivElement>, idx: number) => {
     e.stopPropagation();
     e.preventDefault();
-    setIsDragging(false);
     setDraggingIdx(-1);
     e.currentTarget.style.opacity = '';
   };
@@ -253,6 +250,8 @@ const EntityRelationshipCT = ({
               if (selectedTableIdx === idx) {
                 table.data = {
                   ...table.data,
+                  tableName,
+                  tableComment,
                   columns
                 };
               }
@@ -285,7 +284,7 @@ const EntityRelationshipCT = ({
     });
 
     setSelectedTableIdx(null);
-  }, [tables, columns]);
+  }, [tables, tableName, tableComment, columns, selectedTableIdx]);
 
   // 테이블 삭제 메소드
   const handleDeleteTable = useCallback(
@@ -373,10 +372,18 @@ const EntityRelationshipCT = ({
         if (flow) {
           const { x = 0, y = 0, zoom = 1 } = flow.viewport;
           setTables(
-            flow.nodes.map((table: Node) => {
-              const { data, width, height } = table;
-              return { ...table, data: { ...data, width, height } };
-            }) || []
+            [
+              ...flow.nodes.map((node: Node) => {
+                return {
+                  ...node,
+                  data: {
+                    ...node.data,
+                    onSetSelectedTableIdx: setSelectedTableIdx,
+                    onDeleteTable: handleDeleteTable
+                  }
+                };
+              })
+            ] || []
           );
           setEdges(flow.edges || []);
           setViewport({ x, y, zoom });
@@ -408,9 +415,6 @@ const EntityRelationshipCT = ({
       })
     );
   }, [tables, setTables]);
-
-  // 핸들 제거하기
-  const handleDeleteHandle = useCallback(() => {}, [tables, setTables]);
 
   return (
     <EntityRelationshipPT
