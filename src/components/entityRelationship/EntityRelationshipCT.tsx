@@ -78,7 +78,11 @@ const EntityRelationshipCT = ({
   const [rfInstance, setRfInstance] = useState<any>(null); // 로컬스토리지 일시 저장용 다이어그램 인스턴스
   const { setViewport } = useReactFlow(); // 전체젹인 뷰 관련 객체
   const [columns, setColumns] = useState<Array<typeColumn>>([initColumn]); // 테이블 컬럼 배열
-  const [selectedTableIdx, setSelectedTableIdx] = useState<number | null>(null); // 선택된 테이블 인덱스
+  const [selectedTableIdxForUpdate, setSelectedTableIdxForUpdate] = useState<
+    number | null
+  >(null); // 선택된 테이블 인덱스(업데이트용)
+  const [selectedTableIdxForDelete, setSelectedTableIdxForDelete] =
+    useState<number>(-1); // 선택된 테이블 인덱스(삭제용)
   const [draggingIdx, setDraggingIdx] = useState<number>(-1); // 드래그 중인 컬럼 인덱스
 
   // 다이어그램 제목 input 참조 객체
@@ -127,21 +131,29 @@ const EntityRelationshipCT = ({
     );
   }, [edgeName, setEdges]);
 
+  // 테이블 생성 및 업데이트 제어 팝업
   useEffect(() => {
-    if (selectedTableIdx === null) {
-    } else if (selectedTableIdx === -1) {
+    if (selectedTableIdxForUpdate === null) {
+    } else if (selectedTableIdxForUpdate === -1) {
       setTableName(initTableName);
       setTableComment('');
       setColumns([{ ...initColumn }]);
     } else {
       const { tableName, tableComment, columns } =
-        tables[selectedTableIdx].data;
+        tables[selectedTableIdxForUpdate].data;
 
       setTableName(tableName);
       setTableComment(tableComment);
       setColumns(columns);
     }
-  }, [selectedTableIdx]);
+  }, [selectedTableIdxForUpdate]);
+
+  // 테이블 삭제 제어 팝업
+  useEffect(() => {
+    if (selectedTableIdxForDelete > -1) {
+      //TODO: 삭제하겠습니까 팝업 버튼에 handleDeleteTable 함수 주입
+    }
+  }, [selectedTableIdxForDelete]);
 
   // 수정할 컬럼 input 접근
   const handleColumnInputChange = useCallback(
@@ -169,45 +181,16 @@ const EntityRelationshipCT = ({
   );
 
   // 새 컬럼 생성
-  const handleAddColumn = useCallback(
-    (tableId?: string) => {
-      // tableId ? setTables((tbls) => {
-      //   return tbls.map(table => {
-      //     if(tableId === table.id) {
-      //       table.data = {
-      //         ...table.data,
-      //         columns: [...table.data.columns, ]
-      //       };
-      //     }
-
-      //     return table;
-      //   });
-      // }) : setColumns([...columns, defaultColumn])
-
-      setColumns([
-        ...columns,
-        { ...defaultColumn, name: `New Column ${columns.length}` }
-      ]);
-    },
-    [columns, setColumns]
-  );
+  const handleAddColumn = useCallback(() => {
+    setColumns([
+      ...columns,
+      { ...defaultColumn, name: `New Column ${columns.length}` }
+    ]);
+  }, [columns, setColumns]);
 
   // 컬럼 제거
   const handleRemoveColumn = useCallback(
-    (idx: number, tableId?: string) => {
-      // tableId ? setTables((tbls) => {
-      //   return tbls.map(table => {
-      //     if(tableId === table.id) {
-      //       table.data = {
-      //         ...table.data,
-      //         columns: [...table.data.columns, ]
-      //       };
-      //     }
-
-      //     return table;
-      //   });
-      // }) : setColumns([...columns, defaultColumn])
-
+    (idx: number) => {
       setColumns(columns.filter((_, index) => index !== idx));
     },
     [columns, setColumns]
@@ -243,11 +226,11 @@ const EntityRelationshipCT = ({
   const handleAddUpdateTable = useCallback(() => {
     setTables((tables: Array<Node>) => {
       let returnArr: Array<Node> = [];
-      if (selectedTableIdx !== null) {
-        if (selectedTableIdx > -1) {
+      if (selectedTableIdxForUpdate !== null) {
+        if (selectedTableIdxForUpdate > -1) {
           returnArr = [
             ...tables.map((table, idx) => {
-              if (selectedTableIdx === idx) {
+              if (selectedTableIdxForUpdate === idx) {
                 table.data = {
                   ...table.data,
                   tableName,
@@ -272,8 +255,8 @@ const EntityRelationshipCT = ({
                 tableName,
                 tableComment,
                 columns,
-                onSetSelectedTableIdx: setSelectedTableIdx,
-                onDeleteTable: handleDeleteTable
+                onSetSelectedTableIdxForUpdate: setSelectedTableIdxForUpdate,
+                onDeleteTable: setSelectedTableIdxForDelete
               }
             }
           ];
@@ -283,13 +266,19 @@ const EntityRelationshipCT = ({
       return returnArr;
     });
 
-    setSelectedTableIdx(null);
-  }, [tables, tableName, tableComment, columns, selectedTableIdx]);
+    setSelectedTableIdxForUpdate(null);
+  }, [tables, tableName, tableComment, columns, selectedTableIdxForUpdate]);
 
   // 테이블 삭제 메소드
   const handleDeleteTable = useCallback(
-    (id: string, idx: number) => {},
-    [tables, edges, columns]
+    (idx: number) => {
+      const { id } = tables[idx].data;
+      setEdges(
+        edges.filter((edge) => edge.source !== id && edge.target !== id)
+      );
+      setTables(tables.filter((_, index) => index !== idx));
+    },
+    [tables, edges]
   );
 
   // 엣지로 테이블과 연결하는 순간 동작하는 메소드
@@ -378,8 +367,9 @@ const EntityRelationshipCT = ({
                   ...node,
                   data: {
                     ...node.data,
-                    onSetSelectedTableIdx: setSelectedTableIdx,
-                    onDeleteTable: handleDeleteTable
+                    onSetSelectedTableIdxForUpdate:
+                      setSelectedTableIdxForUpdate,
+                    onDeleteTable: setSelectedTableIdxForDelete
                   }
                 };
               })
@@ -422,7 +412,7 @@ const EntityRelationshipCT = ({
       tableName={tableName}
       tableComment={tableComment}
       edgeName={edgeName}
-      selectedTableIdx={selectedTableIdx}
+      selectedTableIdxForUpdate={selectedTableIdxForUpdate}
       columns={columns}
       titleNameRef={titleNameRef}
       edgeNameRef={edgeNameRef}
@@ -437,7 +427,7 @@ const EntityRelationshipCT = ({
       onTablesChange={handleTablesChange}
       onEdgesChange={handleEdgesChange}
       onColumnInputChange={handleColumnInputChange}
-      onSetSelectedTableIdx={setSelectedTableIdx}
+      onSetSelectedTableIdxForUpdate={setSelectedTableIdxForUpdate}
       onAddColumn={handleAddColumn}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}

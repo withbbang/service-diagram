@@ -10,7 +10,6 @@ import ReactFlow, {
   OnNodesChange,
   OnEdgesChange,
   OnConnect,
-  NodeMouseHandler,
   EdgeMouseHandler
 } from 'reactflow';
 import styles from './EntityRelationship.module.scss';
@@ -24,7 +23,7 @@ const EntityRelationshipPT = ({
   tableName,
   tableComment,
   edgeName,
-  selectedTableIdx,
+  selectedTableIdxForUpdate,
   columns,
   titleNameRef,
   edgeNameRef,
@@ -43,7 +42,7 @@ const EntityRelationshipPT = ({
   onDragStart,
   onDragEnd,
   onDragOver,
-  onSetSelectedTableIdx,
+  onSetSelectedTableIdxForUpdate,
   onAddUpdateTable,
   onRemoveColumn,
   onConnect,
@@ -90,18 +89,20 @@ const EntityRelationshipPT = ({
               onBlur={() => onBlur('edge')}
               ref={edgeNameRef}
             />
-            <button onClick={() => onSetSelectedTableIdx(-1)}>Add Table</button>
+            <button onClick={() => onSetSelectedTableIdxForUpdate(-1)}>
+              Add Table
+            </button>
             <button onClick={() => onSave()}>Temporarily Save Diagrams</button>
             <button onClick={() => onRestore()}>
               Restore Temporary Diagrams
             </button>
             <button onClick={() => onAddHandle()}>Add Handle</button>
           </div>
-          {selectedTableIdx !== null && (
+          {selectedTableIdxForUpdate !== null && (
             <div className={styles.background}>
               <div
                 className={styles.close}
-                onClick={() => onSetSelectedTableIdx(null)}
+                onClick={() => onSetSelectedTableIdxForUpdate(null)}
               >
                 <SVG type="close" width="40px" height="40px" fill={'#fff'} />
               </div>
@@ -139,7 +140,7 @@ const EntityRelationshipPT = ({
                     ))}
                 </div>
                 <div className={styles.btnsDiv}>
-                  <button onClick={() => onSetSelectedTableIdx(null)}>
+                  <button onClick={() => onSetSelectedTableIdxForUpdate(null)}>
                     Cancel
                   </button>
                   <button onClick={onAddUpdateTable}>Commit</button>
@@ -158,7 +159,7 @@ interface typeEntityRelationshipPT {
   tableName: string;
   tableComment: string;
   edgeName: string;
-  selectedTableIdx: number | null;
+  selectedTableIdxForUpdate: number | null;
   columns: Array<typeColumn>;
   titleNameRef: React.MutableRefObject<HTMLInputElement | null>;
   edgeNameRef: React.MutableRefObject<HTMLInputElement | null>;
@@ -177,7 +178,9 @@ interface typeEntityRelationshipPT {
     type: string,
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => void;
-  onSetSelectedTableIdx: React.Dispatch<React.SetStateAction<number | null>>;
+  onSetSelectedTableIdxForUpdate: React.Dispatch<
+    React.SetStateAction<number | null>
+  >;
   onAddColumn: (tableId?: string) => void;
   onDragStart: (e: React.DragEvent<HTMLDivElement>, idx: number) => void;
   onDragEnd: (e: React.DragEvent<HTMLDivElement>, idx: number) => void;

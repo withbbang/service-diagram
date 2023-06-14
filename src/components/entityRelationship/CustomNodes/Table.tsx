@@ -19,7 +19,7 @@ function Table({
           <span onClick={() => data.onSetSelectedTableIdx(data.idx)}>
             <SVG type="modify" width="10px" height="10px" />
           </span>
-          <span>
+          <span onClick={() => data.onDeleteTable(id, data.idx)}>
             <SVG type="trash" width="10px" height="10px" />
           </span>
         </div>
