@@ -7,10 +7,19 @@ function Column({
   column,
   onColumnInputChange,
   onAddColumn,
-  onRemoveColumn
+  onRemoveColumn,
+  onDragStart,
+  onDragEnd,
+  onDragOver
 }: typeColumnComponent): JSX.Element {
   return (
-    <div className={styles.column}>
+    <div
+      className={styles.column}
+      draggable
+      onDragStart={(e) => onDragStart(e, idx)}
+      onDragEnd={(e) => onDragEnd(e, idx)}
+      onDragOver={(e) => onDragOver(e, idx)}
+    >
       <div className={styles.inputs}>
         <div className={styles.inputDiv}>
           <span>Name</span>
@@ -21,10 +30,27 @@ function Column({
         </div>
         <div className={styles.inputDiv}>
           <span>Type</span>
-          <input
+          <select
             value={column.type}
             onChange={(e) => onColumnInputChange(idx, 'type', e)}
-          />
+          >
+            <option value={''}>SELECT</option>
+            <option value={'INTEGER'}>INTEGER</option>
+            <option value={'INTEGER'}>SMALLINT</option>
+            <option value={'BIGINT'}>BIGINT</option>
+            <option value={'NUMERIC'}>NUMERIC</option>
+            <option value={'FLOAT'}>FLOAT</option>
+            <option value={'DOUBLE'}>DOUBLE</option>
+            <option value={'BOOLEAN'}>BOOLEAN</option>
+            <option value={'CHARACTER'}>CHARACTER</option>
+            <option value={'VARCHAR'}>VARCHAR</option>
+            <option value={'TEXT'}>TEXT</option>
+            <option value={'DATE'}>DATE</option>
+            <option value={'TIME'}>TIME</option>
+            <option value={'TIMESTAMP'}>TIMESTAMP</option>
+            <option value={'JSON'}>JSON</option>
+            <option value={'BLOB'}>BLOB</option>
+          </select>
         </div>
         <div className={styles.inputDiv}>
           <span>Comment</span>
@@ -93,10 +119,13 @@ interface typeColumnComponent {
   onColumnInputChange: (
     idx: number,
     type: string,
-    e: ChangeEvent<HTMLInputElement>
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => void;
   onAddColumn: (tableId?: string) => void;
   onRemoveColumn: (idx: number, tableId?: string) => void;
+  onDragStart: (e: React.DragEvent<HTMLDivElement>, idx: number) => void;
+  onDragEnd: (e: React.DragEvent<HTMLDivElement>, idx: number) => void;
+  onDragOver: (e: React.DragEvent<HTMLDivElement>, idx: number) => void;
 }
 
 export default Column;

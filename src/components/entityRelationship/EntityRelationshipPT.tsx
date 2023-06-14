@@ -41,6 +41,9 @@ const EntityRelationshipPT = ({
   onEdgesChange,
   onColumnInputChange,
   onAddColumn,
+  onDragStart,
+  onDragEnd,
+  onDragOver,
   onAddTable,
   onRemoveColumn,
   onConnect,
@@ -137,6 +140,9 @@ const EntityRelationshipPT = ({
                         onColumnInputChange={onColumnInputChange}
                         onAddColumn={onAddColumn}
                         onRemoveColumn={onRemoveColumn}
+                        onDragStart={onDragStart}
+                        onDragEnd={onDragEnd}
+                        onDragOver={onDragOver}
                       />
                     </div>
                   ))}
@@ -176,9 +182,12 @@ interface typeEntityRelationshipPT {
   onColumnInputChange: (
     idx: number,
     type: string,
-    e: ChangeEvent<HTMLInputElement>
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => void;
   onAddColumn: (tableId?: string) => void;
+  onDragStart: (e: React.DragEvent<HTMLDivElement>, idx: number) => void;
+  onDragEnd: (e: React.DragEvent<HTMLDivElement>, idx: number) => void;
+  onDragOver: (e: React.DragEvent<HTMLDivElement>, idx: number) => void;
   onAddTable: () => void;
   onRemoveColumn: (idx: number, tableId?: string) => void;
   onConnect: OnConnect;

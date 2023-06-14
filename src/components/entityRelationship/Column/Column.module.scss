@@ -25,6 +25,14 @@
       &:nth-child(2n) {
         margin-left: 10px;
       }
+
+      > span,
+      input,
+      select {
+        display: flex;
+        flex: 1;
+        width: 50%;
+      }
     }
   }
 

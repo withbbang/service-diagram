@@ -67,13 +67,15 @@ const EntityRelationshipCT = ({
 }: typeEntityRelationshipCT): JSX.Element => {
   const [id, setId] = useState<string>(''); // 포커싱된 테이블 및 엣지 id
   const [title, setTitle] = useState<string>(''); // 다이어그램 제목
-  const [tableName, setTableName] = useState<string>(''); // 테이블 이름
+  const [tableName, setTableName] = useState<string>('New Table'); // 테이블 이름
   const [tableComment, setTableComment] = useState<string>(''); // 테이블 설명
   const [edgeName, setEdgeName] = useState<string>(''); // 엣지 이름
   const [isAddTablePopup, setIsAddTablePopup] = useState<boolean>(false); // 테이블 생성 팝업 관리
   const [rfInstance, setRfInstance] = useState<any>(null); // 로컬스토리지 일시 저장용 다이어그램 인스턴스
   const { setViewport } = useReactFlow(); // 전체젹인 뷰 관련 객체
   const [columns, setColumns] = useState<Array<typeColumn>>([initColumn]); // 테이블 컬럼 배열
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [draggingIdx, setDraggingIdx] = useState<number>(-1);
 
   // 다이어그램 제목 input 참조 객체
   const titleNameRef = useRef(
@@ -127,14 +129,20 @@ const EntityRelationshipCT = ({
 
   // 수정할 컬럼 input ref 접근
   const handleColumnInputChange = useCallback(
-    (idx: number, type: string, e: ChangeEvent<HTMLInputElement>) => {
+    (
+      idx: number,
+      type: string,
+      e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    ) => {
       setColumns((columns: Array<typeColumn>) => {
         return columns.map((column: typeColumn, index) => {
           if (index === idx) {
-            const value: string = e.target.value;
-            const checked: boolean = e.target.checked;
-
-            column[type] = e.target.type === 'text' ? value : checked;
+            if (e.target.tagName === 'SELECT') {
+              column[type] = e.target.value;
+            } else {
+              const { value, checked } = e.target as HTMLInputElement;
+              column[type] = e.target.type === 'text' ? value : checked;
+            }
           }
 
           return column;
@@ -189,6 +197,34 @@ const EntityRelationshipCT = ({
     [columns, setColumns]
   );
 
+  // 컬럼 드래그 시작 콜백
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, idx: number) => {
+    setIsDragging(true);
+    setDraggingIdx(idx);
+    e.currentTarget.style.opacity = '0.4';
+  };
+
+  // 컬럼 드래그 종료 콜백
+  const handleDragEnd = (e: React.DragEvent<HTMLDivElement>, idx: number) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setIsDragging(false);
+    setDraggingIdx(-1);
+    e.currentTarget.style.opacity = '';
+  };
+
+  // 컬럼 드래그 콜백
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>, idx: number) => {
+    e.stopPropagation();
+    e.preventDefault();
+    const newColumns = columns;
+    const draggedItem = newColumns[draggingIdx];
+    newColumns.splice(draggingIdx, 1);
+    newColumns.splice(idx, 0, draggedItem);
+    setColumns([...newColumns]);
+    setDraggingIdx(idx);
+  };
+
   // 테이블 추가 메소드
   const handleAddTable = useCallback(() => {
     setTables((tables: Array<Node>) => {
@@ -210,9 +246,9 @@ const EntityRelationshipCT = ({
     });
 
     handleAddTablePopup();
-  }, [tables, columns]);
+  }, [tables, columns, isAddTablePopup]);
 
-  // 테이블 생성 팝업 제어 메소드
+  // 테이블 생성 팝업 on/off
   const handleAddTablePopup = () => {
     isAddTablePopup && setColumns([initColumn]);
     setIsAddTablePopup(!isAddTablePopup);
@@ -376,6 +412,9 @@ const EntityRelationshipCT = ({
       onEdgesChange={handleEdgesChange}
       onColumnInputChange={handleColumnInputChange}
       onAddColumn={handleAddColumn}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      onDragOver={handleDragOver}
       onAddTable={handleAddTable}
       onRemoveColumn={handleRemoveColumn}
       onConnect={handleConnect}
