@@ -83,6 +83,32 @@ function Table({
                 backgroundColor: '#aaa'
               }}
             />
+            <div className={styles.description}>
+              <div className={styles.top}>
+                <strong>{column.name}</strong>
+                <span>{column.type}</span>
+              </div>
+              <div className={styles.bottom}>
+                <p className={styles.boolType}>
+                  {column.primary && <strong>(Primary)</strong>}
+                  {column.unique && <strong>(Unique)</strong>}
+                  {column.notNull && <strong>(Not Null)</strong>}
+                  {column.autoIncrement && <strong>(Auto Increment)</strong>}
+                </p>
+                <p>
+                  <strong>Default:</strong>
+                  <span className={column.default === '' ? styles.nothing : ''}>
+                    {column.default ? column.default : '(Unset)'}
+                  </span>
+                </p>
+                <p>
+                  <strong>Comment:</strong>
+                  <span className={column.comment === '' ? styles.nothing : ''}>
+                    {column.comment ? column.comment : '(No Comment)'}
+                  </span>
+                </p>
+              </div>
+            </div>
             <p>
               {column.name}
               {column.primary && (
