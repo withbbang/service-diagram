@@ -18,7 +18,7 @@ function NormalEdge({
   targetPosition,
   data
 }: typeCustomEdge): JSX.Element {
-  const [edgePath] = getBezierPath({
+  const [edgePath, middleX, middleY, offsetX, offsetY] = getBezierPath({
     sourceX,
     sourceY,
     sourcePosition,
@@ -26,6 +26,17 @@ function NormalEdge({
     targetY,
     targetPosition
   });
+  console.log('edgePath: ', edgePath);
+  console.log('middleX: ', middleX);
+  console.log('middleY: ', middleY);
+  console.log('offsetX: ', offsetX);
+  console.log('offsetY: ', offsetY);
+  console.log('sourceX: ', sourceX);
+  console.log('sourceY: ', sourceY);
+  console.log('targetX: ', targetX);
+  console.log('targetY: ', targetY);
+
+  const handleGetMiddle = (pos1: number, pos2: number) => (pos1 + pos2) / 2;
 
   return (
     <>
@@ -34,9 +45,10 @@ function NormalEdge({
         <div
           className={styles.label}
           style={{
-            transform: `translate(${
-              sourcePosition === Position.Right ? '25%' : '-125%'
-            }, -50%) translate(${sourceX}px,${sourceY}px)`
+            transform: `translate(${handleGetMiddle(
+              sourceX,
+              middleX
+            )}px,${handleGetMiddle(sourceY, middleY)}px)`
           }}
         >
           {'1'}
@@ -44,9 +56,10 @@ function NormalEdge({
         <div
           className={styles.label}
           style={{
-            transform: `translate(${
-              targetPosition === Position.Right ? '25%' : '-125%'
-            }, -50%) translate(${targetX}px,${targetY}px)`
+            transform: `translate(${handleGetMiddle(
+              targetX,
+              middleX
+            )}px,${handleGetMiddle(targetY, middleY)}px)`
           }}
         >
           {'*'}

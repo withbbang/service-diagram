@@ -33,11 +33,11 @@ const edgeOptions = Object.freeze({
   //   height: 15,
   //   color: '#74c3f0'
   // },
-  type: 'normal',
-  style: {
-    strokeWidth: 2,
-    stroke: '#74c3f0'
-  }
+  type: 'normal'
+  // style: {
+  //   strokeWidth: 2,
+  //   stroke: '#74c3f0'
+  // }
 }); // 엣지 공통 옵션
 const initColumn: typeColumn = Object.freeze({
   name: 'id',
