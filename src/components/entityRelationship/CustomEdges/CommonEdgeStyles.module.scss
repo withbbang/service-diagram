@@ -1,0 +1,14 @@
+.label {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 7px;
+  height: 7px;
+  padding: 5px;
+  line-height: 0;
+  background: #fff;
+  border-radius: 15px;
+  font-size: 0.1em;
+  font-weight: bold;
+}

@@ -11,37 +11,46 @@ function Table({
   selected
 }: typeCustomNode): JSX.Element {
   // console.log(data);
+  const {
+    idx,
+    tableName,
+    tableComment,
+    onSetSelectedTableIdxForUpdate,
+    onSetSelectedTableIdxForDelete,
+    columns
+  } = data;
+
   return (
     <div className={styles.tableWrap}>
       <div className={styles.tableName}>
-        {data.tableName}
+        {tableName}
         <div className={styles.floatBtns}>
-          <span onClick={() => data.onSetSelectedTableIdxForUpdate(data.idx)}>
+          <span onClick={() => onSetSelectedTableIdxForUpdate(idx)}>
             <SVG type="modify" width="10px" height="10px" />
           </span>
-          <span onClick={() => data.onSetSelectedTableIdxForDelete(data.idx)}>
+          <span onClick={() => onSetSelectedTableIdxForDelete(idx)}>
             <SVG type="trash" width="10px" height="10px" />
           </span>
         </div>
       </div>
       <div
         className={
-          data.columns && data.columns.length > 0
+          columns && columns.length > 0
             ? styles.tableComment
             : [styles.tableComment, styles.nothing].join(' ')
         }
         style={
-          data.tableComment === '' ? { fontStyle: 'italic', color: '#aaa' } : {}
+          tableComment === '' ? { fontStyle: 'italic', color: '#aaa' } : {}
         }
       >
-        {data.tableComment ? data.tableComment : '(No Comment)'}
+        {tableComment ? tableComment : '(No Comment)'}
       </div>
-      {data.columns &&
-        data.columns.length > 0 &&
-        data.columns.map((column: typeColumn, idx: number) => (
+      {columns &&
+        columns.length > 0 &&
+        columns.map((column: typeColumn, idx: number) => (
           <div
             className={
-              idx + 1 === data.columns.length
+              idx + 1 === columns.length
                 ? [styles.column, styles.isLast].join(' ')
                 : styles.column
             }

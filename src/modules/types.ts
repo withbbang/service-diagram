@@ -1,3 +1,5 @@
+import { EdgeProps, NodeProps } from 'reactflow';
+
 export interface typeSVG {
   type?: string;
   etcType?: string;
@@ -16,20 +18,7 @@ export interface typeIcon {
   size: number;
 }
 
-export interface typeCustomNode {
-  id: string;
-  data: any;
-  isConnectable: boolean;
-  selected: boolean;
-  xPos: number;
-  yPos: number;
-}
-
-export interface typeTable {
-  name: string;
-  comment: string;
-  columns: Array<typeColumn>;
-}
+export interface typeCustomNode extends NodeProps {}
 
 export interface typeColumn {
   // TODO: (공부하기) 개체 유형에 인덱스 서명 추가
@@ -44,3 +33,5 @@ export interface typeColumn {
   notNull: boolean;
   autoIncrement: boolean;
 }
+
+export interface typeCustomEdge extends EdgeProps {}

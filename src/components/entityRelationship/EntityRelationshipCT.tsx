@@ -20,24 +20,25 @@ import {
 } from 'reactflow';
 import EntityRelationshipPT from './EntityRelationshipPT';
 import Table from './CustomNodes/Table';
+import NormalEdge from './CustomEdges/NormalEdge';
 import { typeColumn } from 'modules/types';
 import { handleRandomString } from 'modules/utils';
 
 const keyForTempERDiagrams = 'tempERDiagrams'; // 로컬 스토리지에 일시 저장할 키값
-const edgeTypes = {}; // 커스텀 엣지 타입들
-const edgeOptions = {
-  // // animated: true,
+const edgeOptions = Object.freeze({
+  // animated: true,
   // markerEnd: {
   //   type: MarkerType.Arrow,
   //   width: 15,
   //   height: 15,
   //   color: '#74c3f0'
   // },
+  type: 'normal',
   style: {
     strokeWidth: 2,
     stroke: '#74c3f0'
   }
-}; // 엣지 공통 옵션
+}); // 엣지 공통 옵션
 const initColumn: typeColumn = Object.freeze({
   name: 'id',
   type: 'INTEGER',
@@ -69,6 +70,7 @@ const EntityRelationshipCT = ({
   handleLoaderFalse
 }: typeEntityRelationshipCT): JSX.Element => {
   const tableTypes = useMemo(() => ({ table: Table }), []); // 커스텀 테이블 타입들
+  const edgeTypes = useMemo(() => ({ normal: NormalEdge }), []); // 커스텀 엣지 타입들
 
   const [id, setId] = useState<string>(''); // 포커싱된 테이블 및 엣지 id
   const [title, setTitle] = useState<string>(''); // 다이어그램 제목
