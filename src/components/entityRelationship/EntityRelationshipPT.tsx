@@ -17,6 +17,7 @@ import 'reactflow/dist/style.css';
 import SVG from 'modules/SVG';
 import { typeColumn } from 'modules/types';
 import Column from './Column';
+import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
 
 const EntityRelationshipPT = ({
   title,
@@ -24,6 +25,7 @@ const EntityRelationshipPT = ({
   tableComment,
   edgeName,
   selectedTableIdxForUpdate,
+  selectedTableIdxForDelete,
   columns,
   titleNameRef,
   edgeNameRef,
@@ -31,6 +33,7 @@ const EntityRelationshipPT = ({
   edges,
   tableTypes,
   edgeTypes,
+  confirmMessage,
   onSetTitle,
   onSetTableName,
   onSetTableComment,
@@ -52,10 +55,19 @@ const EntityRelationshipPT = ({
   onSave,
   onRestore,
   onInit,
-  onAddHandle
+  onAddHandle,
+  onConfirm,
+  onCancel
 }: typeEntityRelationshipPT): JSX.Element => {
   return (
     <>
+      <ConfirmPopup
+        isActive={selectedTableIdxForDelete > -1}
+        confirmMessage={confirmMessage}
+        confirmType=""
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+      />
       <div className={styles.wrap}>
         <ReactFlow
           nodes={tables}
@@ -160,6 +172,7 @@ interface typeEntityRelationshipPT {
   tableComment: string;
   edgeName: string;
   selectedTableIdxForUpdate: number | null;
+  selectedTableIdxForDelete: number;
   columns: Array<typeColumn>;
   titleNameRef: React.MutableRefObject<HTMLInputElement | null>;
   edgeNameRef: React.MutableRefObject<HTMLInputElement | null>;
@@ -167,6 +180,7 @@ interface typeEntityRelationshipPT {
   edges: Edge<any>[];
   tableTypes: NodeTypes;
   edgeTypes: EdgeTypes;
+  confirmMessage: string;
   onSetTitle: React.Dispatch<React.SetStateAction<string>>;
   onSetTableName: React.Dispatch<React.SetStateAction<string>>;
   onSetTableComment: React.Dispatch<React.SetStateAction<string>>;
@@ -195,6 +209,8 @@ interface typeEntityRelationshipPT {
   onRestore: () => void;
   onInit: React.Dispatch<any>;
   onAddHandle: () => void;
+  onConfirm: () => void;
+  onCancel: () => void;
 }
 
 export default EntityRelationshipPT;

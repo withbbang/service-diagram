@@ -16,10 +16,10 @@ function Table({
       <div className={styles.tableName}>
         {data.tableName}
         <div className={styles.floatBtns}>
-          <span onClick={() => data.onSetSelectedTableIdx(data.idx)}>
+          <span onClick={() => data.onSetSelectedTableIdxForUpdate(data.idx)}>
             <SVG type="modify" width="10px" height="10px" />
           </span>
-          <span onClick={() => data.onDeleteTable(id, data.idx)}>
+          <span onClick={() => data.onSetSelectedTableIdxForDelete(data.idx)}>
             <SVG type="trash" width="10px" height="10px" />
           </span>
         </div>

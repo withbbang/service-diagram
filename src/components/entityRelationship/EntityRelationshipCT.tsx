@@ -84,6 +84,7 @@ const EntityRelationshipCT = ({
   const [selectedTableIdxForDelete, setSelectedTableIdxForDelete] =
     useState<number>(-1); // 선택된 테이블 인덱스(삭제용)
   const [draggingIdx, setDraggingIdx] = useState<number>(-1); // 드래그 중인 컬럼 인덱스
+  const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
 
   // 다이어그램 제목 input 참조 객체
   const titleNameRef = useRef(
@@ -98,22 +99,6 @@ const EntityRelationshipCT = ({
   const [edges, setEdges, handleEdgesChange] = useEdgesState(initialEdges); // 엣지 수정 hook
 
   const updateNodeInternals = useUpdateNodeInternals(); // 동적 핸들 추가시 필요한 객체
-
-  // 테이블 변경 적용을 위한 useEffect. 현재는 테이블 내 data 객체의 label만 수정가능
-  useEffect(() => {
-    setTables((tbls) =>
-      tbls.map((table) => {
-        if (table.id === id) {
-          table.data = {
-            ...table.data,
-            label: tableName
-          };
-        }
-
-        return table;
-      })
-    );
-  }, [tableName, setTables]);
 
   // 엣지 변경 적용을 위한 useEffect. 현재는 엣지 내 data 객체의 label만 수정가능
   useEffect(() => {
@@ -151,7 +136,9 @@ const EntityRelationshipCT = ({
   // 테이블 삭제 제어 팝업
   useEffect(() => {
     if (selectedTableIdxForDelete > -1) {
-      //TODO: 삭제하겠습니까 팝업 버튼에 handleDeleteTable 함수 주입
+      setConfirmMessage('Really Delete?');
+    } else {
+      setConfirmMessage('');
     }
   }, [selectedTableIdxForDelete]);
 
@@ -256,7 +243,7 @@ const EntityRelationshipCT = ({
                 tableComment,
                 columns,
                 onSetSelectedTableIdxForUpdate: setSelectedTableIdxForUpdate,
-                onDeleteTable: setSelectedTableIdxForDelete
+                onSetSelectedTableIdxForDelete: setSelectedTableIdxForDelete
               }
             }
           ];
@@ -272,11 +259,22 @@ const EntityRelationshipCT = ({
   // 테이블 삭제 메소드
   const handleDeleteTable = useCallback(
     (idx: number) => {
-      const { id } = tables[idx].data;
+      const { id } = tables[idx];
       setEdges(
         edges.filter((edge) => edge.source !== id && edge.target !== id)
       );
-      setTables(tables.filter((_, index) => index !== idx));
+      setTables(
+        tables
+          .filter((_, index) => index !== idx)
+          .map((table, idx) => {
+            table.data = {
+              ...table.data,
+              idx
+            };
+
+            return table;
+          })
+      );
     },
     [tables, edges]
   );
@@ -369,7 +367,7 @@ const EntityRelationshipCT = ({
                     ...node.data,
                     onSetSelectedTableIdxForUpdate:
                       setSelectedTableIdxForUpdate,
-                    onDeleteTable: setSelectedTableIdxForDelete
+                    onSetSelectedTableIdxForDelete: setSelectedTableIdxForDelete
                   }
                 };
               })
@@ -406,6 +404,17 @@ const EntityRelationshipCT = ({
     );
   }, [tables, setTables]);
 
+  // confirm 팝업 확인 버튼 TODO: 추후 confirm팝업의 용도가 달라지므로 용도에 따라 콜백 함수 구분해야함
+  const handleConfirm = () => {
+    handleDeleteTable(selectedTableIdxForDelete);
+    setSelectedTableIdxForDelete(-1);
+  };
+
+  // confirm 팝업 취소 버튼 TODO: 추후 confirm팝업의 용도가 달라지므로 용도에 따라 콜백 함수 구분해야함
+  const handleCancel = () => {
+    setSelectedTableIdxForDelete(-1);
+  };
+
   return (
     <EntityRelationshipPT
       title={title}
@@ -413,6 +422,7 @@ const EntityRelationshipCT = ({
       tableComment={tableComment}
       edgeName={edgeName}
       selectedTableIdxForUpdate={selectedTableIdxForUpdate}
+      selectedTableIdxForDelete={selectedTableIdxForDelete}
       columns={columns}
       titleNameRef={titleNameRef}
       edgeNameRef={edgeNameRef}
@@ -420,6 +430,7 @@ const EntityRelationshipCT = ({
       edges={edges}
       tableTypes={tableTypes}
       edgeTypes={edgeTypes}
+      confirmMessage={confirmMessage}
       onSetTitle={setTitle}
       onSetTableName={setTableName}
       onSetTableComment={setTableComment}
@@ -442,6 +453,8 @@ const EntityRelationshipCT = ({
       onRestore={handleRestore}
       onInit={setRfInstance}
       onAddHandle={handleAddHandle}
+      onConfirm={handleConfirm}
+      onCancel={handleCancel}
     />
   );
 };
