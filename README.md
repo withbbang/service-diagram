@@ -78,10 +78,8 @@ Service Diagrams
 ### 주요 학습 내용
 
 > 1. svg 이미지 만드는 방법
->
-> - svg 태그 내에 태그들을 조작하며 직접 이미지를 만듦 (marker, link)
-> - path 태그의 베지어 곡선 원리를 파악하여 해당 방정식을 이용하여 dom 추가
->
+>    > svg 태그 내에 태그들을 조작하며 직접 이미지를 만듦 (marker, link)
+>    > path 태그의 베지어 곡선 원리를 파악하여 해당 방정식을 이용하여 dom 추가
 > 2. useCallback의 사용법
 > 3. useRef의 사용법
 > 4. scss를 전역적으로 사용하는 법
