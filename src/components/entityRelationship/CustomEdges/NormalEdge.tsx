@@ -45,7 +45,7 @@ function NormalEdge({
       <BaseEdge id={id} path={edgePath} />
       <EdgeLabelRenderer>
         <div
-          className={styles.label}
+          className={[styles.label, styles.source].join(' ')}
           style={{
             transform: `translate(-50%, -50%) translate(${handleGetCoordinate(
               [sourceX, middleX, middleX, targetX],
@@ -69,7 +69,7 @@ function NormalEdge({
           </button>
         </div>
         <div
-          className={styles.label}
+          className={[styles.label, styles.target].join(' ')}
           style={{
             transform: `translate(-50%, -50%) translate(${handleGetCoordinate(
               [sourceX, middleX, middleX, targetX],

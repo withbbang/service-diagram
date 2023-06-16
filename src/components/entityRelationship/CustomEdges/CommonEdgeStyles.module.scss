@@ -13,4 +13,12 @@
   font-weight: bold;
   pointer-events: all;
   cursor: pointer;
+
+  &.source {
+    background-color: #ffffaa;
+  }
+
+  &.target {
+    background-color: #ddffdd;
+  }
 }

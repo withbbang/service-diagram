@@ -168,7 +168,7 @@ const EntityRelationshipPT = ({
               </div>
               <div className={[styles.modalBody, styles.updateEdge].join(' ')}>
                 <div className={styles.selectBtnsDiv}>
-                  <span>Change Relation:</span>
+                  <span className={styles.source}>Change Relation</span>
                   <button
                     className={
                       sourceRelation === '1'
@@ -191,7 +191,7 @@ const EntityRelationshipPT = ({
                   </button>
                 </div>
                 <div className={styles.selectBtnsDiv}>
-                  <span>Change Relation:</span>
+                  <span className={styles.target}>Change Relation</span>
                   <button
                     className={
                       targetRelation === '1'
