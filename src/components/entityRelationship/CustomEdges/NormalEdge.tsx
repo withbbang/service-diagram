@@ -47,7 +47,7 @@ function NormalEdge({
         <div
           className={styles.label}
           style={{
-            transform: `translate(${handleGetCoordinate(
+            transform: `translate(-50%, -50%) translate(${handleGetCoordinate(
               [sourceX, middleX, middleX, targetX],
               sourcePosition
             )}px, ${handleGetCoordinate(
@@ -71,7 +71,7 @@ function NormalEdge({
         <div
           className={styles.label}
           style={{
-            transform: `translate(${handleGetCoordinate(
+            transform: `translate(-50%, -50%) translate(${handleGetCoordinate(
               [sourceX, middleX, middleX, targetX],
               targetPosition
             )}px, ${handleGetCoordinate(
