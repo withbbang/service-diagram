@@ -73,6 +73,8 @@ Service Diagrams
 > > npm i --save react-sequence-diagram
 > ```
 
+---
+
 ### 주요 학습 내용
 
 > 1. svg 이미지 만드는 방법
