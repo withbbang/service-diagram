@@ -5,6 +5,7 @@ import { BaseEdge, EdgeLabelRenderer, getBezierPath } from 'reactflow';
 
 function NormalEdge({
   id,
+  selected,
   sourceX,
   sourceY,
   targetX,
@@ -58,16 +59,18 @@ function NormalEdge({
         >
           {data.sourceRelation}
         </div>
-        <div
-          className={styles.label}
-          style={{
-            transform: `translate(-50%, -50%) translate(${middleX}px,${middleY}px)`
-          }}
-        >
-          <button className="edgebutton" onClick={(e) => handleDeleteEdge(e)}>
-            ×
-          </button>
-        </div>
+        {selected && (
+          <div
+            className={styles.label}
+            style={{
+              transform: `translate(-50%, -50%) translate(${middleX}px,${middleY}px)`
+            }}
+          >
+            <button className="edgebutton" onClick={(e) => handleDeleteEdge(e)}>
+              ×
+            </button>
+          </div>
+        )}
         <div
           className={[styles.label, styles.target].join(' ')}
           style={{
