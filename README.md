@@ -49,7 +49,7 @@ Service Diagrams
 - 📁scripts: CRA의 동작 명령어를 담고 있는 폴더
 - 📄global.d.ts: 타입스크립트가 지원하지 않는 타입을 추가하는 프로젝트 한정 글로벌 파일
 - 📄.prettierrc: 프리티어 설정 파일
-- Todo.txt: 현재 프로젝트의 Todo List
+- 📄Todo.txt: 현재 프로젝트의 Todo List
 
 ---
 
