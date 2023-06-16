@@ -23,21 +23,22 @@ const EntityRelationshipPT = ({
   title,
   tableName,
   tableComment,
-  edgeName,
   selectedTableIdxForUpdate,
   selectedTableIdxForDelete,
+  selectedEdgeIdxForUpdate,
+  sourceRelation,
+  targetRelation,
   columns,
   titleNameRef,
-  edgeNameRef,
   tables,
   edges,
   tableTypes,
   edgeTypes,
   confirmMessage,
+  confirmPopupActive,
   onSetTitle,
   onSetTableName,
   onSetTableComment,
-  onSetEdgeName,
   onTablesChange,
   onEdgesChange,
   onColumnInputChange,
@@ -46,7 +47,11 @@ const EntityRelationshipPT = ({
   onDragEnd,
   onDragOver,
   onSetSelectedTableIdxForUpdate,
+  onSetSelectedEdgeIdxForUpdate,
+  onSetSourceRelation,
+  onSetTargetRelation,
   onAddUpdateTable,
+  onUpdateTableRelation,
   onRemoveColumn,
   onConnect,
   onEdgeDoubleClick,
@@ -62,7 +67,7 @@ const EntityRelationshipPT = ({
   return (
     <>
       <ConfirmPopup
-        isActive={selectedTableIdxForDelete > -1}
+        isActive={confirmPopupActive}
         confirmMessage={confirmMessage}
         confirmType=""
         onConfirm={onConfirm}
@@ -79,6 +84,7 @@ const EntityRelationshipPT = ({
           onConnect={onConnect}
           onEdgeDoubleClick={onEdgeDoubleClick}
           onInit={onInit}
+          deleteKeyCode={null}
           fitView
         >
           <Controls />
@@ -93,14 +99,6 @@ const EntityRelationshipPT = ({
               onBlur={() => onBlur('title')}
               ref={titleNameRef}
             />
-            <label>Edge Label:</label>
-            <input
-              value={edgeName}
-              onKeyDown={(e) => onKeyDown(e, 'edge')}
-              onChange={(e) => onSetEdgeName(e.target.value)}
-              onBlur={() => onBlur('edge')}
-              ref={edgeNameRef}
-            />
             <button onClick={() => onSetSelectedTableIdxForUpdate(-1)}>
               Add Table
             </button>
@@ -108,7 +106,7 @@ const EntityRelationshipPT = ({
             <button onClick={() => onRestore()}>
               Restore Temporary Diagrams
             </button>
-            <button onClick={() => onAddHandle()}>Add Handle</button>
+            {/* <button onClick={() => onAddHandle()}>Add Handle</button> */}
           </div>
           {selectedTableIdxForUpdate !== null && (
             <div className={styles.background}>
@@ -118,7 +116,7 @@ const EntityRelationshipPT = ({
               >
                 <SVG type="close" width="40px" height="40px" fill={'#fff'} />
               </div>
-              <div className={styles.modalBody}>
+              <div className={[styles.modalBody, styles.updateTable].join(' ')}>
                 <div className={styles.inputDiv}>
                   <span>Table Name:</span>
                   <input
@@ -160,6 +158,70 @@ const EntityRelationshipPT = ({
               </div>
             </div>
           )}
+          {selectedEdgeIdxForUpdate > -1 && (
+            <div className={styles.background}>
+              <div
+                className={styles.close}
+                onClick={() => onSetSelectedEdgeIdxForUpdate(-1)}
+              >
+                <SVG type="close" width="40px" height="40px" fill={'#fff'} />
+              </div>
+              <div className={[styles.modalBody, styles.updateEdge].join(' ')}>
+                <div className={styles.selectBtnsDiv}>
+                  <span>Change Relation:</span>
+                  <button
+                    className={
+                      sourceRelation === '1'
+                        ? [styles.selectBtn, styles.selected].join(' ')
+                        : styles.selectBtn
+                    }
+                    onClick={() => onSetSourceRelation('1')}
+                  >
+                    1
+                  </button>
+                  <button
+                    className={
+                      sourceRelation === '*'
+                        ? [styles.selectBtn, styles.selected].join(' ')
+                        : styles.selectBtn
+                    }
+                    onClick={() => onSetSourceRelation('*')}
+                  >
+                    *
+                  </button>
+                </div>
+                <div className={styles.selectBtnsDiv}>
+                  <span>Change Relation:</span>
+                  <button
+                    className={
+                      targetRelation === '1'
+                        ? [styles.selectBtn, styles.selected].join(' ')
+                        : styles.selectBtn
+                    }
+                    onClick={() => onSetTargetRelation('1')}
+                  >
+                    1
+                  </button>
+                  <button
+                    className={
+                      targetRelation === '*'
+                        ? [styles.selectBtn, styles.selected].join(' ')
+                        : styles.selectBtn
+                    }
+                    onClick={() => onSetTargetRelation('*')}
+                  >
+                    *
+                  </button>
+                </div>
+                <div className={styles.btnsDiv}>
+                  <button onClick={() => onSetSelectedEdgeIdxForUpdate(-1)}>
+                    Cancel
+                  </button>
+                  <button onClick={onUpdateTableRelation}>Commit</button>
+                </div>
+              </div>
+            </div>
+          )}
         </ReactFlow>
       </div>
     </>
@@ -170,21 +232,22 @@ interface typeEntityRelationshipPT {
   title: string;
   tableName: string;
   tableComment: string;
-  edgeName: string;
   selectedTableIdxForUpdate: number | null;
   selectedTableIdxForDelete: number;
+  selectedEdgeIdxForUpdate: number;
+  sourceRelation: string;
+  targetRelation: string;
   columns: Array<typeColumn>;
   titleNameRef: React.MutableRefObject<HTMLInputElement | null>;
-  edgeNameRef: React.MutableRefObject<HTMLInputElement | null>;
   tables: Node<any, string | undefined>[];
   edges: Edge<any>[];
   tableTypes: NodeTypes;
   edgeTypes: EdgeTypes;
   confirmMessage: string;
+  confirmPopupActive: boolean;
   onSetTitle: React.Dispatch<React.SetStateAction<string>>;
   onSetTableName: React.Dispatch<React.SetStateAction<string>>;
   onSetTableComment: React.Dispatch<React.SetStateAction<string>>;
-  onSetEdgeName: React.Dispatch<React.SetStateAction<string>>;
   onTablesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
   onColumnInputChange: (
@@ -195,11 +258,15 @@ interface typeEntityRelationshipPT {
   onSetSelectedTableIdxForUpdate: React.Dispatch<
     React.SetStateAction<number | null>
   >;
+  onSetSelectedEdgeIdxForUpdate: React.Dispatch<React.SetStateAction<number>>;
+  onSetSourceRelation: React.Dispatch<React.SetStateAction<string>>;
+  onSetTargetRelation: React.Dispatch<React.SetStateAction<string>>;
   onAddColumn: (tableId?: string) => void;
   onDragStart: (e: React.DragEvent<HTMLDivElement>, idx: number) => void;
   onDragEnd: (e: React.DragEvent<HTMLDivElement>, idx: number) => void;
   onDragOver: (e: React.DragEvent<HTMLDivElement>, idx: number) => void;
   onAddUpdateTable: () => void;
+  onUpdateTableRelation: () => void;
   onRemoveColumn: (idx: number, tableId?: string) => void;
   onConnect: OnConnect;
   onEdgeDoubleClick: EdgeMouseHandler;

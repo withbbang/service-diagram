@@ -25,6 +25,7 @@ import { typeColumn } from 'modules/types';
 import { handleRandomString } from 'modules/utils';
 
 const keyForTempERDiagrams = 'tempERDiagrams'; // 로컬 스토리지에 일시 저장할 키값
+const initTableName: string = 'New Table';
 const edgeOptions = Object.freeze({
   // animated: true,
   // markerEnd: {
@@ -33,7 +34,11 @@ const edgeOptions = Object.freeze({
   //   height: 15,
   //   color: '#74c3f0'
   // },
-  type: 'normal'
+  type: 'normal',
+  data: {
+    sourceRelation: '1',
+    targetRelation: '*'
+  }
   // style: {
   //   strokeWidth: 2,
   //   stroke: '#74c3f0'
@@ -63,8 +68,6 @@ const defaultColumn: typeColumn = Object.freeze({
 const initialTables: Array<Node> = []; // 테이블 초기화
 const initialEdges: Array<Edge> = []; // 엣지 초기화
 
-const initTableName: string = 'New Table';
-
 const EntityRelationshipCT = ({
   handleLoaderTrue,
   handleLoaderFalse
@@ -72,11 +75,9 @@ const EntityRelationshipCT = ({
   const tableTypes = useMemo(() => ({ table: Table }), []); // 커스텀 테이블 타입들
   const edgeTypes = useMemo(() => ({ normal: NormalEdge }), []); // 커스텀 엣지 타입들
 
-  const [id, setId] = useState<string>(''); // 포커싱된 테이블 및 엣지 id
   const [title, setTitle] = useState<string>(''); // 다이어그램 제목
   const [tableName, setTableName] = useState<string>(initTableName); // 테이블 이름
   const [tableComment, setTableComment] = useState<string>(''); // 테이블 설명
-  const [edgeName, setEdgeName] = useState<string>(''); // 엣지 이름
   const [rfInstance, setRfInstance] = useState<any>(null); // 로컬스토리지 일시 저장용 다이어그램 인스턴스
   const { setViewport } = useReactFlow(); // 전체젹인 뷰 관련 객체
   const [columns, setColumns] = useState<Array<typeColumn>>([initColumn]); // 테이블 컬럼 배열
@@ -85,15 +86,18 @@ const EntityRelationshipCT = ({
   >(null); // 선택된 테이블 인덱스(업데이트용)
   const [selectedTableIdxForDelete, setSelectedTableIdxForDelete] =
     useState<number>(-1); // 선택된 테이블 인덱스(삭제용)
+  const [selectedEdgeIdxForUpdate, setSelectedEdgeIdxForUpdate] =
+    useState<number>(-1); // 선택된 엣지 인덱스(업데이트용))
+  const [selectedEdgeIdxForDelete, setSelectedEdgeIdxForDelete] =
+    useState<number>(-1); // 선택된 엣지 인덱스(삭제용)
+  const [sourceRelation, setSourceRelation] = useState<string>(''); // 선택된 엣지 sourceRelation
+  const [targetRelation, setTargetRelation] = useState<string>(''); // 선택된 엣지 targetRelation
   const [draggingIdx, setDraggingIdx] = useState<number>(-1); // 드래그 중인 컬럼 인덱스
+  const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false); // 확인 팝업 활성 상태
   const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
 
   // 다이어그램 제목 input 참조 객체
   const titleNameRef = useRef(
-    null
-  ) as React.MutableRefObject<HTMLInputElement | null>;
-  // 포커싱된 엣지 이름 input 참조 객체
-  const edgeNameRef = useRef(
     null
   ) as React.MutableRefObject<HTMLInputElement | null>;
 
@@ -102,21 +106,29 @@ const EntityRelationshipCT = ({
 
   const updateNodeInternals = useUpdateNodeInternals(); // 동적 핸들 추가시 필요한 객체
 
-  // 엣지 변경 적용을 위한 useEffect. 현재는 엣지 내 data 객체의 label만 수정가능
+  // 엣지 업데이트 제어 팝업
   useEffect(() => {
-    setEdges((edges) =>
-      edges.map((edge) => {
-        if (edge.id === id) {
-          edge = {
-            ...edge,
-            label: edgeName
-          };
-        }
+    if (selectedEdgeIdxForUpdate === -1) {
+      setSourceRelation('');
+      setTargetRelation('');
+    } else {
+      const { sourceRelation, targetRelation } =
+        edges[selectedEdgeIdxForUpdate].data;
+      setSourceRelation(sourceRelation);
+      setTargetRelation(targetRelation);
+    }
+  }, [selectedEdgeIdxForUpdate]);
 
-        return edge;
-      })
-    );
-  }, [edgeName, setEdges]);
+  // 엣지 삭제 제어 팝업
+  useEffect(() => {
+    if (selectedEdgeIdxForDelete > -1) {
+      setConfirmMessage('Really Delete?');
+      setConfirmPopupActive(true);
+    } else {
+      setConfirmMessage('');
+      setConfirmPopupActive(false);
+    }
+  }, [selectedEdgeIdxForDelete]);
 
   // 테이블 생성 및 업데이트 제어 팝업
   useEffect(() => {
@@ -139,8 +151,10 @@ const EntityRelationshipCT = ({
   useEffect(() => {
     if (selectedTableIdxForDelete > -1) {
       setConfirmMessage('Really Delete?');
+      setConfirmPopupActive(true);
     } else {
       setConfirmMessage('');
+      setConfirmPopupActive(false);
     }
   }, [selectedTableIdxForDelete]);
 
@@ -263,7 +277,16 @@ const EntityRelationshipCT = ({
     (idx: number) => {
       const { id } = tables[idx];
       setEdges(
-        edges.filter((edge) => edge.source !== id && edge.target !== id)
+        edges
+          .filter((edge) => edge.source !== id && edge.target !== id)
+          .map((edge, idx) => {
+            edge.data = {
+              ...edge.data,
+              idx
+            };
+
+            return edge;
+          })
       );
       setTables(
         tables
@@ -288,7 +311,12 @@ const EntityRelationshipCT = ({
         addEdge(
           {
             ...params,
-            ...edgeOptions
+            ...edgeOptions,
+            data: {
+              ...edgeOptions.data,
+              idx: edges.length,
+              onSetSelectedTableIdxForDelete: setSelectedEdgeIdxForDelete
+            }
           },
           edges
         )
@@ -299,20 +327,51 @@ const EntityRelationshipCT = ({
 
   // 엣지 더블 클릭 -> 엣지 이름 input 포커싱
   const handleEdgeDoubleClick = (e: React.MouseEvent, edge: any) => {
-    setTableName('');
-    setId(edge.id);
-    edge.label ? setEdgeName(edge.label) : setEdgeName('');
-    edgeNameRef && edgeNameRef.current && edgeNameRef.current.focus();
+    setSelectedEdgeIdxForUpdate(edge.data.idx);
   };
+
+  // 엣지 삭제 메소드
+  const handleDeleteEdge = useCallback(
+    (idx: number) => {
+      setEdges(
+        edges
+          .filter((_, index) => index !== idx)
+          .map((edge, idx) => {
+            edge.data = {
+              ...edge.data,
+              idx
+            };
+
+            return edge;
+          })
+      );
+    },
+    [edges]
+  );
+
+  // 엣지 관계 업데이트
+  const handleUpdateTableRelation = useCallback(() => {
+    setEdges((edges: Array<Edge>) =>
+      edges.map((edge, idx) => {
+        if (idx === selectedEdgeIdxForUpdate) {
+          edge.data = {
+            ...edge.data,
+            sourceRelation,
+            targetRelation
+          };
+        }
+
+        return edge;
+      })
+    );
+
+    setSelectedEdgeIdxForUpdate(-1);
+  }, [edges, selectedEdgeIdxForUpdate, sourceRelation, targetRelation]);
 
   // input 포커싱 해제
   const handleBlur = (type: string) => {
-    setId('');
     if (type === 'title' && titleNameRef && titleNameRef.current) {
       titleNameRef.current.blur();
-    } else if (type === 'edge' && edgeNameRef && edgeNameRef.current) {
-      setEdgeName('');
-      edgeNameRef.current.blur();
     }
   };
 
@@ -375,7 +434,19 @@ const EntityRelationshipCT = ({
               })
             ] || []
           );
-          setEdges(flow.edges || []);
+          setEdges(
+            [
+              ...flow.edges.map((edge: Edge) => {
+                return {
+                  ...edge,
+                  data: {
+                    ...edge.data,
+                    onSetSelectedTableIdxForDelete: setSelectedEdgeIdxForDelete
+                  }
+                };
+              })
+            ] || []
+          );
           setViewport({ x, y, zoom });
         }
         handleLoaderFalse();
@@ -408,13 +479,22 @@ const EntityRelationshipCT = ({
 
   // confirm 팝업 확인 버튼 TODO: 추후 confirm팝업의 용도가 달라지므로 용도에 따라 콜백 함수 구분해야함
   const handleConfirm = () => {
-    handleDeleteTable(selectedTableIdxForDelete);
-    setSelectedTableIdxForDelete(-1);
+    if (selectedTableIdxForDelete > -1) {
+      handleDeleteTable(selectedTableIdxForDelete);
+      setSelectedTableIdxForDelete(-1);
+    } else if (selectedEdgeIdxForDelete > -1) {
+      handleDeleteEdge(selectedEdgeIdxForDelete);
+      setSelectedEdgeIdxForDelete(-1);
+    }
   };
 
   // confirm 팝업 취소 버튼 TODO: 추후 confirm팝업의 용도가 달라지므로 용도에 따라 콜백 함수 구분해야함
   const handleCancel = () => {
-    setSelectedTableIdxForDelete(-1);
+    if (selectedTableIdxForDelete > -1) {
+      setSelectedTableIdxForDelete(-1);
+    } else if (selectedEdgeIdxForDelete > -1) {
+      setSelectedEdgeIdxForDelete(-1);
+    }
   };
 
   return (
@@ -422,30 +502,35 @@ const EntityRelationshipCT = ({
       title={title}
       tableName={tableName}
       tableComment={tableComment}
-      edgeName={edgeName}
       selectedTableIdxForUpdate={selectedTableIdxForUpdate}
       selectedTableIdxForDelete={selectedTableIdxForDelete}
+      selectedEdgeIdxForUpdate={selectedEdgeIdxForUpdate}
+      sourceRelation={sourceRelation}
+      targetRelation={targetRelation}
       columns={columns}
       titleNameRef={titleNameRef}
-      edgeNameRef={edgeNameRef}
       tables={tables}
       edges={edges}
       tableTypes={tableTypes}
       edgeTypes={edgeTypes}
       confirmMessage={confirmMessage}
+      confirmPopupActive={confirmPopupActive}
       onSetTitle={setTitle}
       onSetTableName={setTableName}
       onSetTableComment={setTableComment}
-      onSetEdgeName={setEdgeName}
       onTablesChange={handleTablesChange}
       onEdgesChange={handleEdgesChange}
       onColumnInputChange={handleColumnInputChange}
       onSetSelectedTableIdxForUpdate={setSelectedTableIdxForUpdate}
+      onSetSelectedEdgeIdxForUpdate={setSelectedEdgeIdxForUpdate}
+      onSetSourceRelation={setSourceRelation}
+      onSetTargetRelation={setTargetRelation}
       onAddColumn={handleAddColumn}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       onDragOver={handleDragOver}
       onAddUpdateTable={handleAddUpdateTable}
+      onUpdateTableRelation={handleUpdateTableRelation}
       onRemoveColumn={handleRemoveColumn}
       onConnect={handleConnect}
       onEdgeDoubleClick={handleEdgeDoubleClick}

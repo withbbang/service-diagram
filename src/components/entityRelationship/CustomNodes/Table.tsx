@@ -57,7 +57,7 @@ function Table({
             key={idx}
           >
             <Handle
-              id={`left-target-${idx + 1}`}
+              id={`${id}-left-target-${idx + 1}`}
               type={'target'}
               position={Position.Left}
               isConnectable={isConnectable}
@@ -66,7 +66,7 @@ function Table({
               }}
             />
             <Handle
-              id={`left-source-${idx + 1}`}
+              id={`${id}-left-source-${idx + 1}`}
               type={'source'}
               position={Position.Left}
               isConnectable={isConnectable}
@@ -75,7 +75,7 @@ function Table({
               }}
             />
             <Handle
-              id={`right-target-${idx + 1}`}
+              id={`${id}-right-target-${idx + 1}`}
               type={'target'}
               position={Position.Right}
               isConnectable={isConnectable}
@@ -84,7 +84,7 @@ function Table({
               }}
             />
             <Handle
-              id={`right-source-${idx + 1}`}
+              id={`${id}-right-source-${idx + 1}`}
               type={'source'}
               position={Position.Right}
               isConnectable={isConnectable}

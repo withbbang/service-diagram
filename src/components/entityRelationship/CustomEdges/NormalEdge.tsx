@@ -1,12 +1,7 @@
 import { typeCustomEdge } from 'modules/types';
 import styles from './CommonEdgeStyles.module.scss';
 import SVG from 'modules/SVG';
-import {
-  BaseEdge,
-  EdgeLabelRenderer,
-  getBezierPath,
-  Position
-} from 'reactflow';
+import { BaseEdge, EdgeLabelRenderer, getBezierPath } from 'reactflow';
 
 function NormalEdge({
   id,
@@ -18,7 +13,7 @@ function NormalEdge({
   targetPosition,
   data
 }: typeCustomEdge): JSX.Element {
-  const [edgePath, middleX] = getBezierPath({
+  const [edgePath, middleX, middleY] = getBezierPath({
     sourceX,
     sourceY,
     sourcePosition,
@@ -27,10 +22,16 @@ function NormalEdge({
     targetPosition
   });
 
+  const handleDeleteEdge = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const { idx, onSetSelectedTableIdxForDelete } = data;
+    onSetSelectedTableIdxForDelete(idx);
+  };
+
   // 제어점 4개의 베지어 곡선 방정식을 이용한 좌표 반환 함수
   // B(t) = (1 - t)³ * P0 + 3(1 - t)² * t * P1 + 3(1 - t) * t² * P2 + t³ * P3
   const handleGetCoordinate = (posArr: Array<number>, position: string) => {
-    const t = position === 'right' ? 0.15 : 0.85;
+    const t = position === 'right' ? 0.25 : 0.75;
     return (
       Math.pow(1 - t, 3) * posArr[0] +
       3 * Math.pow(1 - t, 2) * t * posArr[1] +
@@ -55,7 +56,17 @@ function NormalEdge({
             )}px)`
           }}
         >
-          {'1'}
+          {data.sourceRelation}
+        </div>
+        <div
+          className={styles.label}
+          style={{
+            transform: `translate(-50%, -50%) translate(${middleX}px,${middleY}px)`
+          }}
+        >
+          <button className="edgebutton" onClick={(e) => handleDeleteEdge(e)}>
+            ×
+          </button>
         </div>
         <div
           className={styles.label}
@@ -69,7 +80,7 @@ function NormalEdge({
             )}px)`
           }}
         >
-          {'*'}
+          {data.targetRelation}
         </div>
       </EdgeLabelRenderer>
     </>
