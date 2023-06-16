@@ -21,8 +21,30 @@
 ```
 Service Diagrams
 ├─ 📁config
+│  ├─ 📁jest
+│  │  ├─ 📄babelTransform.js
+│  │  ├─ 📄cssTransform.js
+│  │  └─ 📄fileTransform.js
+│  ├─ 📁components
+│  │  └─ 📁persistentCache
+│  │     └─ 📁persistentCache
+│  │        └─ 📄createEnvironmentHash.js
+│  ├─ 📄env.js
+│  ├─ 📄getHttpsConfig.js
+│  ├─ 📄modules.js
+│  ├─ 📄paths.js
+│  ├─ 📄webpack.config.js
+│  └─ 📄webpackDevServer.config.js
 ├─ 📁public
+│  ├─ 📄index.css
+│  ├─ 📄index.html
+│  ├─ 📄logo_#.svg
+│  ├─ 📄manifest.json
+│  └─ 📄robots.txt
 ├─ 📁scripts
+│  ├─ 📄build.js
+│  ├─ 📄start.js
+│  └─ 📄test.js
 ├─ 📁src
 │  ├─ 📁components
 │  ├─ 📁middlewares
@@ -83,6 +105,7 @@ Service Diagrams
 - useCallback의 사용법
 - useRef의 사용법
 - scss를 전역적으로 사용하는 법
+- 타입스크립트 타입 정의
 
 ---
 
