@@ -29,12 +29,12 @@ const edgeOptions = {
   markerEnd: {
     type: MarkerType.Arrow,
     width: 15,
-    height: 15,
-    color: '#74c3f0'
+    height: 15
+    // color: '#74c3f0'
   },
   style: {
-    strokeWidth: 2,
-    stroke: '#74c3f0'
+    strokeWidth: 2
+    // stroke: '#74c3f0'
   }
 };
 
