@@ -1,6 +1,2 @@
 [TODO]
-1. 일시저장 및 가져오기 아이디어로 DB에도 동일하게 저장하기 (대신 다이어그램이 클 수록 stringfy, parse 부하가 많음)
-    1) Flow Diagrams -> JSON.stringfy()
-    2) DB save
-    3) Restore Flow Diagrams text from DB
-    4) Flow Diagrams text -> JSON.parse()
+1. update, delete 기능 추가
