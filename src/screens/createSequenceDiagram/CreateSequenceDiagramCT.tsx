@@ -83,7 +83,7 @@ const CreateSequenceDiagramCT = ({
     setConfirmMessage('');
     setConfirmPopupActive(false);
     handleLoaderTrue();
-    const docRef = await addDoc(collection(db, type), {
+    await addDoc(collection(db, type), {
       title,
       content
     });

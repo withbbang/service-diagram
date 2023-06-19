@@ -6,6 +6,7 @@ import CreateSequencDiagram from 'screens/createSequenceDiagram';
 import Diagrams from 'screens/diagrams';
 import Index from 'screens/index';
 import NotFound from 'screens/notFound';
+import ViewFlowDiagram from 'screens/viewFlowDiagram';
 import ViewSequenceDiagram from 'screens/viewSequenceDiagram';
 
 const App = (): JSX.Element => {
@@ -18,6 +19,7 @@ const App = (): JSX.Element => {
           path="/diagrams/sequence/:id"
           element={<ViewSequenceDiagram />}
         />
+        <Route path="/diagrams/flow/:id" element={<ViewFlowDiagram />} />
         <Route
           path="/diagram/sequence/create"
           element={<CreateSequencDiagram />}

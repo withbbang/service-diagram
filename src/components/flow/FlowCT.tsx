@@ -30,83 +30,11 @@ const edgeOptions = {
     type: MarkerType.Arrow,
     width: 15,
     height: 15
-    // color: '#74c3f0'
   },
   style: {
     strokeWidth: 2
-    // stroke: '#74c3f0'
   }
 };
-
-const initialNodes: Array<Node> = [
-  // {
-  //   id: 'node-0',
-  //   type: 'diamondNode',
-  //   position: { x: 500, y: 500 },
-  //   data: { label: 'diamond' }
-  // },
-  // {
-  //   id: 'node-3',
-  //   type: 'rectangleNode',
-  //   position: { x: 300, y: 300 },
-  //   data: { label: 'node 3' }
-  // },
-  // {
-  //   id: 'node-4',
-  //   type: 'rectangleNode',
-  //   position: { x: 0, y: 0 },
-  //   data: { label: 'node 4' }
-  // },
-  // {
-  //   id: 'node-1',
-  //   type: 'output',
-  //   position: { x: 0, y: 200 },
-  //   data: { label: 'node 2' }
-  // },
-  // {
-  //   id: 'node-2',
-  //   type: 'output',
-  //   position: { x: 200, y: 200 },
-  //   data: { label: 'node 2' }
-  // }
-];
-
-const initialEdges: Array<Edge> = [
-  // {
-  //   id: 'edge-1',
-  //   source: 'node-0',
-  //   target: 'node-3',
-  //   sourceHandle: 'bottom-source',
-  //   type: 'step',
-  //   ...edgeOptions
-  // },
-  // {
-  //   id: 'edge-2',
-  //   source: 'node-0',
-  //   target: 'node-2',
-  //   sourceHandle: 'left-source',
-  //   type: 'step',
-  //   ...edgeOptions
-  // },
-  // {
-  //   id: 'edge-self',
-  //   source: 'node-4',
-  //   target: 'node-4',
-  //   sourceHandle: 'right-source',
-  //   type: 'step',
-  //   ...edgeOptions
-  // },
-  // {
-  //   id: 'self-edge',
-  //   source: 'node-4',
-  //   target: 'node-4',
-  //   sourceHandle: 'left-source',
-  //   targetHandle: 'left-target',
-  //   type: 'selfConnectingEdge',
-  //   label: 'self edge',
-  //   ...edgeOptions
-  // }
-];
 
 const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
   const [id, setId] = useState<string>('');
@@ -126,8 +54,8 @@ const FlowCT = ({ handleLoaderTrue, handleLoaderFalse }: typeFlowCT) => {
     null
   ) as React.MutableRefObject<HTMLInputElement | null>;
 
-  const [nodes, setNodes, handleNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, handleEdgesChange] = useEdgesState(initialEdges);
+  const [nodes, setNodes, handleNodesChange] = useNodesState([]);
+  const [edges, setEdges, handleEdgesChange] = useEdgesState([]);
 
   useEffect(() => {
     setNodes((nds) =>

@@ -18,26 +18,25 @@ const DiagramsCT = ({
     (async () => {
       handleLoaderTrue();
       if (type !== undefined) {
+        const querySnapshot = await getDocs(collection(db, type));
+        setContents(
+          querySnapshot.docs.map((doc) => {
+            return {
+              id: doc.id,
+              title: doc.data().title
+            };
+          })
+        );
+        handleLoaderFalse();
+
         if (type === 'sequence') {
           setTitle('Sequence Diagrams');
-          const querySnapshot = await getDocs(collection(db, type));
-          setContents(
-            querySnapshot.docs.map((doc) => {
-              return {
-                id: doc.id,
-                title: doc.data().title
-              };
-            })
-          );
         } else if (type === 'flow') {
           setTitle('Flow Diagrams');
-          //TODO: flow diagram 불러오기
         } else if (type === 'entity-relationship') {
           setTitle('Entity-Relationship Diagrams');
-          //TODO: erd diagram 불러오기
         }
       }
-      handleLoaderFalse();
     })();
   }, []);
 

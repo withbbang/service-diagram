@@ -29,8 +29,6 @@ const ViewSequenceDiagramCT = ({
         if (docSnap.exists()) {
           const { title, content } = docSnap.data();
 
-          console.log(docSnap.data());
-
           setTitle(title);
           setContent(content);
         }

@@ -1,0 +1,114 @@
+import React, { useEffect, useState } from 'react';
+import { getFirestore } from 'firebase/firestore';
+import { app } from 'modules/utils';
+import { doc, getDoc } from 'firebase/firestore';
+import {
+  MarkerType,
+  Node,
+  ReactFlowProvider,
+  useEdgesState,
+  useNodesState,
+  useReactFlow
+} from 'reactflow';
+import { useNavigate, useParams } from 'react-router-dom';
+import DiamondNode from 'components/flow/customNodes/DiamondNode';
+import RectangleNode from 'components/flow/customNodes/RectangleNode';
+import SelfConnectingEdge from 'components/flow/customEdges/SelfConnectingEdge';
+import ViewFlowDiagramPT from './ViewFlowDiagramPT';
+
+const keyForTempFlowDiagrams = 'tempFlowDiagrams';
+const nodeTypes = { diamondNode: DiamondNode, rectangleNode: RectangleNode };
+const edgeTypes = {
+  selfConnectingEdge: SelfConnectingEdge
+};
+const edgeOptions = {
+  // animated: true,
+  markerEnd: {
+    type: MarkerType.Arrow,
+    width: 15,
+    height: 15
+  }
+};
+
+const ViewFlowDiagramCT = ({
+  handleLoaderTrue,
+  handleLoaderFalse
+}: typeViewFlowDiagramCT): JSX.Element => {
+  const db = getFirestore(app);
+  const type = 'flow';
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const [title, setTitle] = useState<string>('');
+  const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false); // 확인 팝업 활성 상태
+  const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
+
+  const [rfInstance, setRfInstance] = useState<any>(null);
+  const [nodes, setNodes, handleNodesChange] = useNodesState([]);
+  const [edges, setEdges, handleEdgesChange] = useEdgesState([]);
+  const { setViewport } = useReactFlow();
+
+  useEffect(() => {
+    (async () => {
+      handleLoaderTrue();
+      if (id !== undefined) {
+        const docRef = doc(db, type, id);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const { title, content } = docSnap.data();
+
+          const flow = JSON.parse(content);
+
+          if (flow) {
+            const { x = 0, y = 0, zoom = 1 } = flow.viewport;
+            setNodes(
+              flow.nodes.map((node: Node) => {
+                const { data, width, height } = node;
+                return { ...node, data: { ...data, width, height } };
+              }) || []
+            );
+            setEdges(flow.edges || []);
+            setViewport({ x, y, zoom });
+          }
+
+          setTitle(title);
+        }
+      } else {
+        setConfirmMessage('No Document Detail ID!');
+        setConfirmPopupActive(true);
+      }
+      handleLoaderFalse();
+    })();
+  }, []);
+
+  const handleConfirm = () => {
+    navigate(-1);
+  };
+
+  return (
+    <ViewFlowDiagramPT
+      title={title}
+      nodes={nodes}
+      edges={edges}
+      nodeTypes={nodeTypes}
+      edgeTypes={edgeTypes}
+      confirmPopupActive={confirmPopupActive}
+      confirmMessage={confirmMessage}
+      onConfirm={handleConfirm}
+      onCancel={handleConfirm}
+      onInit={setRfInstance}
+    />
+  );
+};
+
+export default (props: typeViewFlowDiagramCT) => (
+  <ReactFlowProvider>
+    <ViewFlowDiagramCT {...props} />
+  </ReactFlowProvider>
+);
+
+interface typeViewFlowDiagramCT {
+  handleLoaderTrue: () => void;
+  handleLoaderFalse: () => void;
+}

@@ -1,4 +1,4 @@
-import CreateFlowDiagramCT from './CreateFlowDiagramCT';
+import ViewFlowDiagramCT from './ViewFlowDiagramCT';
 import { connect } from 'react-redux';
 import { PropState } from 'middlewares/configureReducer';
 import { Action } from '@reduxjs/toolkit';
@@ -23,9 +23,4 @@ const mapDispatchToProps = (dispatch: (actionFunction: Action<any>) => any) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(CreateFlowDiagramCT);
-
-// https://codesandbox.io/s/romantic-jasper-lij20h?file=/src/CustomDiagram/task/component.js 참고
+export default connect(mapStateToProps, mapDispatchToProps)(ViewFlowDiagramCT);
