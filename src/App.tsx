@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import CreateEntityRelationshipDiagram from 'screens/createEntityRelationshipdDiagram';
+import CreateEntityRelationshipDiagram from 'screens/createEntityRelationshipDiagram';
 import CreateFlowDiagram from 'screens/createFlowDiagram';
 import CreateSequencDiagram from 'screens/createSequenceDiagram';
 import Diagrams from 'screens/diagrams';

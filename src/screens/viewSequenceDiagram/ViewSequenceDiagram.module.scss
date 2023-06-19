@@ -1,0 +1,27 @@
+.wrap {
+  display: flex;
+  width: 100%;
+  min-height: 100%;
+  @include background($more-light);
+
+  .innerWrap {
+    width: 100%;
+    padding: 10% 10%;
+    overflow: auto;
+
+    .title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      word-break: break-all;
+      @include font($most-dark);
+    }
+
+    .content {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
