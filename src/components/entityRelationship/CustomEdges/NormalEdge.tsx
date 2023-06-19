@@ -59,7 +59,7 @@ function NormalEdge({
         >
           {data.sourceRelation}
         </div>
-        {selected && (
+        {selected && data.editPossible && (
           <div
             className={styles.label}
             style={{

@@ -1,4 +1,4 @@
-import CreateErdDiagramCT from './CreateEntityRelationshipDiagramCT';
+import ViewEntityRelationshipDiagramCT from './ViewEntityRelationshipDiagramCT';
 import { connect } from 'react-redux';
 import { PropState } from 'middlewares/configureReducer';
 import { Action } from '@reduxjs/toolkit';
@@ -23,4 +23,7 @@ const mapDispatchToProps = (dispatch: (actionFunction: Action<any>) => any) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateErdDiagramCT);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ViewEntityRelationshipDiagramCT);

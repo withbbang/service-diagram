@@ -9,7 +9,6 @@ import {
 import styles from './CommonEdgeStyles.module.scss';
 
 const SelfConnecting = (props: EdgeProps): JSX.Element => {
-  // we are using the default bezier edge when source and target ids are different
   if (props.sourcePosition !== props.targetPosition) {
     return <BezierEdge {...props} />;
   }

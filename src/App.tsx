@@ -6,6 +6,7 @@ import CreateSequencDiagram from 'screens/createSequenceDiagram';
 import Diagrams from 'screens/diagrams';
 import Index from 'screens/index';
 import NotFound from 'screens/notFound';
+import ViewEntityRelationshipDiagram from 'screens/viewEntityRelationshipDiagram';
 import ViewFlowDiagram from 'screens/viewFlowDiagram';
 import ViewSequenceDiagram from 'screens/viewSequenceDiagram';
 
@@ -20,6 +21,10 @@ const App = (): JSX.Element => {
           element={<ViewSequenceDiagram />}
         />
         <Route path="/diagrams/flow/:id" element={<ViewFlowDiagram />} />
+        <Route
+          path="/diagrams/entity-relationship/:id"
+          element={<ViewEntityRelationshipDiagram />}
+        />
         <Route
           path="/diagram/sequence/create"
           element={<CreateSequencDiagram />}

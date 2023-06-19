@@ -15,23 +15,26 @@ function Table({
     idx,
     tableName,
     tableComment,
+    columns,
+    editPossible,
     onSetSelectedTableIdxForUpdate,
-    onSetSelectedTableIdxForDelete,
-    columns
+    onSetSelectedTableIdxForDelete
   } = data;
 
   return (
     <div className={styles.tableWrap}>
       <div className={styles.tableName}>
         {tableName}
-        <div className={styles.floatBtns}>
-          <span onClick={() => onSetSelectedTableIdxForUpdate(idx)}>
-            <SVG type="modify" width="10px" height="10px" />
-          </span>
-          <span onClick={() => onSetSelectedTableIdxForDelete(idx)}>
-            <SVG type="trash" width="10px" height="10px" />
-          </span>
-        </div>
+        {editPossible && (
+          <div className={styles.floatBtns}>
+            <span onClick={() => onSetSelectedTableIdxForUpdate(idx)}>
+              <SVG type="modify" width="10px" height="10px" />
+            </span>
+            <span onClick={() => onSetSelectedTableIdxForDelete(idx)}>
+              <SVG type="trash" width="10px" height="10px" />
+            </span>
+          </div>
+        )}
       </div>
       <div
         className={

@@ -155,7 +155,7 @@ const CreateFlowDiagramCT = ({
             id: 'node-' + num,
             type,
             position: { x: 0, y: 0 },
-            data: { label: 'node ' + num },
+            data: { label: 'node ' + num, editPossible: true },
             selected: true
           }
         ];

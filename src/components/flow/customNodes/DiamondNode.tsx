@@ -44,14 +44,16 @@ function DiamondNode({ data, isConnectable, selected }: typeCustomNode) {
         height: `${height}px`
       }}
     >
-      <NodeResizer
-        color="#ff0071"
-        isVisible={selected}
-        minWidth={initWidth}
-        minHeight={initHeight}
-        onResize={handleResize}
-        onResizeEnd={handleResizeEnd}
-      />
+      {data.editPossible && (
+        <NodeResizer
+          color="#ff0071"
+          isVisible={selected}
+          minWidth={initWidth}
+          minHeight={initHeight}
+          onResize={handleResize}
+          onResizeEnd={handleResizeEnd}
+        />
+      )}
       <Handle
         id="top-target"
         type={'target'}

@@ -16,7 +16,6 @@ import RectangleNode from 'components/flow/customNodes/RectangleNode';
 import SelfConnectingEdge from 'components/flow/customEdges/SelfConnectingEdge';
 import ViewFlowDiagramPT from './ViewFlowDiagramPT';
 
-const keyForTempFlowDiagrams = 'tempFlowDiagrams';
 const nodeTypes = { diamondNode: DiamondNode, rectangleNode: RectangleNode };
 const edgeTypes = {
   selfConnectingEdge: SelfConnectingEdge
@@ -44,8 +43,8 @@ const ViewFlowDiagramCT = ({
   const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
 
   const [rfInstance, setRfInstance] = useState<any>(null);
-  const [nodes, setNodes, handleNodesChange] = useNodesState([]);
-  const [edges, setEdges, handleEdgesChange] = useEdgesState([]);
+  const [nodes, setNodes] = useNodesState([]);
+  const [edges, setEdges] = useEdgesState([]);
   const { setViewport } = useReactFlow();
 
   useEffect(() => {
@@ -65,7 +64,10 @@ const ViewFlowDiagramCT = ({
             setNodes(
               flow.nodes.map((node: Node) => {
                 const { data, width, height } = node;
-                return { ...node, data: { ...data, width, height } };
+                return {
+                  ...node,
+                  data: { ...data, width, height, editPossible: false }
+                };
               }) || []
             );
             setEdges(flow.edges || []);
