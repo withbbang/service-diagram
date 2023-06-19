@@ -4,5 +4,3 @@
     2) DB save
     3) Restore Flow Diagrams text from DB
     4) Flow Diagrams text -> JSON.parse()
-2. 테이블 핸들 위치 마다 동적 추가 기능 필요
-3. 동적 컬럼 추가하고 리사이징할 경우 포커싱 안 맞는 오류
