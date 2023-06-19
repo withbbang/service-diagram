@@ -8,6 +8,20 @@
     width: 100%;
     padding: 10% 10%;
     overflow: auto;
+    position: relative;
+
+    .saveBtn {
+      position: absolute;
+      padding: 10px;
+      top: 20px;
+      right: 20px;
+      cursor: pointer;
+      @include boxShadow('none');
+    }
+
+    .saveBtn:hover {
+      @include boxShadow(4px 4px 2px 1px rgba(0, 0, 0, 0.2));
+    }
 
     .title {
       display: flex;

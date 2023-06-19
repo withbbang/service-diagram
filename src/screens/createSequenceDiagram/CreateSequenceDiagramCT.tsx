@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import { addDoc, collection, getFirestore } from 'firebase/firestore';
+import { app } from 'modules/utils';
 import CreateSequenceDiagramPT from './CreateSequenceDiagramPT';
 import styles from 'components/functionPopup/FunctionPopup.module.scss';
 
-const CreateSequenceDiagramCT = (
-  props: typeCreateSequenceDiagramCT
-): JSX.Element => {
+const CreateSequenceDiagramCT = ({
+  handleLoaderTrue,
+  handleLoaderFalse
+}: typeCreateSequenceDiagramCT): JSX.Element => {
+  const db = getFirestore(app);
+  const type = 'sequence';
+  const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false); // 확인 팝업 활성 상태
+  const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
+
   const titleRef = React.useRef() as React.MutableRefObject<HTMLInputElement>;
   const contentRef =
     React.useRef() as React.MutableRefObject<HTMLTextAreaElement>;
@@ -14,19 +22,15 @@ const CreateSequenceDiagramCT = (
   const [isFunctionPopupActive, setIsFunctionPopupActive] =
     useState<boolean>(false);
 
-  const [title, setTitle] = useState<string>('Test Sequence Diagram');
-  const [content, setContent] = useState<string>(`
-    1.0-->1.0: 🟢 Vendedor :department_store:
-    1.0-->1.0: 🟢 HQRRT\\nOCASA 321\\nSeguimiento: EC34874565\\nFecha: 12/11/2021 14:30:55hs
-    1.0-->1.0: 🟢 Operational_RT\\nCarrier 2FG\\nFecha: 14/11/2021 11:55:33hs
-    1.0-->1.0: ❌ Comprador :shopping_trolley:
-    2.0->2.0: 🔵 P2P_RT\\nCORREO ARGENTINO 422\\nSeguimiento: 16XG34329\\nFecha: 18/11/2021 13:17:23hs
-    2.0->1.0: 🔵 Inicializado
-    2.0->2.0: 🔵 Vendedor :department_store:\\nFecha: 24/11/2021 14:30:56hs
-    2.0->1.0: 🔵 Completado
-  `);
+  const [title, setTitle] = useState<string>('');
+  const [content, setContent] = useState<string>(``);
 
   useEffect(() => {}, []);
+
+  const handleSaveBtn = async () => {
+    setConfirmMessage('Really Save?');
+    setConfirmPopupActive(true);
+  };
 
   const handleCreateUpdatePopup = () => {
     setIsFunctionPopupActive(!isFunctionPopupActive);
@@ -71,15 +75,25 @@ const CreateSequenceDiagramCT = (
         onKeyDown={(e) => handleTextAreaTab(e)}
         ref={contentRef}
       />
-      <button
-        // onClick={() => handleCreateUpdateContent()}
-        onKeyUp={(e) => {}}
-        ref={createUpdateBtnRef}
-      >
-        확인
-      </button>
+      <button onClick={handleCreateUpdatePopup}>확인</button>
     </div>
   );
+
+  const handleConfirm = async () => {
+    setConfirmMessage('');
+    setConfirmPopupActive(false);
+    handleLoaderTrue();
+    const docRef = await addDoc(collection(db, type), {
+      title,
+      content
+    });
+    handleLoaderFalse();
+  };
+
+  const handleCancel = () => {
+    setConfirmMessage('');
+    setConfirmPopupActive(false);
+  };
 
   return (
     <CreateSequenceDiagramPT
@@ -87,11 +101,19 @@ const CreateSequenceDiagramCT = (
       content={content}
       isFunctionPopupActive={isFunctionPopupActive}
       children={handleChildren}
+      confirmPopupActive={confirmPopupActive}
+      confirmMessage={confirmMessage}
       onCreateUpdatePopup={handleCreateUpdatePopup}
+      onSaveBtn={handleSaveBtn}
+      onConfirm={handleConfirm}
+      onCancel={handleCancel}
     />
   );
 };
 
-interface typeCreateSequenceDiagramCT {}
+interface typeCreateSequenceDiagramCT {
+  handleLoaderTrue: () => void;
+  handleLoaderFalse: () => void;
+}
 
 export default CreateSequenceDiagramCT;

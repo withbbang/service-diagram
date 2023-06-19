@@ -1,27 +1,66 @@
 import React, { useEffect, useState } from 'react';
+import { getFirestore } from 'firebase/firestore';
+import { app } from 'modules/utils';
+import { doc, getDoc } from 'firebase/firestore';
+import { useNavigate, useParams } from 'react-router-dom';
 import ViewSequenceDiagramPT from './ViewSequenceDiagramPT';
-import styles from 'components/functionPopup/FunctionPopup.module.scss';
 
-const ViewSequenceDiagramCT = (
-  props: typeViewSequenceDiagramCT
-): JSX.Element => {
-  const [title, setTitle] = useState<string>('Test Sequence Diagram');
-  const [content, setContent] = useState<string>(`
-    1.0-->1.0: 🟢 Vendedor :department_store:
-    1.0-->1.0: 🟢 HQRRT\\nOCASA 321\\nSeguimiento: EC34874565\\nFecha: 12/11/2021 14:30:55hs
-    1.0-->1.0: 🟢 Operational_RT\\nCarrier 2FG\\nFecha: 14/11/2021 11:55:33hs
-    1.0-->1.0: ❌ Comprador :shopping_trolley:
-    2.0->2.0: 🔵 P2P_RT\\nCORREO ARGENTINO 422\\nSeguimiento: 16XG34329\\nFecha: 18/11/2021 13:17:23hs
-    2.0->1.0: 🔵 Inicializado
-    2.0->2.0: 🔵 Vendedor :department_store:\\nFecha: 24/11/2021 14:30:56hs
-    2.0->1.0: 🔵 Completado
-  `);
+const ViewSequenceDiagramCT = ({
+  handleLoaderTrue,
+  handleLoaderFalse
+}: typeViewSequenceDiagramCT): JSX.Element => {
+  const db = getFirestore(app);
+  const type = 'sequence';
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-  useEffect(() => {}, []);
+  const [title, setTitle] = useState<string>('');
+  const [content, setContent] = useState<string>(``);
+  const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false); // 확인 팝업 활성 상태
+  const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
 
-  return <ViewSequenceDiagramPT title={title} content={content} />;
+  useEffect(() => {
+    (async () => {
+      handleLoaderTrue();
+      if (id !== undefined) {
+        const docRef = doc(db, type, id);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const { title, content } = docSnap.data();
+
+          console.log(docSnap.data());
+
+          setTitle(title);
+          setContent(content);
+        }
+      } else {
+        setConfirmMessage('No Document Detail ID!');
+        setConfirmPopupActive(true);
+      }
+      handleLoaderFalse();
+    })();
+  }, []);
+
+  const handleConfirm = () => {
+    navigate(-1);
+  };
+
+  return (
+    <ViewSequenceDiagramPT
+      title={title}
+      content={content}
+      confirmPopupActive={confirmPopupActive}
+      confirmMessage={confirmMessage}
+      onConfirm={handleConfirm}
+      onCancel={handleConfirm}
+    />
+  );
 };
 
-interface typeViewSequenceDiagramCT {}
+interface typeViewSequenceDiagramCT {
+  handleLoaderTrue: () => void;
+  handleLoaderFalse: () => void;
+}
 
 export default ViewSequenceDiagramCT;

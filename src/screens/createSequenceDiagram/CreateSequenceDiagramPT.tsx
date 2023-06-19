@@ -3,16 +3,31 @@ import Sequence from 'react-sequence-diagram';
 import styles from './CreateSequenceDiagram.module.scss';
 import SVG from 'modules/SVG';
 import FunctionPopup from 'components/functionPopup/FunctionPopup';
+import Loader from 'components/loader';
+import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
 
 const CreateSequenceDiagramPT = ({
   title,
   content,
   isFunctionPopupActive,
   children,
-  onCreateUpdatePopup
+  confirmPopupActive,
+  confirmMessage,
+  onCreateUpdatePopup,
+  onSaveBtn,
+  onConfirm,
+  onCancel
 }: typeCreateSequenceDiagramPT): JSX.Element => {
   return (
     <>
+      <Loader />
+      <ConfirmPopup
+        isActive={confirmPopupActive}
+        confirmMessage={confirmMessage}
+        confirmType=""
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+      />
       <FunctionPopup
         isActive={isFunctionPopupActive}
         children={children}
@@ -20,6 +35,9 @@ const CreateSequenceDiagramPT = ({
       />
       <div className={styles.wrap}>
         <div className={styles.innerWrap}>
+          <button className={styles.saveBtn} onClick={onSaveBtn}>
+            Save
+          </button>
           <h2 className={styles.title}>{title}</h2>
           <div className={styles.content}>
             <Sequence options={{ theme: 'simple' }} input={content} />
@@ -38,7 +56,12 @@ interface typeCreateSequenceDiagramPT {
   content: string;
   isFunctionPopupActive: boolean;
   children: JSX.Element;
+  confirmPopupActive: boolean;
+  confirmMessage: string;
   onCreateUpdatePopup: () => void;
+  onSaveBtn: () => void;
+  onConfirm: () => void;
+  onCancel: () => void;
 }
 
 export default CreateSequenceDiagramPT;

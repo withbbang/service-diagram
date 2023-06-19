@@ -1,3 +1,4 @@
+import { DocumentData } from 'firebase/firestore';
 import { EdgeProps, NodeProps } from 'reactflow';
 
 export interface typeSVG {
@@ -35,3 +36,8 @@ export interface typeColumn {
 }
 
 export interface typeCustomEdge extends EdgeProps {}
+
+export interface typeContent extends DocumentData {
+  id: string;
+  title: string;
+}
