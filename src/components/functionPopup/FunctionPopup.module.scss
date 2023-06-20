@@ -84,10 +84,32 @@
         justify-content: space-between;
 
         :nth-child(n) {
-          width: 100%;
+          width: 50%;
+        }
+
+        > input {
           border-radius: 10px;
           padding: 0 10px;
           border: solid 1px $less-light;
+        }
+
+        .select {
+          display: flex;
+          align-items: center;
+
+          > label {
+            display: flex;
+            align-items: center;
+            justify-content: end;
+            font-size: 0.8rem;
+            margin-right: 10px;
+          }
+
+          > select {
+            border-radius: 10px;
+            padding: 0 10px;
+            border: solid 1px $less-light;
+          }
         }
 
         > input:focus {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { addDoc, collection, getFirestore } from 'firebase/firestore';
 import { app } from 'modules/utils';
 import CreateSequenceDiagramPT from './CreateSequenceDiagramPT';
@@ -10,22 +10,20 @@ const CreateSequenceDiagramCT = ({
 }: typeCreateSequenceDiagramCT): JSX.Element => {
   const db = getFirestore(app);
   const type = 'sequence';
+
+  const [isDone, setIsDone] = useState<string>('N');
   const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false); // 확인 팝업 활성 상태
   const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
 
   const titleRef = React.useRef() as React.MutableRefObject<HTMLInputElement>;
   const contentRef =
     React.useRef() as React.MutableRefObject<HTMLTextAreaElement>;
-  const createUpdateBtnRef =
-    React.useRef() as React.MutableRefObject<HTMLButtonElement>;
 
   const [isFunctionPopupActive, setIsFunctionPopupActive] =
     useState<boolean>(false);
 
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>(``);
-
-  useEffect(() => {}, []);
 
   const handleSaveBtn = async () => {
     setConfirmMessage('Really Save?');
@@ -55,17 +53,15 @@ const CreateSequenceDiagramCT = ({
           id="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          // onKeyUp={(e) => handleCreateUpdateContent(e)}
-          onKeyUp={(e) => {}}
           ref={titleRef}
         />
-        {/* <select
-          defaultValue={isDone}
-          onChange={(e) => setIsDone(e.target.value)}
-        >
-          <option value={'N'}>비노출</option>
-          <option value={'Y'}>노출</option>
-        </select> */}
+        <div className={styles.select}>
+          <label>Complete</label>
+          <select value={isDone} onChange={(e) => setIsDone(e.target.value)}>
+            <option value={'N'}>N</option>
+            <option value={'Y'}>Y</option>
+          </select>
+        </div>
       </div>
       <textarea
         placeholder="CONTENT"
@@ -85,7 +81,8 @@ const CreateSequenceDiagramCT = ({
     handleLoaderTrue();
     await addDoc(collection(db, type), {
       title,
-      content
+      content,
+      isDone
     });
     handleLoaderFalse();
   };
