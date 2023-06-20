@@ -12,6 +12,24 @@
   word-break: keep-all;
   @include background-boxShadow-transform($most-light, 'none', scale(1));
 
+  .floatBtns {
+    position: absolute;
+    display: none;
+    top: 15px;
+    right: 25px;
+
+    > span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+
+      &:last-child {
+        margin-left: 10px;
+      }
+    }
+  }
+
   h3 {
     margin: 0;
     font-size: 1.5em;
@@ -29,10 +47,9 @@
 
 .wrap:hover {
   cursor: pointer;
-  /* 1.03배로 크기 키우기 */
-  // transform: scale(1.03);
-  /* offset-x | offset-y | blur-radius | spread-radius | color */
-  // box-shadow: 4px 4px 2px 1px rgba(0, 0, 0, 0.2);
-  /* transform, box-shadow 속성 0.5s 속도로 변경 */
   @include boxShadow-transform(4px 4px 2px 1px rgba(0, 0, 0, 0.2), scale(1.03));
+
+  .floatBtns {
+    display: flex;
+  }
 }

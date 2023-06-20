@@ -5,7 +5,9 @@ import {
   getDocs,
   getFirestore,
   query,
-  where
+  where,
+  doc,
+  deleteDoc
 } from 'firebase/firestore';
 import DiagramsPT from './DiagramsPT';
 import { app } from 'modules/utils';
@@ -19,22 +21,14 @@ const DiagramsCT = ({
   const { type } = useParams();
   const [title, setTitle] = useState<string>('');
   const [contents, setContents] = useState<Array<typeContent>>([]);
+  const [selectedContentId, setSelectedContentId] = useState<string>('');
+  const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false); // 확인 팝업 활성 상태
+  const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
 
   useEffect(() => {
     (async () => {
-      handleLoaderTrue();
       if (type !== undefined) {
-        const q = query(collection(db, type), where('isDone', '==', 'Y'));
-        const querySnapshot = await getDocs(q);
-        setContents(
-          querySnapshot.docs.map((doc) => {
-            return {
-              id: doc.id,
-              title: doc.data().title
-            };
-          })
-        );
-        handleLoaderFalse();
+        handleGetContents(type);
 
         if (type === 'sequence') {
           setTitle('Sequence Diagrams');
@@ -47,7 +41,63 @@ const DiagramsCT = ({
     })();
   }, []);
 
-  return <DiagramsPT type={type} title={title} contents={contents} />;
+  const handleGetContents = async (type: string) => {
+    handleLoaderTrue();
+    const q = query(collection(db, type), where('isDone', '==', 'Y'));
+    const querySnapshot = await getDocs(q);
+    setContents(
+      querySnapshot.docs.map((doc) => {
+        return {
+          id: doc.id,
+          title: doc.data().title
+        };
+      })
+    );
+    handleLoaderFalse();
+  };
+
+  const handleDeleteBtn = async (
+    e: React.MouseEvent,
+    selectedContentId: string
+  ) => {
+    e.stopPropagation();
+    setSelectedContentId(selectedContentId);
+    setConfirmMessage('Really Delete?');
+    setConfirmPopupActive(true);
+  };
+
+  const handleConfirm = async () => {
+    if (type !== undefined) {
+      handleLoaderTrue();
+      await deleteDoc(doc(db, type, selectedContentId));
+      setConfirmMessage('');
+      setConfirmPopupActive(false);
+      setSelectedContentId('');
+      await handleGetContents(type);
+      handleLoaderFalse();
+    } else {
+      alert('Nothing Delete');
+    }
+  };
+
+  const handleCancel = () => {
+    setConfirmMessage('');
+    setSelectedContentId('');
+    setConfirmPopupActive(false);
+  };
+
+  return (
+    <DiagramsPT
+      type={type}
+      title={title}
+      contents={contents}
+      confirmPopupActive={confirmPopupActive}
+      confirmMessage={confirmMessage}
+      onDeleteBtn={handleDeleteBtn}
+      onConfirm={handleConfirm}
+      onCancel={handleCancel}
+    />
+  );
 };
 
 interface typeDiagramsCT {
