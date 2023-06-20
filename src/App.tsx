@@ -12,6 +12,8 @@ import ViewSequenceDiagram from 'screens/viewSequenceDiagram';
 import UpdateEntityRelationshipDiagram from 'screens/updateEntityRelationshipDiagram';
 import UpdateFlowDiagram from 'screens/updateFlowDiagram';
 import UpdateSequencDiagram from 'screens/updateSequenceDiagram';
+import SignIn from 'screens/signIn';
+import SignUp from 'screens/signUp';
 
 const App = (): JSX.Element => {
   return (
@@ -49,6 +51,8 @@ const App = (): JSX.Element => {
           path="/diagram/entity-relationship/update/:contentId"
           element={<UpdateEntityRelationshipDiagram />}
         />
+        <Route path="/sign/in" element={<SignIn />} />
+        <Route path="/sign/up" element={<SignUp />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
