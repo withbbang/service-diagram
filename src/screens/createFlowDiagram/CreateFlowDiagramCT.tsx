@@ -45,6 +45,7 @@ const CreateFlowDiagramCT = ({
   const [title, setTitle] = useState<string>('');
   const [nodeName, setNodeName] = useState<string>('');
   const [edgeName, setEdgeName] = useState<string>('');
+  const [isDone, setIsDone] = useState<string>('N');
   const [rfInstance, setRfInstance] = useState<any>(null);
   const { setViewport } = useReactFlow();
   const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false); // 확인 팝업 활성 상태
@@ -59,6 +60,9 @@ const CreateFlowDiagramCT = ({
   const edgeNameRef = React.useRef(
     null
   ) as React.MutableRefObject<HTMLInputElement | null>;
+  const isDoneRef = React.useRef(
+    null
+  ) as React.MutableRefObject<HTMLSelectElement | null>;
 
   const [nodes, setNodes, handleNodesChange] = useNodesState([]);
   const [edges, setEdges, handleEdgesChange] = useEdgesState([]);
@@ -193,6 +197,8 @@ const CreateFlowDiagramCT = ({
     } else if (type === 'edge' && edgeNameRef && edgeNameRef.current) {
       setEdgeName('');
       edgeNameRef.current.blur();
+    } else if (type === 'isDone' && isDoneRef && isDoneRef.current) {
+      isDoneRef.current.blur();
     }
   };
 
@@ -269,7 +275,8 @@ const CreateFlowDiagramCT = ({
     handleLoaderTrue();
     await addDoc(collection(db, type), {
       title,
-      content: JSON.stringify(rfInstance.toObject())
+      content: JSON.stringify(rfInstance.toObject()),
+      isDone
     });
     handleLoaderFalse();
   };
@@ -284,9 +291,11 @@ const CreateFlowDiagramCT = ({
       title={title}
       nodeName={nodeName}
       edgeName={edgeName}
+      isDone={isDone}
       titleNameRef={titleNameRef}
       nodeNameRef={nodeNameRef}
       edgeNameRef={edgeNameRef}
+      isDoneRef={isDoneRef}
       nodes={nodes}
       edges={edges}
       nodeTypes={nodeTypes}
@@ -296,6 +305,7 @@ const CreateFlowDiagramCT = ({
       onSetTitle={setTitle}
       onSetNodeName={setNodeName}
       onSetEdgeName={setEdgeName}
+      onSetIsDone={setIsDone}
       onNodesDelete={handleNodesDelete}
       onNodesChange={handleNodesChange}
       onEdgesChange={handleEdgesChange}

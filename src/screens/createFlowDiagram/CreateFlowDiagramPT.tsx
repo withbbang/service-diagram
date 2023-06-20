@@ -22,9 +22,11 @@ const CreateFlowDiagramPT = ({
   title,
   nodeName,
   edgeName,
+  isDone,
   titleNameRef,
   nodeNameRef,
   edgeNameRef,
+  isDoneRef,
   nodes,
   edges,
   nodeTypes,
@@ -34,6 +36,7 @@ const CreateFlowDiagramPT = ({
   onSetTitle,
   onSetNodeName,
   onSetEdgeName,
+  onSetIsDone,
   onNodesDelete,
   onNodesChange,
   onEdgesChange,
@@ -104,6 +107,16 @@ const CreateFlowDiagramPT = ({
                 onBlur={() => onBlur('edge')}
                 ref={edgeNameRef}
               />
+              <label>Complete:</label>
+              <select
+                value={isDone}
+                onChange={(e) => onSetIsDone(e.target.value)}
+                onBlur={() => onBlur('isDone')}
+                ref={isDoneRef}
+              >
+                <option value={'N'}>N</option>
+                <option value={'Y'}>Y</option>
+              </select>
               <button onClick={() => onAddNode('diamondNode')}>
                 Add Diamond Node
               </button>
@@ -129,9 +142,11 @@ interface typeCreateFlowDiagramPT {
   title: string;
   nodeName: string;
   edgeName: string;
+  isDone: string;
   titleNameRef: React.MutableRefObject<HTMLInputElement | null>;
   nodeNameRef: React.MutableRefObject<HTMLInputElement | null>;
   edgeNameRef: React.MutableRefObject<HTMLInputElement | null>;
+  isDoneRef: React.MutableRefObject<HTMLSelectElement | null>;
   nodes: Node<any, string | undefined>[];
   edges: Edge<any>[];
   nodeTypes: NodeTypes;
@@ -141,6 +156,7 @@ interface typeCreateFlowDiagramPT {
   onSetTitle: React.Dispatch<React.SetStateAction<string>>;
   onSetNodeName: React.Dispatch<React.SetStateAction<string>>;
   onSetEdgeName: React.Dispatch<React.SetStateAction<string>>;
+  onSetIsDone: React.Dispatch<React.SetStateAction<string>>;
   onNodesDelete: (deleted: Array<Node>) => void;
   onNodesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;

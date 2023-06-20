@@ -71,6 +71,7 @@ const CreateErdDiagramCT = ({
   const edgeTypes = useMemo(() => ({ normal: NormalEdge }), []); // 커스텀 엣지 타입들
 
   const [title, setTitle] = useState<string>(''); // 다이어그램 제목
+  const [isDone, setIsDone] = useState<string>('N'); // 완료 여부
   const [tableName, setTableName] = useState<string>(initTableName); // 테이블 이름
   const [tableComment, setTableComment] = useState<string>(''); // 테이블 설명
   const [rfInstance, setRfInstance] = useState<any>(null); // 로컬스토리지 일시 저장용 다이어그램 인스턴스
@@ -95,6 +96,10 @@ const CreateErdDiagramCT = ({
   const titleNameRef = useRef(
     null
   ) as React.MutableRefObject<HTMLInputElement | null>;
+  // 완료여부 select 참조 객체
+  const isDoneRef = React.useRef(
+    null
+  ) as React.MutableRefObject<HTMLSelectElement | null>;
 
   const [tables, setTables, handleTablesChange] = useNodesState(initialTables); // 테이블 수정 hook
   const [edges, setEdges, handleEdgesChange] = useEdgesState(initialEdges); // 엣지 수정 hook
@@ -368,6 +373,8 @@ const CreateErdDiagramCT = ({
   const handleBlur = (type: string) => {
     if (type === 'title' && titleNameRef && titleNameRef.current) {
       titleNameRef.current.blur();
+    } else if (type === 'isDone' && isDoneRef && isDoneRef.current) {
+      isDoneRef.current.blur();
     }
   };
 
@@ -487,7 +494,8 @@ const CreateErdDiagramCT = ({
       handleLoaderTrue();
       await addDoc(collection(db, type), {
         title,
-        content: JSON.stringify(rfInstance.toObject())
+        content: JSON.stringify(rfInstance.toObject()),
+        isDone
       });
       handleLoaderFalse();
     }
@@ -513,6 +521,7 @@ const CreateErdDiagramCT = ({
   return (
     <CreateErdDiagramPT
       title={title}
+      isDone={isDone}
       tableName={tableName}
       tableComment={tableComment}
       selectedTableIdxForUpdate={selectedTableIdxForUpdate}
@@ -522,6 +531,7 @@ const CreateErdDiagramCT = ({
       targetRelation={targetRelation}
       columns={columns}
       titleNameRef={titleNameRef}
+      isDoneRef={isDoneRef}
       tables={tables}
       edges={edges}
       tableTypes={tableTypes}
@@ -529,6 +539,7 @@ const CreateErdDiagramCT = ({
       confirmMessage={confirmMessage}
       confirmPopupActive={confirmPopupActive}
       onSetTitle={setTitle}
+      onSetIsDone={setIsDone}
       onSetTableName={setTableName}
       onSetTableComment={setTableComment}
       onTablesChange={handleTablesChange}

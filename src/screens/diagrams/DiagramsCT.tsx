@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { collection, getDocs, getFirestore } from 'firebase/firestore';
+import {
+  collection,
+  getDocs,
+  getFirestore,
+  query,
+  where
+} from 'firebase/firestore';
 import DiagramsPT from './DiagramsPT';
 import { app } from 'modules/utils';
 import { typeContent } from 'modules/types';
@@ -18,7 +24,8 @@ const DiagramsCT = ({
     (async () => {
       handleLoaderTrue();
       if (type !== undefined) {
-        const querySnapshot = await getDocs(collection(db, type));
+        const q = query(collection(db, type), where('isDone', '==', 'Y'));
+        const querySnapshot = await getDocs(q);
         setContents(
           querySnapshot.docs.map((doc) => {
             return {

@@ -22,6 +22,7 @@ import Column from 'components/entityRelationship/Column';
 
 const CreateErdDiagramPT = ({
   title,
+  isDone,
   tableName,
   tableComment,
   selectedTableIdxForUpdate,
@@ -30,6 +31,7 @@ const CreateErdDiagramPT = ({
   targetRelation,
   columns,
   titleNameRef,
+  isDoneRef,
   tables,
   edges,
   tableTypes,
@@ -37,6 +39,7 @@ const CreateErdDiagramPT = ({
   confirmMessage,
   confirmPopupActive,
   onSetTitle,
+  onSetIsDone,
   onSetTableName,
   onSetTableComment,
   onTablesChange,
@@ -93,7 +96,7 @@ const CreateErdDiagramPT = ({
           <MiniMap />
           <Background gap={12} size={1} />
           <div className={styles.updatetable__controls}>
-            <label>Title Label:</label>
+            <label>Title:</label>
             <input
               value={title}
               onKeyDown={(e) => onKeyDown(e, 'title')}
@@ -101,6 +104,16 @@ const CreateErdDiagramPT = ({
               onBlur={() => onBlur('title')}
               ref={titleNameRef}
             />
+            <label>Complete:</label>
+            <select
+              value={isDone}
+              onChange={(e) => onSetIsDone(e.target.value)}
+              onBlur={() => onBlur('isDone')}
+              ref={isDoneRef}
+            >
+              <option value={'N'}>N</option>
+              <option value={'Y'}>Y</option>
+            </select>
             <button onClick={() => onSetSelectedTableIdxForUpdate(-1)}>
               Add Table
             </button>
@@ -235,6 +248,7 @@ const CreateErdDiagramPT = ({
 
 interface typeCreateErdDiagramPT {
   title: string;
+  isDone: string;
   tableName: string;
   tableComment: string;
   selectedTableIdxForUpdate: number | null;
@@ -244,6 +258,7 @@ interface typeCreateErdDiagramPT {
   targetRelation: string;
   columns: Array<typeColumn>;
   titleNameRef: React.MutableRefObject<HTMLInputElement | null>;
+  isDoneRef: React.MutableRefObject<HTMLSelectElement | null>;
   tables: Node<any, string | undefined>[];
   edges: Edge<any>[];
   tableTypes: NodeTypes;
@@ -251,6 +266,7 @@ interface typeCreateErdDiagramPT {
   confirmMessage: string;
   confirmPopupActive: boolean;
   onSetTitle: React.Dispatch<React.SetStateAction<string>>;
+  onSetIsDone: React.Dispatch<React.SetStateAction<string>>;
   onSetTableName: React.Dispatch<React.SetStateAction<string>>;
   onSetTableComment: React.Dispatch<React.SetStateAction<string>>;
   onTablesChange: OnNodesChange;
