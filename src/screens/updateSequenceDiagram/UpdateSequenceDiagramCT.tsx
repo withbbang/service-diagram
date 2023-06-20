@@ -11,7 +11,7 @@ const UpdateSequenceDiagramCT = ({
 }: typeUpdateSequenceDiagramCT): JSX.Element => {
   const db = getFirestore(app);
   const type = 'sequence';
-  const { id } = useParams();
+  const { contentId } = useParams();
 
   const titleRef = React.useRef() as React.MutableRefObject<HTMLInputElement>;
   const contentRef =
@@ -29,8 +29,8 @@ const UpdateSequenceDiagramCT = ({
   useEffect(() => {
     (async () => {
       handleLoaderTrue();
-      if (id !== undefined) {
-        const docSnap = await getDoc(doc(db, type, id));
+      if (contentId !== undefined) {
+        const docSnap = await getDoc(doc(db, type, contentId));
 
         if (docSnap.exists()) {
           const { title, content, isDone } = docSnap.data();
@@ -98,11 +98,11 @@ const UpdateSequenceDiagramCT = ({
   );
 
   const handleConfirm = async () => {
-    if (id !== undefined) {
+    if (contentId !== undefined) {
       handleLoaderTrue();
       setConfirmMessage('');
       setConfirmPopupActive(false);
-      await setDoc(doc(db, type, id), {
+      await setDoc(doc(db, type, contentId), {
         title,
         content,
         isDone

@@ -14,11 +14,11 @@ import ReactFlow, {
   EdgeMouseHandler
 } from 'reactflow';
 import Loader from 'components/loader';
-import styles from './CreateFlowDiagram.module.scss';
+import styles from './UpdateFlowDiagram.module.scss';
 import 'reactflow/dist/style.css';
 import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
 
-const CreateFlowDiagramPT = ({
+const UpdateFlowDiagramPT = ({
   title,
   nodeName,
   edgeName,
@@ -48,11 +48,11 @@ const CreateFlowDiagramPT = ({
   onAddNode,
   onTemporarilySave,
   onRestore,
-  onSaveBtn,
+  onUpdateBtn,
   onConfirm,
   onCancel,
   onInit
-}: typeCreateFlowDiagramPT): JSX.Element => {
+}: typeUpdateFlowDiagramPT): JSX.Element => {
   return (
     <>
       <Loader />
@@ -127,7 +127,7 @@ const CreateFlowDiagramPT = ({
                 Temporarily Save Diagrams
               </button>
               <button onClick={onRestore}>Restore Temporary Diagrams</button>
-              <button onClick={onSaveBtn}>Permanently Save Diagrams</button>
+              <button onClick={onUpdateBtn}>Permanently Update Diagrams</button>
             </div>
           </ReactFlow>
         </div>
@@ -136,7 +136,7 @@ const CreateFlowDiagramPT = ({
   );
 };
 
-interface typeCreateFlowDiagramPT {
+interface typeUpdateFlowDiagramPT {
   title: string;
   nodeName: string;
   edgeName: string;
@@ -166,10 +166,10 @@ interface typeCreateFlowDiagramPT {
   onAddNode: (type: string) => void;
   onTemporarilySave: () => void;
   onRestore: () => void;
-  onSaveBtn: () => void;
+  onUpdateBtn: () => void;
   onConfirm: () => void;
   onCancel: () => void;
   onInit: React.Dispatch<any>;
 }
 
-export default CreateFlowDiagramPT;
+export default UpdateFlowDiagramPT;

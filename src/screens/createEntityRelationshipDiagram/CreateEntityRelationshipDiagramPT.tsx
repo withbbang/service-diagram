@@ -123,7 +123,7 @@ const CreateErdDiagramPT = ({
             <button onClick={() => onRestore()}>
               Restore Temporary Diagrams
             </button>
-            <button onClick={onSaveBtn}>Permanently Temporary Diagrams</button>
+            <button onClick={onSaveBtn}>Permanently Save Diagrams</button>
             {/* <button onClick={() => onAddHandle()}>Add Handle</button> */}
           </div>
           {selectedTableIdxForUpdate !== null && (

@@ -1,4 +1,4 @@
-import CreateFlowDiagramCT from './CreateFlowDiagramCT';
+import UpdateFlowDiagramCT from './UpdateFlowDiagramCT';
 import { connect } from 'react-redux';
 import { PropState } from 'middlewares/configureReducer';
 import { Action } from '@reduxjs/toolkit';
@@ -26,4 +26,4 @@ const mapDispatchToProps = (dispatch: (actionFunction: Action<any>) => any) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(CreateFlowDiagramCT);
+)(UpdateFlowDiagramCT);
