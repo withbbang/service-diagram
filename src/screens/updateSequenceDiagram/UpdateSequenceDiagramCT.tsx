@@ -28,8 +28,8 @@ const UpdateSequenceDiagramCT = ({
 
   useEffect(() => {
     (async () => {
-      handleLoaderTrue();
       if (contentId !== undefined) {
+        handleLoaderTrue();
         const docSnap = await getDoc(doc(db, type, contentId));
 
         if (docSnap.exists()) {
@@ -39,11 +39,12 @@ const UpdateSequenceDiagramCT = ({
           setContent(content);
           setIsDone(isDone);
         }
+
+        handleLoaderFalse();
       } else {
         setConfirmMessage('No Document Detail ID!');
         setConfirmPopupActive(true);
       }
-      handleLoaderFalse();
     })();
   }, []);
 

@@ -71,8 +71,8 @@ const UpdateFlowDiagramCT = ({
 
   useEffect(() => {
     (async () => {
-      handleLoaderTrue();
       if (contentId !== undefined) {
+        handleLoaderTrue();
         const docSnap = await getDoc(doc(db, type, contentId));
 
         if (docSnap.exists()) {
@@ -95,9 +95,9 @@ const UpdateFlowDiagramCT = ({
               setEdges(flow.edges || []);
               setViewport({ x, y, zoom });
             }
-            handleLoaderFalse();
           }
         }
+        handleLoaderFalse();
       } else {
         setConfirmMessage('No Document Detail ID!');
         setConfirmPopupActive(true);

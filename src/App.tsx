@@ -9,6 +9,7 @@ import NotFound from 'screens/notFound';
 import ViewEntityRelationshipDiagram from 'screens/viewEntityRelationshipDiagram';
 import ViewFlowDiagram from 'screens/viewFlowDiagram';
 import ViewSequenceDiagram from 'screens/viewSequenceDiagram';
+import UpdateEntityRelationshipDiagram from 'screens/updateEntityRelationshipDiagram';
 import UpdateFlowDiagram from 'screens/updateFlowDiagram';
 import UpdateSequencDiagram from 'screens/updateSequenceDiagram';
 
@@ -43,6 +44,10 @@ const App = (): JSX.Element => {
         <Route
           path="/diagram/flow/update/:contentId"
           element={<UpdateFlowDiagram />}
+        />
+        <Route
+          path="/diagram/entity-relationship/update/:contentId"
+          element={<UpdateEntityRelationshipDiagram />}
         />
         <Route path="*" element={<NotFound />} />
       </Routes>
