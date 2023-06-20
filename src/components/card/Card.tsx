@@ -12,12 +12,18 @@ const mapDispatchToProps = () => {
   return {};
 };
 
-const Card = ({ id, title, path, onDeleteBtn }: typeCard): JSX.Element => {
+const Card = ({
+  id,
+  title,
+  type,
+  path,
+  onDeleteBtn
+}: typeCard): JSX.Element => {
   const navigate = useNavigate();
 
   const handleUpdateBtn = (e: React.MouseEvent) => {
     e.stopPropagation();
-    console.log('click');
+    type && navigate(`/diagram/${type}/update/${id}`);
   };
 
   return (
@@ -46,6 +52,7 @@ interface typeCard {
   idx: number;
   id: string;
   title: string;
+  type?: string;
   path: string;
   onDeleteBtn?: (e: React.MouseEvent, selectedContentId: string) => void;
 }

@@ -37,6 +37,7 @@ const DiagramsPT = ({
                 idx={idx}
                 id={content.id}
                 title={content.title}
+                type={type}
                 path={`/diagrams/${type}/${content.id}`}
                 onDeleteBtn={onDeleteBtn}
               />

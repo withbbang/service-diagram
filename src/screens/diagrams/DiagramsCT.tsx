@@ -76,7 +76,8 @@ const DiagramsCT = ({
       await handleGetContents(type);
       handleLoaderFalse();
     } else {
-      alert('Nothing Delete');
+      setConfirmMessage('No Document Detail Type!');
+      setConfirmPopupActive(true);
     }
   };
 

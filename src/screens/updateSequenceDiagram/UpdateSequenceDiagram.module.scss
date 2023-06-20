@@ -1,0 +1,55 @@
+.wrap {
+  display: flex;
+  width: 100%;
+  min-height: 100%;
+  @include background($more-light);
+
+  .innerWrap {
+    width: 100%;
+    padding: 10% 10%;
+    overflow: auto;
+    position: relative;
+
+    .updateBtn {
+      position: absolute;
+      padding: 10px;
+      top: 20px;
+      right: 20px;
+      cursor: pointer;
+      @include boxShadow('none');
+    }
+
+    .updateBtn:hover {
+      @include boxShadow(4px 4px 2px 1px rgba(0, 0, 0, 0.2));
+    }
+
+    .title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      word-break: break-all;
+      @include font($most-dark);
+    }
+
+    .content {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .createUpdateBtn {
+    width: 35px;
+    height: 35px;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    bottom: 50%;
+    right: 30px;
+    cursor: pointer;
+    @include background($most-light);
+  }
+}

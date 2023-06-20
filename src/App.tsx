@@ -9,6 +9,7 @@ import NotFound from 'screens/notFound';
 import ViewEntityRelationshipDiagram from 'screens/viewEntityRelationshipDiagram';
 import ViewFlowDiagram from 'screens/viewFlowDiagram';
 import ViewSequenceDiagram from 'screens/viewSequenceDiagram';
+import UpdateSequencDiagram from 'screens/updateSequenceDiagram';
 
 const App = (): JSX.Element => {
   return (
@@ -33,6 +34,10 @@ const App = (): JSX.Element => {
         <Route
           path="/diagram/entity-relationship/create"
           element={<CreateEntityRelationshipDiagram />}
+        />
+        <Route
+          path="/diagram/sequence/update/:id"
+          element={<UpdateSequencDiagram />}
         />
         <Route path="*" element={<NotFound />} />
       </Routes>
