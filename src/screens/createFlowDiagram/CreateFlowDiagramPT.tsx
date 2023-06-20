@@ -19,6 +19,8 @@ import 'reactflow/dist/style.css';
 import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
 
 const CreateFlowDiagramPT = ({
+  uid,
+  uid_,
   title,
   nodeName,
   edgeName,
@@ -127,7 +129,15 @@ const CreateFlowDiagramPT = ({
                 Temporarily Save Diagrams
               </button>
               <button onClick={onRestore}>Restore Temporary Diagrams</button>
-              <button onClick={onSaveBtn}>Permanently Save Diagrams</button>
+              {uid !== undefined &&
+              uid !== null &&
+              uid !== '' &&
+              uid_ !== '' &&
+              uid === uid_ ? (
+                <button onClick={onSaveBtn}>Permanently Save Diagrams</button>
+              ) : (
+                ''
+              )}
             </div>
           </ReactFlow>
         </div>
@@ -137,6 +147,8 @@ const CreateFlowDiagramPT = ({
 };
 
 interface typeCreateFlowDiagramPT {
+  uid?: string;
+  uid_: string;
   title: string;
   nodeName: string;
   edgeName: string;

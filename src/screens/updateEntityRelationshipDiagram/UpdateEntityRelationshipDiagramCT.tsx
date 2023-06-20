@@ -21,10 +21,12 @@ import {
 import Table from 'components/entityRelationship/CustomNodes/Table';
 import NormalEdge from 'components/entityRelationship/CustomEdges/NormalEdge';
 import { typeColumn } from 'modules/types';
-import { app, handleRandomString } from 'modules/utils';
+import { app, auth, handleRandomString } from 'modules/utils';
 import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore';
 import UpdateEntityRelationshipDiagramPT from './UpdateEntityRelationshipDiagramPT';
 import { useParams } from 'react-router-dom';
+import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const keyForTempERDiagrams = 'tempERDiagrams'; // 로컬 스토리지에 일시 저장할 키값
 const initTableName: string = 'New Table';
@@ -62,6 +64,7 @@ const initialTables: Array<Node> = []; // 테이블 초기화
 const initialEdges: Array<Edge> = []; // 엣지 초기화
 
 const UpdateEntityRelationshipDiagramCT = ({
+  uid,
   handleLoaderTrue,
   handleLoaderFalse
 }: typeUpdateEntityRelationshipDiagramCT): JSX.Element => {
@@ -72,6 +75,7 @@ const UpdateEntityRelationshipDiagramCT = ({
   const tableTypes = useMemo(() => ({ table: Table }), []); // 커스텀 테이블 타입들
   const edgeTypes = useMemo(() => ({ normal: NormalEdge }), []); // 커스텀 엣지 타입들
 
+  const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
   const [title, setTitle] = useState<string>(''); // 다이어그램 제목
   const [isDone, setIsDone] = useState<string>('N'); // 완료 여부
   const [tableName, setTableName] = useState<string>(initTableName); // 테이블 이름
@@ -107,6 +111,21 @@ const UpdateEntityRelationshipDiagramCT = ({
   const [edges, setEdges, handleEdgesChange] = useEdgesState(initialEdges); // 엣지 수정 hook
 
   const updateNodeInternals = useUpdateNodeInternals(); // 동적 핸들 추가시 필요한 객체
+
+  // 로그인 여부 판단 훅
+  useEffect(() => {
+    if (uid !== undefined && uid !== null && uid !== '') {
+      handleLoaderTrue();
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          setUid_(user.uid);
+        }
+        handleLoaderFalse();
+      });
+    } else {
+      setUid_('');
+    }
+  }, [uid]);
 
   // 초기 데이터 불러오기
   useEffect(() => {
@@ -587,6 +606,8 @@ const UpdateEntityRelationshipDiagramCT = ({
 
   return (
     <UpdateEntityRelationshipDiagramPT
+      uid={uid}
+      uid_={uid_}
       title={title}
       isDone={isDone}
       tableName={tableName}
@@ -644,7 +665,7 @@ export default (props: typeUpdateEntityRelationshipDiagramCT) => (
   </ReactFlowProvider>
 );
 
-interface typeUpdateEntityRelationshipDiagramCT {
+interface typeUpdateEntityRelationshipDiagramCT extends CommonState {
   handleLoaderTrue: () => void;
   handleLoaderFalse: () => void;
 }

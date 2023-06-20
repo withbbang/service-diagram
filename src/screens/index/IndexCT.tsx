@@ -59,7 +59,6 @@ const IndexCT = ({
 };
 
 interface typeIndexCT extends CommonState {
-  uid?: string;
   handleLoaderTrue: () => void;
   handleLoaderFalse: () => void;
   handleSetUid: (uid: string) => void;

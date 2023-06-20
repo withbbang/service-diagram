@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { connect } from 'react-redux';
 import { PropState } from 'middlewares/configureReducer';
@@ -30,6 +30,7 @@ const mapDispatchToProps = (dispatch: (actionFunction: Action<any>) => any) => {
 };
 
 const SignUp = ({
+  uid,
   handleLoaderTrue,
   handleLoaderFalse
 }: typeSignUp): JSX.Element => {
@@ -39,6 +40,12 @@ const SignUp = ({
   const [password, setPassword] = useState<string>('');
   const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false);
   const [confirmMessage, setConfirmMessage] = useState<string>('');
+
+  useEffect(() => {
+    if (uid !== undefined && uid !== null && uid !== '') {
+      navigate('/', { replace: true });
+    }
+  }, [uid]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -114,7 +121,7 @@ const SignUp = ({
   );
 };
 
-interface typeSignUp {
+interface typeSignUp extends CommonState {
   handleLoaderTrue: () => void;
   handleLoaderFalse: () => void;
 }

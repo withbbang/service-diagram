@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { addDoc, collection, getFirestore } from 'firebase/firestore';
-import { app } from 'modules/utils';
+import { app, auth } from 'modules/utils';
 import CreateSequenceDiagramPT from './CreateSequenceDiagramPT';
 import styles from 'components/functionPopup/FunctionPopup.module.scss';
+import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const CreateSequenceDiagramCT = ({
+  uid,
   handleLoaderTrue,
   handleLoaderFalse
 }: typeCreateSequenceDiagramCT): JSX.Element => {
   const db = getFirestore(app);
   const type = 'sequence';
 
+  const [uid_, setUid_] = useState<string>('');
+  const [title, setTitle] = useState<string>('');
+  const [content, setContent] = useState<string>(``);
   const [isDone, setIsDone] = useState<string>('N');
   const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false); // 확인 팝업 활성 상태
   const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
@@ -22,8 +28,19 @@ const CreateSequenceDiagramCT = ({
   const [isFunctionPopupActive, setIsFunctionPopupActive] =
     useState<boolean>(false);
 
-  const [title, setTitle] = useState<string>('');
-  const [content, setContent] = useState<string>(``);
+  useEffect(() => {
+    if (uid !== undefined && uid !== null && uid !== '') {
+      handleLoaderTrue();
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          setUid_(user.uid);
+        }
+        handleLoaderFalse();
+      });
+    } else {
+      setUid_('');
+    }
+  }, [uid]);
 
   const handleSaveBtn = async () => {
     setConfirmMessage('Really Save?');
@@ -94,6 +111,8 @@ const CreateSequenceDiagramCT = ({
 
   return (
     <CreateSequenceDiagramPT
+      uid={uid}
+      uid_={uid_}
       title={title}
       content={content}
       isFunctionPopupActive={isFunctionPopupActive}
@@ -108,7 +127,7 @@ const CreateSequenceDiagramCT = ({
   );
 };
 
-interface typeCreateSequenceDiagramCT {
+interface typeCreateSequenceDiagramCT extends CommonState {
   handleLoaderTrue: () => void;
   handleLoaderFalse: () => void;
 }

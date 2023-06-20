@@ -1,18 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import styles from './Card.module.scss';
+import { PropState } from 'middlewares/configureReducer';
+import { Action } from '@reduxjs/toolkit';
+import {
+  CommonState,
+  handleLoaderFalse,
+  handleLoaderTrue
+} from 'middlewares/reduxToolkits/commonSlice';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from 'modules/utils';
 import SVG from 'modules/SVG';
+import styles from './Card.module.scss';
 
-const mapStateToProps = () => {
-  return {};
+const mapStateToProps = (state: PropState): CommonState => {
+  return { ...state.common };
 };
 
-const mapDispatchToProps = () => {
-  return {};
+const mapDispatchToProps = (dispatch: (actionFunction: Action<any>) => any) => {
+  return {
+    handleLoaderTrue: (): void => {
+      dispatch(handleLoaderTrue());
+    },
+    handleLoaderFalse: (): void => {
+      dispatch(handleLoaderFalse());
+    }
+  };
 };
 
 const Card = ({
+  uid,
   id,
   title,
   type,
@@ -20,6 +37,21 @@ const Card = ({
   onDeleteBtn
 }: typeCard): JSX.Element => {
   const navigate = useNavigate();
+  const [uid_, setUid_] = useState<string>('');
+
+  useEffect(() => {
+    if (uid !== undefined && uid !== null && uid !== '') {
+      handleLoaderTrue();
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          setUid_(user.uid);
+        }
+        handleLoaderFalse();
+      });
+    } else {
+      setUid_('');
+    }
+  }, [uid]);
 
   const handleUpdateBtn = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -28,7 +60,12 @@ const Card = ({
 
   return (
     <div className={styles.wrap} onClick={() => navigate(path)}>
-      {id !== '0' && (
+      {id !== '0' &&
+      uid !== undefined &&
+      uid !== null &&
+      uid !== '' &&
+      uid_ !== '' &&
+      uid === uid_ ? (
         <div className={styles.floatBtns}>
           <span onClick={(e) => handleUpdateBtn(e)}>
             <SVG type="modify" width="20px" height="20px" />
@@ -37,6 +74,8 @@ const Card = ({
             <SVG type="trash" width="20px" height="20px" />
           </span>
         </div>
+      ) : (
+        ''
       )}
       <h3>{title}</h3>
       {id === '0' && (
@@ -48,7 +87,7 @@ const Card = ({
   );
 };
 
-interface typeCard {
+interface typeCard extends CommonState {
   idx: number;
   id: string;
   title: string;

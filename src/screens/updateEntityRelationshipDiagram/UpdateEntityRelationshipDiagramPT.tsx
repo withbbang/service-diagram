@@ -21,6 +21,8 @@ import 'reactflow/dist/style.css';
 import Column from 'components/entityRelationship/Column';
 
 const UpdateEntityRelationshipDiagramPT = ({
+  uid,
+  uid_,
   title,
   isDone,
   tableName,
@@ -123,7 +125,15 @@ const UpdateEntityRelationshipDiagramPT = ({
             <button onClick={() => onRestore()}>
               Restore Temporary Diagrams
             </button>
-            <button onClick={onUpdateBtn}>Permanently Update Diagrams</button>
+            {uid !== undefined &&
+            uid !== null &&
+            uid !== '' &&
+            uid_ !== '' &&
+            uid === uid_ ? (
+              <button onClick={onUpdateBtn}>Permanently Update Diagrams</button>
+            ) : (
+              ''
+            )}
             {/* <button onClick={() => onAddHandle()}>Add Handle</button> */}
           </div>
           {selectedTableIdxForUpdate !== null && (
@@ -247,6 +257,8 @@ const UpdateEntityRelationshipDiagramPT = ({
 };
 
 interface typeUpdateEntityRelationshipDiagramPT {
+  uid?: string;
+  uid_: string;
   title: string;
   isDone: string;
   tableName: string;

@@ -7,6 +7,8 @@ import Loader from 'components/loader';
 import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
 
 const CreateSequenceDiagramPT = ({
+  uid,
+  uid_,
   title,
   content,
   isFunctionPopupActive,
@@ -35,9 +37,17 @@ const CreateSequenceDiagramPT = ({
       />
       <div className={styles.wrap}>
         <div className={styles.innerWrap}>
-          <button className={styles.saveBtn} onClick={onSaveBtn}>
-            Save
-          </button>
+          {uid !== undefined &&
+          uid !== null &&
+          uid !== '' &&
+          uid_ !== '' &&
+          uid === uid_ ? (
+            <button className={styles.saveBtn} onClick={onSaveBtn}>
+              Save
+            </button>
+          ) : (
+            ''
+          )}
           <h2 className={styles.title}>{title}</h2>
           <div className={styles.content}>
             <Sequence options={{ theme: 'simple' }} input={content} />
@@ -52,6 +62,8 @@ const CreateSequenceDiagramPT = ({
 };
 
 interface typeCreateSequenceDiagramPT {
+  uid?: string;
+  uid_: string;
   title: string;
   content: string;
   isFunctionPopupActive: boolean;

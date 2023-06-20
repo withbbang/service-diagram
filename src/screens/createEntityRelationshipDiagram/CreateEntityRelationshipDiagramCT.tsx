@@ -21,9 +21,11 @@ import {
 import Table from 'components/entityRelationship/CustomNodes/Table';
 import NormalEdge from 'components/entityRelationship/CustomEdges/NormalEdge';
 import { typeColumn } from 'modules/types';
-import { app, handleRandomString } from 'modules/utils';
+import { app, auth, handleRandomString } from 'modules/utils';
 import { addDoc, collection, getFirestore } from 'firebase/firestore';
 import CreateErdDiagramPT from './CreateEntityRelationshipDiagramPT';
+import { onAuthStateChanged } from 'firebase/auth';
+import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
 
 const keyForTempERDiagrams = 'tempERDiagrams'; // 로컬 스토리지에 일시 저장할 키값
 const initTableName: string = 'New Table';
@@ -61,6 +63,7 @@ const initialTables: Array<Node> = []; // 테이블 초기화
 const initialEdges: Array<Edge> = []; // 엣지 초기화
 
 const CreateErdDiagramCT = ({
+  uid,
   handleLoaderTrue,
   handleLoaderFalse
 }: typeCreateErdDiagramCT): JSX.Element => {
@@ -70,6 +73,7 @@ const CreateErdDiagramCT = ({
   const tableTypes = useMemo(() => ({ table: Table }), []); // 커스텀 테이블 타입들
   const edgeTypes = useMemo(() => ({ normal: NormalEdge }), []); // 커스텀 엣지 타입들
 
+  const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
   const [title, setTitle] = useState<string>(''); // 다이어그램 제목
   const [isDone, setIsDone] = useState<string>('N'); // 완료 여부
   const [tableName, setTableName] = useState<string>(initTableName); // 테이블 이름
@@ -105,6 +109,21 @@ const CreateErdDiagramCT = ({
   const [edges, setEdges, handleEdgesChange] = useEdgesState(initialEdges); // 엣지 수정 hook
 
   const updateNodeInternals = useUpdateNodeInternals(); // 동적 핸들 추가시 필요한 객체
+
+  // 로그인 여부 판단 훅
+  useEffect(() => {
+    if (uid !== undefined && uid !== null && uid !== '') {
+      handleLoaderTrue();
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          setUid_(user.uid);
+        }
+        handleLoaderFalse();
+      });
+    } else {
+      setUid_('');
+    }
+  }, [uid]);
 
   // 엣지 업데이트 제어 팝업
   useEffect(() => {
@@ -520,6 +539,8 @@ const CreateErdDiagramCT = ({
 
   return (
     <CreateErdDiagramPT
+      uid={uid}
+      uid_={uid_}
       title={title}
       isDone={isDone}
       tableName={tableName}
@@ -577,7 +598,7 @@ export default (props: typeCreateErdDiagramCT) => (
   </ReactFlowProvider>
 );
 
-interface typeCreateErdDiagramCT {
+interface typeCreateErdDiagramCT extends CommonState {
   handleLoaderTrue: () => void;
   handleLoaderFalse: () => void;
 }

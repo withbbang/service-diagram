@@ -1,17 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore';
-import { app } from 'modules/utils';
+import { app, auth } from 'modules/utils';
 import UpdateSequenceDiagramPT from './UpdateSequenceDiagramPT';
 import styles from 'components/functionPopup/FunctionPopup.module.scss';
 import { useParams } from 'react-router-dom';
+import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const UpdateSequenceDiagramCT = ({
+  uid,
   handleLoaderTrue,
   handleLoaderFalse
 }: typeUpdateSequenceDiagramCT): JSX.Element => {
   const db = getFirestore(app);
   const type = 'sequence';
   const { contentId } = useParams();
+
+  const [uid_, setUid_] = useState<string>('');
+  const [title, setTitle] = useState<string>('');
+  const [content, setContent] = useState<string>(``);
+  const [isDone, setIsDone] = useState<string>('N');
+  const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false); // 확인 팝업 활성 상태
+  const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
 
   const titleRef = React.useRef() as React.MutableRefObject<HTMLInputElement>;
   const contentRef =
@@ -20,11 +30,19 @@ const UpdateSequenceDiagramCT = ({
   const [isFunctionPopupActive, setIsFunctionPopupActive] =
     useState<boolean>(false);
 
-  const [title, setTitle] = useState<string>('');
-  const [content, setContent] = useState<string>(``);
-  const [isDone, setIsDone] = useState<string>('N');
-  const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false); // 확인 팝업 활성 상태
-  const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
+  useEffect(() => {
+    if (uid !== undefined && uid !== null && uid !== '') {
+      handleLoaderTrue();
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          setUid_(user.uid);
+        }
+        handleLoaderFalse();
+      });
+    } else {
+      setUid_('');
+    }
+  }, [uid]);
 
   useEffect(() => {
     (async () => {
@@ -122,6 +140,8 @@ const UpdateSequenceDiagramCT = ({
 
   return (
     <UpdateSequenceDiagramPT
+      uid={uid}
+      uid_={uid_}
       title={title}
       content={content}
       isFunctionPopupActive={isFunctionPopupActive}
@@ -136,7 +156,7 @@ const UpdateSequenceDiagramCT = ({
   );
 };
 
-interface typeUpdateSequenceDiagramCT {
+interface typeUpdateSequenceDiagramCT extends CommonState {
   handleLoaderTrue: () => void;
   handleLoaderFalse: () => void;
 }

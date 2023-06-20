@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore';
-import { app } from 'modules/utils';
+import { app, auth } from 'modules/utils';
 import {
   Connection,
   Edge,
@@ -20,6 +20,8 @@ import DiamondNode from 'components/flow/customNodes/DiamondNode';
 import RectangleNode from 'components/flow/customNodes/RectangleNode';
 import UpdateFlowDiagramPT from './UpdateFlowDiagramPT';
 import { useParams } from 'react-router-dom';
+import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const keyForTempFlowDiagrams = 'tempFlowDiagrams';
 const nodeTypes = { diamondNode: DiamondNode, rectangleNode: RectangleNode };
@@ -36,6 +38,7 @@ const edgeOptions = {
 };
 
 const UpdateFlowDiagramCT = ({
+  uid,
   handleLoaderTrue,
   handleLoaderFalse
 }: typeUpdateFlowDiagramCT): JSX.Element => {
@@ -43,6 +46,7 @@ const UpdateFlowDiagramCT = ({
   const type = 'flow';
   const { contentId } = useParams();
 
+  const [uid_, setUid_] = useState<string>('');
   const [id, setId] = useState<string>('');
   const [title, setTitle] = useState<string>('');
   const [nodeName, setNodeName] = useState<string>('');
@@ -68,6 +72,20 @@ const UpdateFlowDiagramCT = ({
 
   const [nodes, setNodes, handleNodesChange] = useNodesState([]);
   const [edges, setEdges, handleEdgesChange] = useEdgesState([]);
+
+  useEffect(() => {
+    if (uid !== undefined && uid !== null && uid !== '') {
+      handleLoaderTrue();
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          setUid_(user.uid);
+        }
+        handleLoaderFalse();
+      });
+    } else {
+      setUid_('');
+    }
+  }, [uid]);
 
   useEffect(() => {
     (async () => {
@@ -331,6 +349,8 @@ const UpdateFlowDiagramCT = ({
 
   return (
     <UpdateFlowDiagramPT
+      uid={uid}
+      uid_={uid_}
       title={title}
       nodeName={nodeName}
       edgeName={edgeName}
@@ -374,7 +394,7 @@ export default (props: typeUpdateFlowDiagramCT) => (
   </ReactFlowProvider>
 );
 
-interface typeUpdateFlowDiagramCT {
+interface typeUpdateFlowDiagramCT extends CommonState {
   handleLoaderTrue: () => void;
   handleLoaderFalse: () => void;
 }
