@@ -532,6 +532,7 @@ const CreateErdDiagramCT = ({
     }
   };
 
+  // 저장 버튼
   const handleSaveBtn = async () => {
     setConfirmMessage('Really Save?');
     setConfirmPopupActive(true);

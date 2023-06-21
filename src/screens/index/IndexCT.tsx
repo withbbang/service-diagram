@@ -11,9 +11,10 @@ const IndexCT = ({
   handleLoaderFalse,
   handleSetUid
 }: typeIndexCT): JSX.Element => {
-  const navigate = useNavigate();
-  const [uid_, setUid_] = useState<string>('');
+  const navigate = useNavigate(); // router 제어 훅
+  const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
 
+  // 로그인 여부 판단 훅
   useEffect(() => {
     if (uid !== undefined && uid !== null && uid !== '') {
       handleLoaderTrue();

@@ -23,11 +23,11 @@ import { useParams } from 'react-router-dom';
 import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
 import { onAuthStateChanged } from 'firebase/auth';
 
-const keyForTempFlowDiagrams = 'tempFlowDiagrams';
-const nodeTypes = { diamondNode: DiamondNode, rectangleNode: RectangleNode };
+const keyForTempFlowDiagrams = 'tempUpdateFlowDiagrams'; // 로컬 스토리지에 일시 저장할 키값
+const nodeTypes = { diamondNode: DiamondNode, rectangleNode: RectangleNode }; // 커스텀 노드 타입들
 const edgeTypes = {
   selfConnectingEdge: SelfConnectingEdge
-};
+}; // 커스텀 엣지 타입들
 const edgeOptions = {
   // animated: true,
   markerEnd: {
@@ -35,44 +35,49 @@ const edgeOptions = {
     width: 15,
     height: 15
   }
-};
+}; // 엣지 공통 옵션
 
 const UpdateFlowDiagramCT = ({
   uid,
   handleLoaderTrue,
   handleLoaderFalse
 }: typeUpdateFlowDiagramCT): JSX.Element => {
-  const db = getFirestore(app);
-  const type = 'flow';
+  const db = getFirestore(app); // Firebase 객체
+  const type = 'flow'; // Firebase 컬렉션 이름
   const { contentId } = useParams();
 
-  const [uid_, setUid_] = useState<string>('');
-  const [id, setId] = useState<string>('');
-  const [title, setTitle] = useState<string>('');
-  const [nodeName, setNodeName] = useState<string>('');
-  const [edgeName, setEdgeName] = useState<string>('');
-  const [isDone, setIsDone] = useState<string>('N');
-  const [rfInstance, setRfInstance] = useState<any>(null);
-  const { setViewport } = useReactFlow();
+  const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
+  const [id, setId] = useState<string>(''); // 노드 및 엣지 포커싱을 위한 id
+  const [title, setTitle] = useState<string>(''); // 다이어그램 제목
+  const [nodeName, setNodeName] = useState<string>(''); // 노드 이름
+  const [edgeName, setEdgeName] = useState<string>(''); // 엣지 이름
+  const [isDone, setIsDone] = useState<string>('N'); // 완료 여부
+  const [rfInstance, setRfInstance] = useState<any>(null); // 로컬스토리지 일시 저장용 다이어그램 인스턴스
+  const { setViewport } = useReactFlow(); // 전체젹인 뷰 관련 객체
   const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false); // 확인 팝업 활성 상태
   const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
 
+  // 다이어그램 제목 input 참조 객체
   const titleNameRef = React.useRef(
     null
   ) as React.MutableRefObject<HTMLInputElement | null>;
+  // 노드 이름 input 참조 객체
   const nodeNameRef = React.useRef(
     null
   ) as React.MutableRefObject<HTMLInputElement | null>;
+  // 엣지 이름 input 참조 객체
   const edgeNameRef = React.useRef(
     null
   ) as React.MutableRefObject<HTMLInputElement | null>;
+  // 완료 여부 select 참조 객체
   const isDoneRef = React.useRef(
     null
   ) as React.MutableRefObject<HTMLSelectElement | null>;
 
-  const [nodes, setNodes, handleNodesChange] = useNodesState([]);
-  const [edges, setEdges, handleEdgesChange] = useEdgesState([]);
+  const [nodes, setNodes, handleNodesChange] = useNodesState([]); // 노드 수정 hook
+  const [edges, setEdges, handleEdgesChange] = useEdgesState([]); // 엣지 수정 hook
 
+  // 로그인 여부 판단 훅
   useEffect(() => {
     if (uid !== undefined && uid !== null && uid !== '') {
       handleLoaderTrue();
@@ -87,6 +92,7 @@ const UpdateFlowDiagramCT = ({
     }
   }, [uid]);
 
+  // 초기 다이어그램 불러오기
   useEffect(() => {
     (async () => {
       if (contentId !== undefined) {
@@ -123,6 +129,7 @@ const UpdateFlowDiagramCT = ({
     })();
   }, []);
 
+  // 노드 이름 변경시 작동
   useEffect(() => {
     setNodes((nds) =>
       nds.map((node) => {
@@ -138,6 +145,7 @@ const UpdateFlowDiagramCT = ({
     );
   }, [nodeName, setNodes]);
 
+  // 엣지 이름 변경시 작동
   useEffect(() => {
     setEdges((edges) =>
       edges.map((edge) => {
@@ -153,6 +161,7 @@ const UpdateFlowDiagramCT = ({
     );
   }, [edgeName, setEdges]);
 
+  // 엣지로 노드와 연결하는 순간 동작하는 메소드
   const handleConnect = useCallback(
     (params: Edge | Connection) => {
       const { source, target } = params;
@@ -176,6 +185,7 @@ const UpdateFlowDiagramCT = ({
     [setEdges]
   );
 
+  // 노드 삭제시 실행되는 콜백 함수
   const handleNodesDelete = useCallback(
     (deleted: Array<Node>) => {
       setEdges(
@@ -204,6 +214,7 @@ const UpdateFlowDiagramCT = ({
     [nodes, edges]
   );
 
+  // 노드 추가 콜백 함수
   const handleAddNode = useCallback(
     (type: string) => {
       const num = nodes.length;
@@ -224,6 +235,7 @@ const UpdateFlowDiagramCT = ({
     [nodes, setNodes]
   );
 
+  // 노드 더블 클릭시 노드 이름 input 포커싱 되는 콜백 함수
   const handleNodeDoubleClick = (
     e: React.MouseEvent<Element, MouseEvent>,
     node: Node
@@ -235,6 +247,7 @@ const UpdateFlowDiagramCT = ({
     edgeNameRef && edgeNameRef.current && edgeNameRef.current.blur();
   };
 
+  // 엣지 더블 클릭시 엣지 이름 input 포커싱 되는 콜백 함수
   const handleEdgeDoubleClick = (e: React.MouseEvent, edge: any) => {
     setNodeName('');
     setId(edge.id);
@@ -243,6 +256,7 @@ const UpdateFlowDiagramCT = ({
     nodeNameRef && nodeNameRef.current && nodeNameRef.current.blur();
   };
 
+  // input 포커싱 해제 콜백 함수
   const handleBlur = (type: string) => {
     setId('');
     if (type === 'title' && titleNameRef && titleNameRef.current) {
@@ -258,6 +272,7 @@ const UpdateFlowDiagramCT = ({
     }
   };
 
+  // input 포커싱 해제 트리거 함수
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
     type: string
@@ -320,11 +335,13 @@ const UpdateFlowDiagramCT = ({
     restoreFlow();
   }, [setNodes, setViewport]);
 
+  // 업데이트 버튼
   const handleUpdateBtn = async () => {
     setConfirmMessage('Really Update?');
     setConfirmPopupActive(true);
   };
 
+  // confirm 팝업 확인 버튼
   const handleConfirm = async () => {
     if (contentId !== undefined) {
       setConfirmMessage('');
@@ -342,6 +359,7 @@ const UpdateFlowDiagramCT = ({
     }
   };
 
+  // confirm 팝업 취소 버튼
   const handleCancel = () => {
     setConfirmMessage('');
     setConfirmPopupActive(false);

@@ -28,7 +28,7 @@ import { useParams } from 'react-router-dom';
 import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
 import { onAuthStateChanged } from 'firebase/auth';
 
-const keyForTempERDiagrams = 'tempERDiagrams'; // 로컬 스토리지에 일시 저장할 키값
+const keyForTempERDiagrams = 'tempUpdateERDiagrams'; // 로컬 스토리지에 일시 저장할 키값
 const initTableName: string = 'New Table';
 const edgeOptions = Object.freeze({
   // animated: true,
@@ -599,6 +599,7 @@ const UpdateEntityRelationshipDiagramCT = ({
     }
   };
 
+  // 업데이트 버튼
   const handleUpdateBtn = async () => {
     setConfirmMessage('Really Update?');
     setConfirmPopupActive(true);

@@ -15,7 +15,7 @@ const UpdateSequenceDiagramPT = ({
   children,
   confirmPopupActive,
   confirmMessage,
-  onCreateUpdatePopup,
+  onUpdatePopup,
   onUpdateBtn,
   onConfirm,
   onCancel
@@ -33,7 +33,7 @@ const UpdateSequenceDiagramPT = ({
       <FunctionPopup
         isActive={isFunctionPopupActive}
         children={children}
-        onClose={onCreateUpdatePopup}
+        onClose={onUpdatePopup}
       />
       <div className={styles.wrap}>
         <div className={styles.innerWrap}>
@@ -52,7 +52,7 @@ const UpdateSequenceDiagramPT = ({
           <div className={styles.content}>
             <Sequence options={{ theme: 'simple' }} input={content} />
           </div>
-          <div className={styles.createUpdateBtn} onClick={onCreateUpdatePopup}>
+          <div className={styles.createUpdateBtn} onClick={onUpdatePopup}>
             <SVG type="modify" width="20px" height="20px" />
           </div>
         </div>
@@ -70,7 +70,7 @@ interface typeUpdateSequenceDiagramPT {
   children: JSX.Element;
   confirmPopupActive: boolean;
   confirmMessage: string;
-  onCreateUpdatePopup: () => void;
+  onUpdatePopup: () => void;
   onUpdateBtn: () => void;
   onConfirm: () => void;
   onCancel: () => void;

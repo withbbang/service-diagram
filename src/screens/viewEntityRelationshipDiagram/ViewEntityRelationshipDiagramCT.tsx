@@ -53,23 +53,24 @@ const ViewEntityRelationshipDiagramCT = ({
   handleLoaderTrue,
   handleLoaderFalse
 }: typeViewEntityRelationshipDiagramCT): JSX.Element => {
-  const db = getFirestore(app);
-  const type = 'entity-relationship';
-  const { id } = useParams();
-  const navigate = useNavigate();
+  const db = getFirestore(app); // Firebase 객체
+  const type = 'entity-relationship'; // Firebase 컬렉션 이름
+  const { id } = useParams(); // 다이어그램 id
+  const navigate = useNavigate(); // router 제어 훅
 
   const tableTypes = useMemo(() => ({ table: Table }), []); // 커스텀 테이블 타입들
   const edgeTypes = useMemo(() => ({ normal: NormalEdge }), []); // 커스텀 엣지 타입들
 
-  const [title, setTitle] = useState<string>('');
+  const [title, setTitle] = useState<string>(''); // 다이어그램 타이틀
   const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false); // 확인 팝업 활성 상태
   const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
 
-  const [rfInstance, setRfInstance] = useState<any>(null);
+  const [rfInstance, setRfInstance] = useState<any>(null); // 로컬스토리지 일시 저장용 다이어그램 인스턴스
   const [tables, setTables] = useNodesState(initialTables); // 테이블 수정 hook
   const [edges, setEdges] = useEdgesState(initialEdges); // 엣지 수정 hook
   const { setViewport } = useReactFlow();
 
+  // 다이어그램 초기 불러오기
   useEffect(() => {
     (async () => {
       handleLoaderTrue();
@@ -123,6 +124,7 @@ const ViewEntityRelationshipDiagramCT = ({
     })();
   }, []);
 
+  // confirm 팝업 확인/취소 버튼
   const handleConfirm = () => {
     navigate(-1);
   };

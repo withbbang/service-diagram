@@ -20,16 +20,17 @@ const DiagramsCT = ({
   handleLoaderTrue,
   handleLoaderFalse
 }: typeDiagramsCT): JSX.Element => {
-  const db = getFirestore(app);
-  const { type } = useParams();
+  const db = getFirestore(app); // Firebase 객체
+  const { type } = useParams(); // 다이어그램 타입
 
-  const [uid_, setUid_] = useState<string>('');
-  const [title, setTitle] = useState<string>('');
-  const [contents, setContents] = useState<Array<typeContent>>([]);
-  const [selectedContentId, setSelectedContentId] = useState<string>('');
+  const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
+  const [title, setTitle] = useState<string>(''); // 선택한 다이어그램에 따른 제목
+  const [contents, setContents] = useState<Array<typeContent>>([]); // 선택한 다이어그램들 배열 훅
+  const [selectedContentId, setSelectedContentId] = useState<string>(''); // 다어그램들 중 선택한 놈 id
   const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false); // 확인 팝업 활성 상태
   const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
 
+  // 선택된 다이어그램에 따라 title 설정 및 다이어그램들 가져오기
   useEffect(() => {
     (async () => {
       if (type !== undefined) {
@@ -46,6 +47,7 @@ const DiagramsCT = ({
     })();
   }, [uid_]);
 
+  // 로그인 여부 판단 훅
   useEffect(() => {
     if (uid !== undefined && uid !== null && uid !== '') {
       handleLoaderTrue();
@@ -60,6 +62,7 @@ const DiagramsCT = ({
     }
   }, [uid]);
 
+  // 로그인 여부에 따른 다이어그램들 가져오기
   const handleGetContents = async (type: string) => {
     handleLoaderTrue();
     const q =
@@ -68,8 +71,8 @@ const DiagramsCT = ({
       uid !== '' &&
       uid_ !== '' &&
       uid === uid_
-        ? collection(db, type)
-        : query(collection(db, type), where('isDone', '==', 'Y'));
+        ? collection(db, type) // 로그인 O
+        : query(collection(db, type), where('isDone', '==', 'Y')); // 로그인 X
     const querySnapshot = await getDocs(q);
     setContents(
       querySnapshot.docs.map((doc) => {
@@ -82,6 +85,7 @@ const DiagramsCT = ({
     handleLoaderFalse();
   };
 
+  // 삭제 버튼
   const handleDeleteBtn = async (
     e: React.MouseEvent,
     selectedContentId: string
@@ -92,6 +96,7 @@ const DiagramsCT = ({
     setConfirmPopupActive(true);
   };
 
+  // confirm 팝업 확인 버튼
   const handleConfirm = async () => {
     if (type !== undefined) {
       handleLoaderTrue();
@@ -107,6 +112,7 @@ const DiagramsCT = ({
     }
   };
 
+  // confirm 팝업 취소 버튼
   const handleCancel = () => {
     setConfirmMessage('');
     setSelectedContentId('');

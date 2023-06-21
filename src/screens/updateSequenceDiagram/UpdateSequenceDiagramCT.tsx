@@ -12,24 +12,27 @@ const UpdateSequenceDiagramCT = ({
   handleLoaderTrue,
   handleLoaderFalse
 }: typeUpdateSequenceDiagramCT): JSX.Element => {
-  const db = getFirestore(app);
-  const type = 'sequence';
+  const db = getFirestore(app); // Firebase 객체
+  const type = 'sequence'; // Firebase 컬렉션 이름
   const { contentId } = useParams();
 
-  const [uid_, setUid_] = useState<string>('');
-  const [title, setTitle] = useState<string>('');
-  const [content, setContent] = useState<string>(``);
-  const [isDone, setIsDone] = useState<string>('N');
+  const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
+  const [title, setTitle] = useState<string>(''); // 다이어그램 제목
+  const [content, setContent] = useState<string>(``); // 다이어그램 내용
+  const [isDone, setIsDone] = useState<string>('N'); // 완료 여부
   const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false); // 확인 팝업 활성 상태
   const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
 
+  // 다이어그램 제목 input 참조 객체
   const titleRef = React.useRef() as React.MutableRefObject<HTMLInputElement>;
+  // 다이어그램 내용 textarea 참조 객체
   const contentRef =
     React.useRef() as React.MutableRefObject<HTMLTextAreaElement>;
-
+  // 기능 팝업 제어 훅
   const [isFunctionPopupActive, setIsFunctionPopupActive] =
     useState<boolean>(false);
 
+  // 로그인 여부 판단 훅
   useEffect(() => {
     if (uid !== undefined && uid !== null && uid !== '') {
       handleLoaderTrue();
@@ -44,6 +47,7 @@ const UpdateSequenceDiagramCT = ({
     }
   }, [uid]);
 
+  // 초기 다이어그램 가져오기
   useEffect(() => {
     (async () => {
       if (contentId !== undefined) {
@@ -66,15 +70,18 @@ const UpdateSequenceDiagramCT = ({
     })();
   }, []);
 
+  // 업데이트 버튼
   const handleUpdateBtn = async () => {
     setConfirmMessage('Really Update?');
     setConfirmPopupActive(true);
   };
 
-  const handleCreateUpdatePopup = () => {
+  // 기능 팝업 활성 제어 함수
+  const handleUpdatePopup = () => {
     setIsFunctionPopupActive(!isFunctionPopupActive);
   };
 
+  // textarea 태그에서 탭 눌렀을 시 다음 태그로 넘어가는 것을 방지하는 함수
   const handleTextAreaTab = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Tab') {
       e.preventDefault();
@@ -85,6 +92,7 @@ const UpdateSequenceDiagramCT = ({
     }
   };
 
+  // 기능 팝업 내부 dom
   const handleChildren = (
     <div className={styles.contentBox}>
       <div className={styles.option}>
@@ -112,10 +120,11 @@ const UpdateSequenceDiagramCT = ({
         onKeyDown={(e) => handleTextAreaTab(e)}
         ref={contentRef}
       />
-      <button onClick={handleCreateUpdatePopup}>확인</button>
+      <button onClick={handleUpdatePopup}>확인</button>
     </div>
   );
 
+  // confirm 팝업 확인 버튼
   const handleConfirm = async () => {
     if (contentId !== undefined) {
       handleLoaderTrue();
@@ -133,6 +142,7 @@ const UpdateSequenceDiagramCT = ({
     }
   };
 
+  // confirm 팝업 취소 버튼
   const handleCancel = () => {
     setConfirmMessage('');
     setConfirmPopupActive(false);
@@ -148,7 +158,7 @@ const UpdateSequenceDiagramCT = ({
       children={handleChildren}
       confirmPopupActive={confirmPopupActive}
       confirmMessage={confirmMessage}
-      onCreateUpdatePopup={handleCreateUpdatePopup}
+      onUpdatePopup={handleUpdatePopup}
       onUpdateBtn={handleUpdateBtn}
       onConfirm={handleConfirm}
       onCancel={handleCancel}
