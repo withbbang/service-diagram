@@ -516,14 +516,20 @@ const CreateErdDiagramCT = ({
       setConfirmMessage('');
       setConfirmPopupActive(false);
       handleLoaderTrue();
-      await addDoc(collection(db, type), {
-        title,
-        content: JSON.stringify(rfInstance.toObject()),
-        isDone,
-        createDt: serverTimestamp(),
-        updateDt: ''
-      });
-      handleLoaderFalse();
+      try {
+        await addDoc(collection(db, type), {
+          title,
+          content: JSON.stringify(rfInstance.toObject()),
+          isDone,
+          createDt: serverTimestamp(),
+          updateDt: ''
+        });
+      } catch (error) {
+        setConfirmMessage('Data Saving Error');
+        setConfirmPopupActive(true);
+      } finally {
+        handleLoaderFalse();
+      }
     }
   };
 

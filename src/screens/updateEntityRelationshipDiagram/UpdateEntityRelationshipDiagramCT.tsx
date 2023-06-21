@@ -138,9 +138,16 @@ const UpdateEntityRelationshipDiagramCT = ({
     (async () => {
       if (contentId !== undefined) {
         handleLoaderTrue();
-        const docSnap = await getDoc(doc(db, type, contentId));
 
-        if (docSnap.exists()) {
+        let docSnap;
+        try {
+          docSnap = await getDoc(doc(db, type, contentId));
+        } catch (error) {
+          setConfirmMessage('Data Fetching Error');
+          setConfirmPopupActive(true);
+        }
+
+        if (docSnap !== undefined && docSnap.exists()) {
           const { title, content, isDone } = docSnap.data();
 
           setTitle(title);
@@ -579,14 +586,19 @@ const UpdateEntityRelationshipDiagramCT = ({
       if (contentId !== undefined) {
         setConfirmMessage('');
         setConfirmPopupActive(false);
-        handleLoaderTrue();
-        await updateDoc(doc(db, type, contentId), {
-          title,
-          content: JSON.stringify(rfInstance.toObject()),
-          isDone,
-          updateDt: serverTimestamp()
-        });
-        handleLoaderFalse();
+        try {
+          await updateDoc(doc(db, type, contentId), {
+            title,
+            content: JSON.stringify(rfInstance.toObject()),
+            isDone,
+            updateDt: serverTimestamp()
+          });
+        } catch (error) {
+          setConfirmMessage('Data Updating Error');
+          setConfirmPopupActive(true);
+        } finally {
+          handleLoaderFalse();
+        }
       } else {
         setConfirmMessage('No Document Detail ID!');
         setConfirmPopupActive(true);

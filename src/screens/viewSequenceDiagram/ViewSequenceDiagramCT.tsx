@@ -21,22 +21,29 @@ const ViewSequenceDiagramCT = ({
 
   useEffect(() => {
     (async () => {
-      handleLoaderTrue();
       if (id !== undefined) {
-        const docRef = doc(db, type, id);
-        const docSnap = await getDoc(docRef);
+        handleLoaderTrue();
 
-        if (docSnap.exists()) {
+        let docSnap;
+        try {
+          docSnap = await getDoc(doc(db, type, id));
+        } catch (error) {
+          setConfirmMessage('Data Fetching Error');
+          setConfirmPopupActive(true);
+        }
+
+        if (docSnap !== undefined && docSnap.exists()) {
           const { title, content } = docSnap.data();
 
           setTitle(title);
           setContent(content);
         }
+
+        handleLoaderFalse();
       } else {
         setConfirmMessage('No Document Detail ID!');
         setConfirmPopupActive(true);
       }
-      handleLoaderFalse();
     })();
   }, []);
 

@@ -58,9 +58,16 @@ const UpdateSequenceDiagramCT = ({
     (async () => {
       if (contentId !== undefined) {
         handleLoaderTrue();
-        const docSnap = await getDoc(doc(db, type, contentId));
 
-        if (docSnap.exists()) {
+        let docSnap;
+        try {
+          docSnap = await getDoc(doc(db, type, contentId));
+        } catch (error) {
+          setConfirmMessage('Data Fetching Error');
+          setConfirmPopupActive(true);
+        }
+
+        if (docSnap !== undefined && docSnap.exists()) {
           const { title, content, isDone } = docSnap.data();
 
           setTitle(title);
@@ -133,16 +140,22 @@ const UpdateSequenceDiagramCT = ({
   // confirm 팝업 확인 버튼
   const handleConfirm = async () => {
     if (contentId !== undefined) {
-      handleLoaderTrue();
       setConfirmMessage('');
       setConfirmPopupActive(false);
-      await updateDoc(doc(db, type, contentId), {
-        title,
-        content,
-        isDone,
-        updateDt: serverTimestamp()
-      });
-      handleLoaderFalse();
+      handleLoaderTrue();
+      try {
+        await updateDoc(doc(db, type, contentId), {
+          title,
+          content,
+          isDone,
+          updateDt: serverTimestamp()
+        });
+      } catch (error) {
+        setConfirmMessage('Data Updating Error');
+        setConfirmPopupActive(true);
+      } finally {
+        handleLoaderFalse();
+      }
     } else {
       setConfirmMessage('No Document Detail ID!');
       setConfirmPopupActive(true);

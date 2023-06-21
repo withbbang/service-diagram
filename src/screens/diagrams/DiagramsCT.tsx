@@ -66,31 +66,37 @@ const DiagramsCT = ({
   // 로그인 여부에 따른 다이어그램들 가져오기
   const handleGetContents = async (type: string) => {
     handleLoaderTrue();
-    const q =
-      uid !== undefined &&
-      uid !== null &&
-      uid !== '' &&
-      uid_ !== '' &&
-      uid === uid_
-        ? query(collection(db, type), orderBy('createDt', 'desc')) // 로그인 O
-        : query(
-            collection(db, type),
-            where('isDone', '==', 'Y'),
-            orderBy('createDt', 'desc')
-          ); // 로그인 X
-    const querySnapshot = await getDocs(q);
-    setContents(
-      querySnapshot.docs.map((doc) => {
-        const { title, createDt } = doc.data();
+    try {
+      const q =
+        uid !== undefined &&
+        uid !== null &&
+        uid !== '' &&
+        uid_ !== '' &&
+        uid === uid_
+          ? query(collection(db, type), orderBy('createDt', 'desc')) // 로그인 O
+          : query(
+              collection(db, type),
+              where('isDone', '==', 'Y'),
+              orderBy('createDt', 'desc')
+            ); // 로그인 X
+      const querySnapshot = await getDocs(q);
+      setContents(
+        querySnapshot.docs.map((doc) => {
+          const { title, createDt } = doc.data();
 
-        return {
-          id: doc.id,
-          title,
-          createDt: handleConvertTimestamp(createDt.toDate(), 'date')
-        };
-      })
-    );
-    handleLoaderFalse();
+          return {
+            id: doc.id,
+            title,
+            createDt: handleConvertTimestamp(createDt.toDate(), 'date')
+          };
+        })
+      );
+    } catch (error) {
+      setConfirmMessage('Data Fetching Error');
+      setConfirmPopupActive(true);
+    } finally {
+      handleLoaderFalse();
+    }
   };
 
   // 삭제 버튼
