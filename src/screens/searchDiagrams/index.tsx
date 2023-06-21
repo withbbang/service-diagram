@@ -190,20 +190,22 @@ const SearchDiagrams = ({
               </span>
             )}
           </div>
-          {didSearch
-            ? Array.isArray(contents) &&
-              contents.length > 0 &&
-              contents.map((content: any, idx: number) => (
-                <Card
-                  key={idx}
-                  idx={idx}
-                  id={content.id}
-                  title={content.title}
-                  createDt={content.createDt}
-                  path={`/diagrams/${content.type}/${content.id}`}
-                />
-              ))
-            : null}
+          <div className={styles.contents}>
+            {didSearch
+              ? Array.isArray(contents) &&
+                contents.length > 0 &&
+                contents.map((content: any, idx: number) => (
+                  <Card
+                    key={idx}
+                    idx={idx}
+                    id={content.id}
+                    title={content.title}
+                    createDt={content.createDt}
+                    path={`/diagrams/${content.type}/${content.id}`}
+                  />
+                ))
+              : null}
+          </div>
         </div>
       </div>
     </>
