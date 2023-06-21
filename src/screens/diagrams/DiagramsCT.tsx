@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   collection,
   getDocs,
@@ -19,8 +19,10 @@ import { onAuthStateChanged } from 'firebase/auth';
 const DiagramsCT = ({
   uid,
   handleLoaderTrue,
-  handleLoaderFalse
+  handleLoaderFalse,
+  handleSetUid
 }: typeDiagramsCT): JSX.Element => {
+  const navigate = useNavigate(); // router 제어 훅
   const db = getFirestore(app); // Firebase 객체
   const { type } = useParams(); // 다이어그램 타입
 
@@ -92,11 +94,28 @@ const DiagramsCT = ({
         })
       );
     } catch (error) {
+      console.error(error);
       setConfirmMessage('Data Fetching Error');
       setConfirmPopupActive(true);
     } finally {
       handleLoaderFalse();
     }
+  };
+
+  const handleSearch = () => {
+    navigate('/search');
+  };
+
+  const handleSignIn = () => {
+    navigate('/sign/in');
+  };
+
+  const handleSignUp = () => {
+    navigate('/sign/up');
+  };
+
+  const handleSignOut = () => {
+    handleSetUid('');
   };
 
   // 삭제 버튼
@@ -135,11 +154,17 @@ const DiagramsCT = ({
 
   return (
     <DiagramsPT
+      uid={uid}
+      uid_={uid_}
       type={type}
       title={title}
       contents={contents}
       confirmPopupActive={confirmPopupActive}
       confirmMessage={confirmMessage}
+      onSearch={handleSearch}
+      onSignIn={handleSignIn}
+      onSignUp={handleSignUp}
+      onSignOut={handleSignOut}
       onDeleteBtn={handleDeleteBtn}
       onConfirm={handleConfirm}
       onCancel={handleCancel}
@@ -150,6 +175,7 @@ const DiagramsCT = ({
 interface typeDiagramsCT extends CommonState {
   handleLoaderTrue: () => void;
   handleLoaderFalse: () => void;
+  handleSetUid: (uid: string) => void;
 }
 
 export default DiagramsCT;

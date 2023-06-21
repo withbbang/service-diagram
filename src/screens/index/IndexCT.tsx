@@ -29,6 +29,10 @@ const IndexCT = ({
     }
   }, [uid]);
 
+  const handleSearch = () => {
+    navigate('/search');
+  };
+
   const handleSignIn = () => {
     navigate('/sign/in');
   };
@@ -51,6 +55,7 @@ const IndexCT = ({
     <IndexPT
       uid={uid}
       uid_={uid_}
+      onSearch={handleSearch}
       onSignIn={handleSignIn}
       onSignUp={handleSignUp}
       onSignOut={handleSignOut}

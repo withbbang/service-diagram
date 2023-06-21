@@ -1,12 +1,14 @@
 import React from 'react';
 import Loader from 'components/loader';
 import styles from './Index.module.scss';
+import SVG from 'modules/SVG';
 
 const IndexPT = ({
   uid,
   uid_,
+  onSearch,
   onSignIn,
-  onSignUp,
+  // onSignUp,
   onSignOut,
   onNavigate
 }: typeIndexPT): JSX.Element => {
@@ -15,6 +17,9 @@ const IndexPT = ({
       <Loader />
       <div className={styles.wrap}>
         <div className={styles.signBtns}>
+          <span onClick={onSearch}>
+            <SVG type="search" width="30px" height="30px" />
+          </span>
           {uid !== undefined &&
           uid !== null &&
           uid !== '' &&
@@ -46,6 +51,7 @@ const IndexPT = ({
 interface typeIndexPT {
   uid?: string;
   uid_: string;
+  onSearch: () => void;
   onSignIn: () => void;
   onSignUp: () => void;
   onSignOut: () => void;

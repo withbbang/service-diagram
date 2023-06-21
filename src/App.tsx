@@ -14,6 +14,7 @@ import UpdateFlowDiagram from 'screens/updateFlowDiagram';
 import UpdateSequencDiagram from 'screens/updateSequenceDiagram';
 import SignIn from 'screens/signIn';
 import SignUp from 'screens/signUp';
+import SearchDiagrams from 'screens/searchDiagrams';
 
 const App = (): JSX.Element => {
   return (
@@ -53,6 +54,7 @@ const App = (): JSX.Element => {
         />
         <Route path="/sign/in" element={<SignIn />} />
         <Route path="/sign/up" element={<SignUp />} />
+        <Route path="/search" element={<SearchDiagrams />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

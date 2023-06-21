@@ -108,6 +108,7 @@ const UpdateFlowDiagramCT = ({
         try {
           docSnap = await getDoc(doc(db, type, contentId));
         } catch (error) {
+          console.error(error);
           setConfirmMessage('Data Fetching Error');
           setConfirmPopupActive(true);
         }
@@ -367,6 +368,7 @@ const UpdateFlowDiagramCT = ({
           updateDt: serverTimestamp()
         });
       } catch (error) {
+        console.error(error);
         setConfirmMessage('Data Updating Error');
         setConfirmPopupActive(true);
       } finally {

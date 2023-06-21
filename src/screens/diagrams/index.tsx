@@ -5,7 +5,8 @@ import { Action } from '@reduxjs/toolkit';
 import {
   CommonState,
   handleLoaderFalse,
-  handleLoaderTrue
+  handleLoaderTrue,
+  handleSetUid
 } from 'middlewares/reduxToolkits/commonSlice';
 
 const mapStateToProps = (state: PropState): CommonState => {
@@ -19,6 +20,9 @@ const mapDispatchToProps = (dispatch: (actionFunction: Action<any>) => any) => {
     },
     handleLoaderFalse: (): void => {
       dispatch(handleLoaderFalse());
+    },
+    handleSetUid: (uid: string): void => {
+      dispatch(handleSetUid({ uid }));
     }
   };
 };

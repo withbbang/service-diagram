@@ -321,6 +321,7 @@ const CreateFlowDiagramCT = ({
         updateDt: ''
       });
     } catch (error) {
+      console.error(error);
       setConfirmMessage('Data Saving Error');
       setConfirmPopupActive(true);
     } finally {

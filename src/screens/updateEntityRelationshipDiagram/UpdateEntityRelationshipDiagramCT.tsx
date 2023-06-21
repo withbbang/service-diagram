@@ -143,6 +143,7 @@ const UpdateEntityRelationshipDiagramCT = ({
         try {
           docSnap = await getDoc(doc(db, type, contentId));
         } catch (error) {
+          console.error(error);
           setConfirmMessage('Data Fetching Error');
           setConfirmPopupActive(true);
         }
@@ -594,6 +595,7 @@ const UpdateEntityRelationshipDiagramCT = ({
             updateDt: serverTimestamp()
           });
         } catch (error) {
+          console.error(error);
           setConfirmMessage('Data Updating Error');
           setConfirmPopupActive(true);
         } finally {

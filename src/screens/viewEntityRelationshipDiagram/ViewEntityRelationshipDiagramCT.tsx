@@ -80,6 +80,7 @@ const ViewEntityRelationshipDiagramCT = ({
         try {
           docSnap = await getDoc(doc(db, type, id));
         } catch (error) {
+          console.error(error);
           setConfirmMessage('Data Fetching Error');
           setConfirmPopupActive(true);
         }
