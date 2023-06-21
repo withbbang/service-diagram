@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore';
+import {
+  doc,
+  getDoc,
+  getFirestore,
+  serverTimestamp,
+  updateDoc
+} from 'firebase/firestore';
 import { app, auth } from 'modules/utils';
 import UpdateSequenceDiagramPT from './UpdateSequenceDiagramPT';
 import styles from 'components/functionPopup/FunctionPopup.module.scss';
@@ -130,10 +136,11 @@ const UpdateSequenceDiagramCT = ({
       handleLoaderTrue();
       setConfirmMessage('');
       setConfirmPopupActive(false);
-      await setDoc(doc(db, type, contentId), {
+      await updateDoc(doc(db, type, contentId), {
         title,
         content,
-        isDone
+        isDone,
+        updateDt: serverTimestamp()
       });
       handleLoaderFalse();
     } else {

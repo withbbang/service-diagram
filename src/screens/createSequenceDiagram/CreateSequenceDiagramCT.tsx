@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { addDoc, collection, getFirestore } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  getFirestore,
+  serverTimestamp
+} from 'firebase/firestore';
 import { app, auth } from 'modules/utils';
 import CreateSequenceDiagramPT from './CreateSequenceDiagramPT';
 import styles from 'components/functionPopup/FunctionPopup.module.scss';
@@ -107,7 +112,9 @@ const CreateSequenceDiagramCT = ({
     await addDoc(collection(db, type), {
       title,
       content,
-      isDone
+      isDone,
+      createDt: serverTimestamp(),
+      updateDt: ''
     });
     handleLoaderFalse();
   };

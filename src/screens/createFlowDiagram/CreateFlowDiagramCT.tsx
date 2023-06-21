@@ -1,5 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { addDoc, collection, getFirestore } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  getFirestore,
+  serverTimestamp
+} from 'firebase/firestore';
 import { app, auth } from 'modules/utils';
 import {
   Connection,
@@ -310,7 +315,9 @@ const CreateFlowDiagramCT = ({
     await addDoc(collection(db, type), {
       title,
       content: JSON.stringify(rfInstance.toObject()),
-      isDone
+      isDone,
+      createDt: serverTimestamp(),
+      updateDt: ''
     });
     handleLoaderFalse();
   };

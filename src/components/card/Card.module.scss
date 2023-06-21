@@ -9,14 +9,13 @@
   box-sizing: border-box;
   max-height: 200px;
   min-height: 200px;
-  word-break: keep-all;
   @include background-boxShadow-transform($most-light, 'none', scale(1));
 
   .floatBtns {
     position: absolute;
     display: none;
     top: 15px;
-    right: 25px;
+    right: 30px;
 
     > span {
       display: flex;
@@ -35,7 +34,20 @@
     font-size: 1.5em;
     overflow: hidden;
     text-overflow: ellipsis;
+    word-break: keep-all; /* 줄 넘기기 */
+
+    /* 최대 줄 3개로 보여주기 */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
     @include font($most-dark);
+  }
+
+  > span {
+    font-size: 0.9rem;
+    position: absolute;
+    bottom: 15px;
+    right: 30px;
   }
 
   .add {

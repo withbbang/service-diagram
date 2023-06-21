@@ -7,10 +7,11 @@ import {
   query,
   where,
   doc,
-  deleteDoc
+  deleteDoc,
+  orderBy
 } from 'firebase/firestore';
 import DiagramsPT from './DiagramsPT';
-import { app, auth } from 'modules/utils';
+import { app, auth, handleConvertTimestamp } from 'modules/utils';
 import { typeContent } from 'modules/types';
 import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -71,14 +72,21 @@ const DiagramsCT = ({
       uid !== '' &&
       uid_ !== '' &&
       uid === uid_
-        ? collection(db, type) // 로그인 O
-        : query(collection(db, type), where('isDone', '==', 'Y')); // 로그인 X
+        ? query(collection(db, type), orderBy('createDt', 'desc')) // 로그인 O
+        : query(
+            collection(db, type),
+            where('isDone', '==', 'Y'),
+            orderBy('createDt', 'desc')
+          ); // 로그인 X
     const querySnapshot = await getDocs(q);
     setContents(
       querySnapshot.docs.map((doc) => {
+        const { title, createDt } = doc.data();
+
         return {
           id: doc.id,
-          title: doc.data().title
+          title,
+          createDt: handleConvertTimestamp(createDt.toDate(), 'date')
         };
       })
     );

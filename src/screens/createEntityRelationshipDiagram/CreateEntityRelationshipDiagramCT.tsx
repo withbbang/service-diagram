@@ -22,7 +22,12 @@ import Table from 'components/entityRelationship/CustomNodes/Table';
 import NormalEdge from 'components/entityRelationship/CustomEdges/NormalEdge';
 import { typeColumn } from 'modules/types';
 import { app, auth, handleRandomString } from 'modules/utils';
-import { addDoc, collection, getFirestore } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  getFirestore,
+  serverTimestamp
+} from 'firebase/firestore';
 import CreateErdDiagramPT from './CreateEntityRelationshipDiagramPT';
 import { onAuthStateChanged } from 'firebase/auth';
 import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
@@ -514,7 +519,9 @@ const CreateErdDiagramCT = ({
       await addDoc(collection(db, type), {
         title,
         content: JSON.stringify(rfInstance.toObject()),
-        isDone
+        isDone,
+        createDt: serverTimestamp(),
+        updateDt: ''
       });
       handleLoaderFalse();
     }

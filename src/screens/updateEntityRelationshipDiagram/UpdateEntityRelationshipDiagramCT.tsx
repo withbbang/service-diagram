@@ -22,7 +22,13 @@ import Table from 'components/entityRelationship/CustomNodes/Table';
 import NormalEdge from 'components/entityRelationship/CustomEdges/NormalEdge';
 import { typeColumn } from 'modules/types';
 import { app, auth, handleRandomString } from 'modules/utils';
-import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore';
+import {
+  doc,
+  getDoc,
+  getFirestore,
+  serverTimestamp,
+  updateDoc
+} from 'firebase/firestore';
 import UpdateEntityRelationshipDiagramPT from './UpdateEntityRelationshipDiagramPT';
 import { useParams } from 'react-router-dom';
 import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
@@ -574,10 +580,11 @@ const UpdateEntityRelationshipDiagramCT = ({
         setConfirmMessage('');
         setConfirmPopupActive(false);
         handleLoaderTrue();
-        await setDoc(doc(db, type, contentId), {
+        await updateDoc(doc(db, type, contentId), {
           title,
           content: JSON.stringify(rfInstance.toObject()),
-          isDone
+          isDone,
+          updateDt: serverTimestamp()
         });
         handleLoaderFalse();
       } else {

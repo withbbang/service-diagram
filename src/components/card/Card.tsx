@@ -32,6 +32,7 @@ const Card = ({
   uid,
   id,
   title,
+  createDt,
   type,
   path,
   onDeleteBtn
@@ -78,6 +79,7 @@ const Card = ({
         ''
       )}
       <h3>{title}</h3>
+      <span>{createDt && createDt}</span>
       {id === '0' && (
         <span className={styles.add}>
           <SVG type="add" width="100px" height="100px" />
@@ -91,6 +93,7 @@ interface typeCard extends CommonState {
   idx: number;
   id: string;
   title: string;
+  createDt?: string;
   type?: string;
   path: string;
   onDeleteBtn?: (e: React.MouseEvent, selectedContentId: string) => void;

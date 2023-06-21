@@ -1,5 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore';
+import {
+  doc,
+  getDoc,
+  getFirestore,
+  serverTimestamp,
+  updateDoc
+} from 'firebase/firestore';
 import { app, auth } from 'modules/utils';
 import {
   Connection,
@@ -347,10 +353,11 @@ const UpdateFlowDiagramCT = ({
       setConfirmMessage('');
       setConfirmPopupActive(false);
       handleLoaderTrue();
-      await setDoc(doc(db, type, contentId), {
+      await updateDoc(doc(db, type, contentId), {
         title,
         content: JSON.stringify(rfInstance.toObject()),
-        isDone
+        isDone,
+        updateDt: serverTimestamp()
       });
       handleLoaderFalse();
     } else {
