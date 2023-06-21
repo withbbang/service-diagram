@@ -10,15 +10,20 @@ import {
   deleteDoc
 } from 'firebase/firestore';
 import DiagramsPT from './DiagramsPT';
-import { app } from 'modules/utils';
+import { app, auth } from 'modules/utils';
 import { typeContent } from 'modules/types';
+import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
+import { onAuthStateChanged } from 'firebase/auth';
 
 const DiagramsCT = ({
+  uid,
   handleLoaderTrue,
   handleLoaderFalse
 }: typeDiagramsCT): JSX.Element => {
   const db = getFirestore(app);
   const { type } = useParams();
+
+  const [uid_, setUid_] = useState<string>('');
   const [title, setTitle] = useState<string>('');
   const [contents, setContents] = useState<Array<typeContent>>([]);
   const [selectedContentId, setSelectedContentId] = useState<string>('');
@@ -39,11 +44,32 @@ const DiagramsCT = ({
         }
       }
     })();
-  }, []);
+  }, [uid_]);
+
+  useEffect(() => {
+    if (uid !== undefined && uid !== null && uid !== '') {
+      handleLoaderTrue();
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          setUid_(user.uid);
+        }
+        handleLoaderFalse();
+      });
+    } else {
+      setUid_('');
+    }
+  }, [uid]);
 
   const handleGetContents = async (type: string) => {
     handleLoaderTrue();
-    const q = query(collection(db, type), where('isDone', '==', 'Y'));
+    const q =
+      uid !== undefined &&
+      uid !== null &&
+      uid !== '' &&
+      uid_ !== '' &&
+      uid === uid_
+        ? collection(db, type)
+        : query(collection(db, type), where('isDone', '==', 'Y'));
     const querySnapshot = await getDocs(q);
     setContents(
       querySnapshot.docs.map((doc) => {
@@ -101,7 +127,7 @@ const DiagramsCT = ({
   );
 };
 
-interface typeDiagramsCT {
+interface typeDiagramsCT extends CommonState {
   handleLoaderTrue: () => void;
   handleLoaderFalse: () => void;
 }
