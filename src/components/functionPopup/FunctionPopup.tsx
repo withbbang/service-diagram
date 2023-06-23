@@ -40,7 +40,7 @@ const FunctionPopup = ({
     setInitialX(e.clientX - xOffset);
     setInitialY(e.clientY - yOffset);
 
-    if (e.target === document.getElementById('item')) {
+    if (e.target === document.getElementById('dnd')) {
       setIsDragging(true);
     }
   };
@@ -69,15 +69,15 @@ const FunctionPopup = ({
     <>
       {isActive ? (
         <div className={styles.background} id={'container'}>
-          <div
-            className={styles.modal_body}
-            id={'item'}
-            draggable
-            onDragStart={handleDragStart}
-            onDragEnd={handleDragEnd}
-            onDrag={handleDrag}
-          >
-            <span className={styles.dnd}>
+          <div className={styles.modal_body} id={'item'}>
+            <span
+              className={styles.dnd}
+              id={'dnd'}
+              draggable
+              onDragStart={handleDragStart}
+              onDragEnd={handleDragEnd}
+              onDrag={handleDrag}
+            >
               <SVG type="dnd" width="20px" height="20px" />
             </span>
             <span className={styles.close} onClick={() => onClose()}>
