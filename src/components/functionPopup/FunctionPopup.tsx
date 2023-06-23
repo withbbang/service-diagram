@@ -34,7 +34,9 @@ const FunctionPopup = ({
     }
   };
 
-  const handleDragStart = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const handleDragStart = (
+    e: React.MouseEvent<HTMLSpanElement, MouseEvent>
+  ) => {
     setInitialX(e.clientX - xOffset);
     setInitialY(e.clientY - yOffset);
 
@@ -43,16 +45,14 @@ const FunctionPopup = ({
     }
   };
 
-  const handleDragEnd = () => {
+  const handleDragEnd = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     setInitialX(currentX);
     setInitialX(currentY);
     setIsDragging(false);
   };
 
-  const handleDrag = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const handleDrag = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     if (isDragging) {
-      e.preventDefault();
-
       initialX && setCurrentX(e.clientX - initialX);
       initialY && setCurrentY(e.clientY - initialY);
 
@@ -68,17 +68,21 @@ const FunctionPopup = ({
   return (
     <>
       {isActive ? (
-        <div
-          className={styles.background}
-          id={'container'}
-          onMouseDown={handleDragStart}
-          onMouseUp={handleDragEnd}
-          onMouseMove={handleDrag}
-        >
-          <div className={styles.modal_body} id={'item'} draggable>
-            <div className={styles.close} onClick={() => onClose()}>
+        <div className={styles.background} id={'container'}>
+          <div
+            className={styles.modal_body}
+            id={'item'}
+            draggable
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+            onDrag={handleDrag}
+          >
+            <span className={styles.dnd}>
+              <SVG type="dnd" width="20px" height="20px" />
+            </span>
+            <span className={styles.close} onClick={() => onClose()}>
               <SVG type="close" width="20px" height="20px" />
-            </div>
+            </span>
             {children}
           </div>
         </div>

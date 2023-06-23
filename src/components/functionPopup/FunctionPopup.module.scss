@@ -23,18 +23,28 @@
     text-align: center;
     border-radius: 10px;
     background-color: $more-light;
-    cursor: move;
+
+    > span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      top: 15px;
+    }
+
+    .dnd {
+      left: 15px;
+      cursor: move;
+    }
+
+    .close {
+      right: 15px;
+      cursor: pointer;
+    }
 
     > div {
       display: flex;
       flex-direction: column;
-    }
-
-    .close {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      cursor: pointer;
     }
 
     .categoryBox {
