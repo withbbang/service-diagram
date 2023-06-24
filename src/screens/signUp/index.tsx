@@ -3,6 +3,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { connect } from 'react-redux';
 import { PropState } from 'middlewares/configureReducer';
 import { Action } from '@reduxjs/toolkit';
+import { SHA256 } from 'crypto-js';
 import {
   CommonState,
   handleLoaderFalse,
@@ -67,7 +68,10 @@ const SignUp = ({
     }
 
     handleLoaderTrue();
-    createUserWithEmailAndPassword(auth, email, password)
+
+    const encryptPassword = SHA256(password).toString();
+
+    createUserWithEmailAndPassword(auth, email, encryptPassword)
       .then((userCredential) => {
         navigate('/sign/in', { replace: true });
       })
