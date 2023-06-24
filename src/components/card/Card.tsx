@@ -61,6 +61,15 @@ const Card = ({
 
   return (
     <div className={styles.wrap} onClick={() => navigate(path)}>
+      {type && (
+        <div className={styles.floatCategory}>
+          <span>
+            <SVG type="category" width="20px" height="20px" />
+            &nbsp;
+            {type}
+          </span>
+        </div>
+      )}
       {id !== '0' &&
       uid !== undefined &&
       uid !== null &&

@@ -11,6 +11,19 @@
   min-height: 200px;
   @include background-boxShadow-transform($most-light, 'none', scale(1));
 
+  .floatCategory {
+    position: absolute;
+    display: none;
+    top: 15px;
+    left: 30px;
+
+    > span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
   .floatBtns {
     position: absolute;
     display: none;
@@ -60,6 +73,10 @@
 .wrap:hover {
   cursor: pointer;
   @include boxShadow-transform(4px 4px 2px 1px rgba(0, 0, 0, 0.2), scale(1.03));
+
+  .floatCategory {
+    display: flex;
+  }
 
   .floatBtns {
     display: flex;

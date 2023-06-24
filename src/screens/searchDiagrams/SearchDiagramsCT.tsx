@@ -55,35 +55,50 @@ const SearchDiagramsCT = ({
         uid_ !== '' &&
         uid === uid_
           ? [
-              ...types.map((type) =>
-                query(collection(db, type), orderBy('createDt', 'desc'))
-              )
+              ...types.map((type) => {
+                return {
+                  type,
+                  query: query(
+                    collection(db, type),
+                    orderBy('createDt', 'desc')
+                  )
+                };
+              })
             ] // 로그인 O
           : [
-              ...types.map((type) =>
-                query(
-                  collection(db, type),
-                  where('isDone', '==', 'Y'),
-                  orderBy('createDt', 'desc')
-                )
-              )
+              ...types.map((type) => {
+                return {
+                  type,
+                  query: query(
+                    collection(db, type),
+                    where('isDone', '==', 'Y'),
+                    orderBy('createDt', 'desc')
+                  )
+                };
+              })
             ]; // 로그인 X
 
       const querySnapshots = await Promise.all(
-        queries.map((query) => getDocs(query))
+        queries.map(async ({ type, query }) => {
+          return {
+            type,
+            docs: await getDocs(query)
+          };
+        })
       );
 
-      querySnapshots.forEach((querySnapshot) => {
+      querySnapshots.forEach(({ type, docs: { docs } }) => {
         setContents((prevContents) => {
           return [
             ...prevContents,
-            ...querySnapshot.docs
+            ...docs
               .map((doc) => {
                 const { title, createDt } = doc.data();
 
                 return {
                   id: doc.id,
                   title,
+                  type,
                   createDt: handleConvertTimestamp(createDt.toDate(), 'date')
                 };
               })
