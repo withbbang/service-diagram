@@ -73,6 +73,7 @@ const ViewFlowDiagramCT = ({
                 const { data, width, height } = node;
                 return {
                   ...node,
+                  connectable: false,
                   data: { ...data, width, height, editPossible: false }
                 };
               }) || []

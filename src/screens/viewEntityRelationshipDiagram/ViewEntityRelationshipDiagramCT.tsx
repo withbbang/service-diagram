@@ -97,6 +97,7 @@ const ViewEntityRelationshipDiagramCT = ({
                 ...flow.nodes.map((node: Node) => {
                   return {
                     ...node,
+                    connectable: false,
                     data: {
                       ...node.data,
                       editPossible: false
