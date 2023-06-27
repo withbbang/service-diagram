@@ -62,7 +62,14 @@ const ViewFlowDiagramCT = ({
         }
 
         if (docSnap !== undefined && docSnap.exists()) {
-          const { title, content } = docSnap.data();
+          const { title, content, isDone } = docSnap.data();
+
+          if (isDone !== 'Y') {
+            setConfirmMessage('Invalid Detail ID!');
+            setConfirmPopupActive(true);
+            handleLoaderFalse();
+            return;
+          }
 
           const flow = JSON.parse(content);
 
@@ -83,6 +90,11 @@ const ViewFlowDiagramCT = ({
           }
 
           setTitle(title);
+        } else {
+          setConfirmMessage('Invalid Detail ID!');
+          setConfirmPopupActive(true);
+          handleLoaderFalse();
+          return;
         }
 
         handleLoaderFalse();

@@ -34,10 +34,22 @@ const ViewSequenceDiagramCT = ({
         }
 
         if (docSnap !== undefined && docSnap.exists()) {
-          const { title, content } = docSnap.data();
+          const { title, content, isDone } = docSnap.data();
+
+          if (isDone !== 'Y') {
+            setConfirmMessage('Invalid Detail ID!');
+            setConfirmPopupActive(true);
+            handleLoaderFalse();
+            return;
+          }
 
           setTitle(title);
           setContent(content);
+        } else {
+          setConfirmMessage('Invalid Detail ID!');
+          setConfirmPopupActive(true);
+          handleLoaderFalse();
+          return;
         }
 
         handleLoaderFalse();
