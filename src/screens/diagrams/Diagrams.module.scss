@@ -1,11 +1,11 @@
 .wrap {
   position: relative;
-  width: 100%;
   min-height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  padding-top: 40px;
   @include background($more-light);
 
   .signBtns {
