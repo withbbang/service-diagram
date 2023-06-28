@@ -27,6 +27,12 @@ const printHostingInstructions = require('react-dev-utils/printHostingInstructio
 const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
 const printBuildError = require('react-dev-utils/printBuildError');
 
+console.log(
+  '@@@@@@@@@@@@@@@@@@@@ Mode ' +
+    process.env.REACT_APP_MODE +
+    ' Build @@@@@@@@@@@@@@@@@@@@'
+);
+
 const measureFileSizesBeforeBuild =
   FileSizeReporter.measureFileSizesBeforeBuild;
 const printFileSizesAfterBuild = FileSizeReporter.printFileSizesAfterBuild;
@@ -47,7 +53,7 @@ const argv = process.argv.slice(2);
 const writeStatsJson = argv.indexOf('--stats') !== -1;
 
 // Generate configuration
-const config = configFactory(process.env.REACT_APP_MODE);
+const config = configFactory('production');
 
 // We require that you explicitly set browsers and do not fall back to
 // browserslist defaults.
