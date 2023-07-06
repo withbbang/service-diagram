@@ -5,7 +5,7 @@ import {
   getFirestore,
   serverTimestamp
 } from 'firebase/firestore';
-import { app, auth } from 'modules/utils';
+import { app, auth, handleRandomString } from 'modules/utils';
 import {
   Connection,
   Edge,
@@ -183,16 +183,16 @@ const CreateFlowDiagramCT = ({
   // 노드 추가 콜백 함수
   const handleAddNode = useCallback(
     (type: string) => {
-      const num = nodes.length;
+      const id = 'node-' + handleRandomString();
 
       setNodes((nodes: Array<Node>) => {
         return [
           ...nodes.map((node) => ({ ...node, selected: false })),
           {
-            id: 'node-' + num,
+            id,
             type,
             position: { x: 0, y: 0 },
-            data: { label: 'node ' + num, editPossible: true },
+            data: { label: id, editPossible: true },
             selected: true
           }
         ];
