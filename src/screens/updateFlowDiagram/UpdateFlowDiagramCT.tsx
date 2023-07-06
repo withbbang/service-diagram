@@ -231,7 +231,7 @@ const UpdateFlowDiagramCT = ({
   // 노드 추가 콜백 함수
   const handleAddNode = useCallback(
     (type: string) => {
-      const num = nodes.length;
+      const num = nodes.length + 1;
 
       setNodes((nodes: Array<Node>) => {
         return [
@@ -246,7 +246,7 @@ const UpdateFlowDiagramCT = ({
         ];
       });
     },
-    [nodes, setNodes]
+    [nodes]
   );
 
   // 노드 더블 클릭시 노드 이름 input 포커싱 되는 콜백 함수
