@@ -16,6 +16,7 @@ import Table from 'components/entityRelationship/CustomNodes/Table';
 import NormalEdge from 'components/entityRelationship/CustomEdges/NormalEdge';
 import ViewEntityRelationshipDiagramPT from './ViewEntityRelationshipDiagramPT';
 import { typeColumn } from 'modules/types';
+import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
 
 const edgeOptions = Object.freeze({
   // animated: true,
@@ -50,6 +51,7 @@ const initialTables: Array<Node> = []; // 테이블 초기화
 const initialEdges: Array<Edge> = []; // 엣지 초기화
 
 const ViewEntityRelationshipDiagramCT = ({
+  uid,
   handleLoaderTrue,
   handleLoaderFalse
 }: typeViewEntityRelationshipDiagramCT): JSX.Element => {
@@ -88,7 +90,10 @@ const ViewEntityRelationshipDiagramCT = ({
         if (docSnap !== undefined && docSnap.exists()) {
           const { title, content, isDone } = docSnap.data();
 
-          if (isDone !== 'Y') {
+          if (
+            isDone !== 'Y' &&
+            (uid === undefined || uid === null || uid === '')
+          ) {
             setConfirmMessage('Invalid Detail ID!');
             setConfirmPopupActive(true);
             handleLoaderFalse();
@@ -172,7 +177,7 @@ export default (props: typeViewEntityRelationshipDiagramCT) => (
   </ReactFlowProvider>
 );
 
-interface typeViewEntityRelationshipDiagramCT {
+interface typeViewEntityRelationshipDiagramCT extends CommonState {
   handleLoaderTrue: () => void;
   handleLoaderFalse: () => void;
 }

@@ -4,8 +4,10 @@ import { app } from 'modules/utils';
 import { doc, getDoc } from 'firebase/firestore';
 import { useNavigate, useParams } from 'react-router-dom';
 import ViewSequenceDiagramPT from './ViewSequenceDiagramPT';
+import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
 
 const ViewSequenceDiagramCT = ({
+  uid,
   handleLoaderTrue,
   handleLoaderFalse
 }: typeViewSequenceDiagramCT): JSX.Element => {
@@ -36,7 +38,10 @@ const ViewSequenceDiagramCT = ({
         if (docSnap !== undefined && docSnap.exists()) {
           const { title, content, isDone } = docSnap.data();
 
-          if (isDone !== 'Y') {
+          if (
+            isDone !== 'Y' &&
+            (uid === undefined || uid === null || uid === '')
+          ) {
             setConfirmMessage('Invalid Detail ID!');
             setConfirmPopupActive(true);
             handleLoaderFalse();
@@ -76,7 +81,7 @@ const ViewSequenceDiagramCT = ({
   );
 };
 
-interface typeViewSequenceDiagramCT {
+interface typeViewSequenceDiagramCT extends CommonState {
   handleLoaderTrue: () => void;
   handleLoaderFalse: () => void;
 }

@@ -15,6 +15,7 @@ import DiamondNode from 'components/flow/customNodes/DiamondNode';
 import RectangleNode from 'components/flow/customNodes/RectangleNode';
 import SelfConnectingEdge from 'components/flow/customEdges/SelfConnectingEdge';
 import ViewFlowDiagramPT from './ViewFlowDiagramPT';
+import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
 
 const nodeTypes = { diamondNode: DiamondNode, rectangleNode: RectangleNode };
 const edgeTypes = {
@@ -30,6 +31,7 @@ const edgeOptions = {
 };
 
 const ViewFlowDiagramCT = ({
+  uid,
   handleLoaderTrue,
   handleLoaderFalse
 }: typeViewFlowDiagramCT): JSX.Element => {
@@ -64,7 +66,10 @@ const ViewFlowDiagramCT = ({
         if (docSnap !== undefined && docSnap.exists()) {
           const { title, content, isDone } = docSnap.data();
 
-          if (isDone !== 'Y') {
+          if (
+            isDone !== 'Y' &&
+            (uid === undefined || uid === null || uid === '')
+          ) {
             setConfirmMessage('Invalid Detail ID!');
             setConfirmPopupActive(true);
             handleLoaderFalse();
@@ -131,7 +136,7 @@ export default (props: typeViewFlowDiagramCT) => (
   </ReactFlowProvider>
 );
 
-interface typeViewFlowDiagramCT {
+interface typeViewFlowDiagramCT extends CommonState {
   handleLoaderTrue: () => void;
   handleLoaderFalse: () => void;
 }
