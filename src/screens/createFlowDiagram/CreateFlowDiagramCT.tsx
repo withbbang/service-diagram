@@ -290,7 +290,7 @@ const CreateFlowDiagramCT = ({
   );
 
   // 노드 더블 클릭시 노드 이름 input 포커싱 되는 콜백 함수
-  const handleNodeDoubleClick = (
+  const handleNodeClick = (
     e: React.MouseEvent<Element, MouseEvent>,
     node: Node
   ) => {
@@ -582,7 +582,7 @@ const CreateFlowDiagramCT = ({
       onNodesChange={handleNodesChange}
       onEdgesChange={handleEdgesChange}
       onConnect={handleConnect}
-      onNodeDoubleClick={handleNodeDoubleClick}
+      onNodeClick={handleNodeClick}
       onEdgeDoubleClick={handleEdgeDoubleClick}
       onKeyDown={handleKeyDown}
       onBlur={handleBlur}
