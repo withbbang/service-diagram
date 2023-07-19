@@ -290,7 +290,7 @@ const CreateFlowDiagramCT = ({
   );
 
   // 노드 더블 클릭시 노드 이름 input 포커싱 되는 콜백 함수
-  const handleNodeClick = (
+  const handleNodeDoubleClick = (
     e: React.MouseEvent<Element, MouseEvent>,
     node: Node
   ) => {
@@ -453,14 +453,14 @@ const CreateFlowDiagramCT = ({
           element: `.${styles.updatenode__controls} input:nth-of-type(2)`,
           popover: {
             title: 'Node 내용 입력',
-            description: '포커싱된 Node의 내용을 입력합니다.'
+            description: '원하는 Node를 더블 클릭 후 내용을 입력합니다.'
           }
         },
         {
           element: `.${styles.updatenode__controls} input:nth-of-type(3)`,
           popover: {
             title: 'Edge 내용 입력',
-            description: '포커싱된 Edge의 내용을 입력합니다.'
+            description: '원하는 Edge를 더블 클릭 후 내용을 입력합니다.'
           }
         },
         {
@@ -512,7 +512,6 @@ const CreateFlowDiagramCT = ({
             description: '원하는 Target Node의 점에 드롭합니다.',
             onNextClick: () => {
               //TODO: 다음으로 넘어가기 전에 노드 포커싱된 화면 보여주기
-              console.log('다음으로 넘어가기 전에 Node 포커싱된 화면 보여주기');
               driverObj.moveNext();
             }
           }
@@ -521,27 +520,24 @@ const CreateFlowDiagramCT = ({
           element: '.CommonNodeStyles_rectangleNode__xcENp',
           popover: {
             title: 'Node 포커싱 하는 방법',
-            description: '포커싱 하고 싶은 Node를 클릭 클릭합니다.',
+            description: '포커싱 하고 싶은 Node를 클릭합니다.',
             onNextClick: () => {
               //TODO: 다음으로 넘어가기 전에엣지 포커싱된 화면 보여주기
-              console.log('다음으로 넘어가기 전에 Edge 포커싱된 화면 보여주기');
               driverObj.moveNext();
             }
           },
           onDeselected: () => {
             //TODO: Node 포커싱 해제
-            console.log('Node 포커싱 해제');
           }
         },
         {
           element: '.react-flow__edge',
           popover: {
             title: 'Edge 포커싱 하는 방법',
-            description: '포커싱 하고 싶은 Edge를 더블 클릭합니다.'
+            description: '포커싱 하고 싶은 Edge를 클릭합니다.'
           },
           onDeselected: () => {
             //TODO: Edge 포커싱 해제
-            console.log('Edge 포커싱 해제');
           }
         },
         {
@@ -589,7 +585,7 @@ const CreateFlowDiagramCT = ({
       onNodesChange={handleNodesChange}
       onEdgesChange={handleEdgesChange}
       onConnect={handleConnect}
-      onNodeClick={handleNodeClick}
+      onNodeDoubleClick={handleNodeDoubleClick}
       onEdgeDoubleClick={handleEdgeDoubleClick}
       onKeyDown={handleKeyDown}
       onBlur={handleBlur}

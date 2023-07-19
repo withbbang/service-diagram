@@ -44,7 +44,7 @@ const CreateFlowDiagramPT = ({
   onNodesChange,
   onEdgesChange,
   onConnect,
-  onNodeClick,
+  onNodeDoubleClick,
   onEdgeDoubleClick,
   onKeyDown,
   onBlur,
@@ -77,7 +77,7 @@ const CreateFlowDiagramPT = ({
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
-            onNodeClick={onNodeClick}
+            onNodeDoubleClick={onNodeDoubleClick}
             onEdgeDoubleClick={onEdgeDoubleClick}
             onInit={onInit}
             fitView
@@ -172,7 +172,7 @@ interface typeCreateFlowDiagramPT {
   onNodesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
-  onNodeClick: NodeMouseHandler;
+  onNodeDoubleClick: NodeMouseHandler;
   onEdgeDoubleClick: EdgeMouseHandler;
   onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>, type: string) => void;
   onBlur: (type: string) => void;
