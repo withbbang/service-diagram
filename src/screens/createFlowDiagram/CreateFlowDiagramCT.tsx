@@ -41,6 +41,88 @@ const edgeOptions = {
   }
 }; // 엣지 공통 옵션
 
+const exampleNodes = [
+  {
+    data: { label: '상남자 김영선', editPossible: true },
+    dragging: false,
+    height: 40,
+    id: 'node-bvyhx9800s',
+    position: { x: -27.442583204721316, y: -42.78548600393444 },
+    positionAbsolute: { x: -27.442583204721316, y: -42.78548600393444 },
+    resizing: false,
+    selected: true,
+    style: { width: 150, height: 40 },
+    type: 'rectangleNode',
+    width: 150
+  },
+  {
+    data: { label: '인정?', editPossible: true },
+    dragging: false,
+    height: 80,
+    id: 'node-4fnm7ez7dsl',
+    position: { x: -27.236989617902907, y: 168.76845594603947 },
+    positionAbsolute: { x: -27.236989617902907, y: 168.76845594603947 },
+    selected: false,
+    type: 'diamondNode',
+    width: 150
+  },
+  {
+    data: { label: '가정 교육 잘 받음', editPossible: true },
+    dragging: false,
+    height: 40,
+    id: 'node-zue9g0i8k1c',
+    position: { x: -327.2120558443477, y: 389.90737382206754 },
+    positionAbsolute: { x: -327.2120558443477, y: 389.90737382206754 },
+    selected: false,
+    type: 'rectangleNode',
+    width: 150
+  },
+  {
+    data: { label: '사형', editPossible: true },
+    dragging: false,
+    height: 40,
+    id: 'node-ebvzjz24iqp',
+    position: { x: 262.77433226782654, y: 391.25536066581407 },
+    positionAbsolute: { x: 262.77433226782654, y: 391.25536066581407 },
+    selected: true,
+    type: 'rectangleNode',
+    width: 150
+  }
+]; // 예시 노드들
+const exampleEdges = [
+  {
+    id: 'reactflow__edge-node-bvyhx9800sbottom-source-node-4fnm7ez7dsltop-target',
+    ...edgeOptions,
+    source: 'node-bvyhx9800s',
+    sourceHandle: 'bottom-source',
+    target: 'node-4fnm7ez7dsl',
+    targetHandle: 'top-target',
+    type: 'step'
+  },
+  {
+    id: 'reactflow__edge-node-4fnm7ez7dslleft-source-node-zue9g0i8k1ctop-target',
+    label: 'Y',
+    ...edgeOptions,
+    selected: false,
+    source: 'node-4fnm7ez7dsl',
+    sourceHandle: 'left-source',
+    target: 'node-zue9g0i8k1c',
+    targetHandle: 'top-target',
+    type: 'step'
+  },
+  {
+    id: 'reactflow__edge-node-4fnm7ez7dslright-source-node-ebvzjz24iqptop-target',
+    label: 'N',
+    ...edgeOptions,
+    selected: false,
+    source: 'node-4fnm7ez7dsl',
+    sourceHandle: 'right-source',
+    target: 'node-ebvzjz24iqp',
+    targetHandle: 'top-target',
+    type: 'step'
+  }
+]; // 예시 엣지들
+
 const CreateFlowDiagramCT = ({
   uid,
   handleLoaderTrue,
@@ -77,8 +159,8 @@ const CreateFlowDiagramCT = ({
     null
   ) as React.MutableRefObject<HTMLSelectElement | null>;
 
-  const [nodes, setNodes, handleNodesChange] = useNodesState([]); // 노드 수정 hook
-  const [edges, setEdges, handleEdgesChange] = useEdgesState([]); // 엣지 수정 hook
+  const [nodes, setNodes, handleNodesChange] = useNodesState(exampleNodes); // 노드 수정 hook
+  const [edges, setEdges, handleEdgesChange] = useEdgesState(exampleEdges); // 엣지 수정 hook
 
   // 로그인 여부 판단 훅
   useEffect(() => {
