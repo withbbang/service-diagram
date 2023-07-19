@@ -15,6 +15,7 @@
 - Sequence Diagram: 프로세스나 로직을 top down 방식으로 제작할 수 있게 도와주는 기능
 - Flow Diagram: 시나리오 Flow를 제작할 수 있게 도와주는 기능
 - Entity Relation Diagram: 개체관계형 데이터베이스 관계도를 제작할 수 있게 도와주는 기능
+- User Guide: 처음 사용하는 유저들을 위한 가이드 기능
 
 ---
 
@@ -95,6 +96,15 @@ Service Diagrams
 >
 > ```terminal
 > > npm i --save react-sequence-diagram
+> ```
+
+#### 3. Driver JS
+
+> https://driverjs.com<br/>
+> User Guide를 위해 사용한 라이브러리
+>
+> ```terminal
+> > npm i --save driver.js
 > ```
 
 ---
