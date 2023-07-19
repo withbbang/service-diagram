@@ -501,14 +501,14 @@ const CreateFlowDiagramCT = ({
         {
           element: '[data-id="node-bvyhx9800s-bottom-source-source"]',
           popover: {
-            title: 'Edge 연결 하는 법 1',
+            title: 'Edge 연결 하는 방법 1',
             description: '원하는 Source Node의 점을 클릭 후 드래그합니다.'
           }
         },
         {
           element: '[data-id="node-4fnm7ez7dsl-top-source-source"]',
           popover: {
-            title: 'Edge 연결 하는 법 2',
+            title: 'Edge 연결 하는 방법 2',
             description: '원하는 Target Node의 점에 드롭합니다.',
             onNextClick: () => {
               //TODO: 다음으로 넘어가기 전에 노드 포커싱된 화면 보여주기
@@ -520,8 +520,8 @@ const CreateFlowDiagramCT = ({
         {
           element: '.CommonNodeStyles_rectangleNode__xcENp',
           popover: {
-            title: 'Node 포커싱 하는 법',
-            description: '포커싱 하고 싶은 Node를 클릭 혹은 더블 클릭합니다.',
+            title: 'Node 포커싱 하는 방법',
+            description: '포커싱 하고 싶은 Node를 클릭 클릭합니다.',
             onNextClick: () => {
               //TODO: 다음으로 넘어가기 전에엣지 포커싱된 화면 보여주기
               console.log('다음으로 넘어가기 전에 Edge 포커싱된 화면 보여주기');
@@ -536,12 +536,19 @@ const CreateFlowDiagramCT = ({
         {
           element: '.react-flow__edge',
           popover: {
-            title: ' 포커싱 하는 법',
+            title: 'Edge 포커싱 하는 방법',
             description: '포커싱 하고 싶은 Edge를 더블 클릭합니다.'
           },
           onDeselected: () => {
             //TODO: Edge 포커싱 해제
             console.log('Edge 포커싱 해제');
+          }
+        },
+        {
+          element: 'delete node or edge',
+          popover: {
+            title: 'Node 혹은 Edge 지우는 방법',
+            description: 'Node 혹은 Edge를 포커싱 하고 Backspace를 누릅니다.'
           }
         }
       ],
