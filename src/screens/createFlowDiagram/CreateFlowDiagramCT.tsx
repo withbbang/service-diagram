@@ -20,12 +20,14 @@ import {
   useReactFlow,
   ReactFlowProvider
 } from 'reactflow';
+import { driver } from 'driver.js';
 import SelfConnectingEdge from 'components/flow/customEdges/SelfConnectingEdge';
 import DiamondNode from 'components/flow/customNodes/DiamondNode';
 import RectangleNode from 'components/flow/customNodes/RectangleNode';
 import CreateFlowDiagramPT from './CreateFlowDiagramPT';
 import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
 import { onAuthStateChanged } from 'firebase/auth';
+import styles from './CreateFlowDiagram.module.scss';
 
 const keyForTempFlowDiagrams = 'tempFlowDiagrams'; // 로컬 스토리지에 일시 저장할 키값
 const nodeTypes = { diamondNode: DiamondNode, rectangleNode: RectangleNode }; // 커스텀 노드 타입들
@@ -49,9 +51,7 @@ const exampleNodes = [
     id: 'node-bvyhx9800s',
     position: { x: -27.442583204721316, y: -42.78548600393444 },
     positionAbsolute: { x: -27.442583204721316, y: -42.78548600393444 },
-    resizing: false,
-    selected: true,
-    style: { width: 150, height: 40 },
+    selected: false,
     type: 'rectangleNode',
     width: 150
   },
@@ -84,7 +84,7 @@ const exampleNodes = [
     id: 'node-ebvzjz24iqp',
     position: { x: 262.77433226782654, y: 391.25536066581407 },
     positionAbsolute: { x: 262.77433226782654, y: 391.25536066581407 },
-    selected: true,
+    selected: false,
     type: 'rectangleNode',
     width: 150
   }
@@ -161,6 +161,11 @@ const CreateFlowDiagramCT = ({
 
   const [nodes, setNodes, handleNodesChange] = useNodesState(exampleNodes); // 노드 수정 hook
   const [edges, setEdges, handleEdgesChange] = useEdgesState(exampleEdges); // 엣지 수정 hook
+
+  // 페이지 진입시 최초 유저 가이드 호출
+  useEffect(() => {
+    handleDrive();
+  }, []);
 
   // 로그인 여부 판단 훅
   useEffect(() => {
@@ -415,6 +420,118 @@ const CreateFlowDiagramCT = ({
   const handleCancel = () => {
     setConfirmMessage('');
     setConfirmPopupActive(false);
+  };
+
+  // 유저 가이드 핸들러
+  const handleDrive = () => {
+    const driverObj = driver({
+      showProgress: true,
+      steps: [
+        {
+          element: 'intro',
+          popover: {
+            title: 'Flow Diagram 사용자 가이드',
+            description: 'Flow Diagram 사용자 가이드를 시작합니다.'
+          }
+        },
+        {
+          element: `.${styles.updatenode__controls}`,
+          popover: {
+            title: '컨트롤 보드',
+            description: 'Diagram을 제어하는 기능들이 담겨있습니다.'
+          }
+        },
+        {
+          element: `.${styles.updatenode__controls} input:nth-of-type(1)`,
+          popover: {
+            title: 'Title 입력',
+            description: '현재 Diagram의 Title을 입력합니다.'
+          }
+        },
+        {
+          element: `.${styles.updatenode__controls} input:nth-of-type(2)`,
+          popover: {
+            title: 'Node 내용 입력',
+            description: '포커싱된 Node의 내용을 입력합니다.'
+          }
+        },
+        {
+          element: `.${styles.updatenode__controls} input:nth-of-type(3)`,
+          popover: {
+            title: 'Edge 내용 입력',
+            description: '포커싱된 Edge의 내용을 입력합니다.'
+          }
+        },
+        {
+          element: `.${styles.updatenode__controls} select`,
+          popover: {
+            title: 'Diagram 공개 여부',
+            description: '영구 저장시, 현재 Diagram의 공개 여부를 선택합니다.'
+          }
+        },
+        {
+          element: `.${styles.updatenode__controls} button:nth-of-type(1)`,
+          popover: {
+            title: 'Diamond Node 생성',
+            description: 'Diamond Node를 생성합니다.'
+          }
+        },
+        {
+          element: `.${styles.updatenode__controls} button:nth-of-type(2)`,
+          popover: {
+            title: 'Rectangle Node 생성',
+            description: 'Rectangle Node를 생성합니다.'
+          }
+        },
+        {
+          element: `.${styles.updatenode__controls} button:nth-of-type(3)`,
+          popover: {
+            title: '일시 저장',
+            description: '현재 작성한 Diagram을 일시 저장합니다.'
+          }
+        },
+        {
+          element: `.${styles.updatenode__controls} button:nth-of-type(4)`,
+          popover: {
+            title: '불러오기',
+            description: '일시 저장한 Diagram을 불러옵니다.',
+            onNextClick: () => {
+              driverObj.moveNext();
+            }
+          }
+        },
+        {
+          element: '[data-id="node-bvyhx9800s-bottom-source-source"]',
+          popover: {
+            title: 'Edge 연결 하는 법 1',
+            description: '원하는 Source Node의 점을 클릭 후 드래그합니다.'
+          }
+        },
+        {
+          element: '[data-id="node-4fnm7ez7dsl-top-source-source"]',
+          popover: {
+            title: 'Edge 연결 하는 법 2',
+            description: '원하는 Target Node의 점에 드롭합니다.'
+          }
+        },
+        {
+          element: '.CommonNodeStyles_rectangleNode__xcENp',
+          popover: {
+            title: 'Node 포커싱 하는 법',
+            description: '포커싱 하고 싶은 Node를 클릭 혹은 더블 클릭합니다.'
+          }
+        },
+        {
+          element: '.react-flow__edge',
+          popover: {
+            title: 'Edge 포커싱 하는 법',
+            description: '포커싱 하고 싶은 Edge를 더블 클릭합니다.'
+          }
+        }
+      ]
+    });
+
+    driverObj.drive();
   };
 
   return (

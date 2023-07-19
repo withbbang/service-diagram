@@ -13,10 +13,11 @@ import ReactFlow, {
   NodeMouseHandler,
   EdgeMouseHandler
 } from 'reactflow';
+import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
 import Loader from 'components/loader';
 import styles from './CreateFlowDiagram.module.scss';
+import 'driver.js/dist/driver.css';
 import 'reactflow/dist/style.css';
-import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
 
 const CreateFlowDiagramPT = ({
   uid,
