@@ -29,7 +29,8 @@ import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
 import { onAuthStateChanged } from 'firebase/auth';
 import styles from './CreateFlowDiagram.module.scss';
 
-const keyForTempFlowDiagrams = 'tempFlowDiagrams'; // 로컬 스토리지에 일시 저장할 키값
+const userGuideYn = 'flowDiagramUserGuide'; // 로컬 스토리지에 사용자 가이드 노출 여부를 저장할 키 값
+const keyForTempFlowDiagrams = 'tempFlowDiagrams'; // 로컬 스토리지에 Diagram을 일시 저장할 키값
 const nodeTypes = { diamondNode: DiamondNode, rectangleNode: RectangleNode }; // 커스텀 노드 타입들
 const edgeTypes = {
   selfConnectingEdge: SelfConnectingEdge
@@ -164,7 +165,7 @@ const CreateFlowDiagramCT = ({
 
   // 페이지 진입시 최초 유저 가이드 호출
   useEffect(() => {
-    handleDrive();
+    localStorage.getItem(userGuideYn) !== 'Y' && handleDrive();
   }, []);
 
   // 로그인 여부 판단 훅
@@ -543,7 +544,13 @@ const CreateFlowDiagramCT = ({
             console.log('Edge 포커싱 해제');
           }
         }
-      ]
+      ],
+      onDestroyStarted: () => {
+        if (window.confirm('사용자 가이드를 다신 안 보시겠습니까?')) {
+          localStorage.setItem(userGuideYn, 'Y');
+          driverObj.destroy();
+        }
+      }
     });
 
     driverObj.drive();
