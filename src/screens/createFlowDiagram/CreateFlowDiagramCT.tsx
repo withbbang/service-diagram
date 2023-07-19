@@ -494,10 +494,7 @@ const CreateFlowDiagramCT = ({
           element: `.${styles.updatenode__controls} button:nth-of-type(4)`,
           popover: {
             title: '불러오기',
-            description: '일시 저장한 Diagram을 불러옵니다.',
-            onNextClick: () => {
-              driverObj.moveNext();
-            }
+            description: '일시 저장한 Diagram을 불러옵니다.'
           }
         },
         {
@@ -511,21 +508,39 @@ const CreateFlowDiagramCT = ({
           element: '[data-id="node-4fnm7ez7dsl-top-source-source"]',
           popover: {
             title: 'Edge 연결 하는 법 2',
-            description: '원하는 Target Node의 점에 드롭합니다.'
+            description: '원하는 Target Node의 점에 드롭합니다.',
+            onNextClick: () => {
+              //TODO: 다음으로 넘어가기 전에 노드 포커싱된 화면 보여주기
+              console.log('다음으로 넘어가기 전에 Node 포커싱된 화면 보여주기');
+              driverObj.moveNext();
+            }
           }
         },
         {
           element: '.CommonNodeStyles_rectangleNode__xcENp',
           popover: {
             title: 'Node 포커싱 하는 법',
-            description: '포커싱 하고 싶은 Node를 클릭 혹은 더블 클릭합니다.'
+            description: '포커싱 하고 싶은 Node를 클릭 혹은 더블 클릭합니다.',
+            onNextClick: () => {
+              //TODO: 다음으로 넘어가기 전에엣지 포커싱된 화면 보여주기
+              console.log('다음으로 넘어가기 전에 Edge 포커싱된 화면 보여주기');
+              driverObj.moveNext();
+            }
+          },
+          onDeselected: () => {
+            //TODO: Node 포커싱 해제
+            console.log('Node 포커싱 해제');
           }
         },
         {
           element: '.react-flow__edge',
           popover: {
-            title: 'Edge 포커싱 하는 법',
+            title: ' 포커싱 하는 법',
             description: '포커싱 하고 싶은 Edge를 더블 클릭합니다.'
+          },
+          onDeselected: () => {
+            //TODO: Edge 포커싱 해제
+            console.log('Edge 포커싱 해제');
           }
         }
       ]
