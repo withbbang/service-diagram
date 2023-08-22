@@ -65,6 +65,12 @@ const FunctionPopup = ({
     }
   };
 
+  const handleClose = () => {
+    setXOffset(0);
+    setYOffset(0);
+    onClose();
+  };
+
   return (
     <>
       {isActive ? (
@@ -80,7 +86,7 @@ const FunctionPopup = ({
             >
               <SVG type="dnd" width="20px" height="20px" />
             </span>
-            <span className={styles.close} onClick={() => onClose()}>
+            <span className={styles.close} onClick={handleClose}>
               <SVG type="close" width="20px" height="20px" />
             </span>
             {children}
