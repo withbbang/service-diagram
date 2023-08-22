@@ -15,6 +15,7 @@ import UpdateSequencDiagram from 'screens/updateSequenceDiagram';
 import SignIn from 'screens/signIn';
 import SignUp from 'screens/signUp';
 import SearchDiagrams from 'screens/searchDiagrams';
+import CreateMermaid from 'screens/createMermaid';
 
 const App = (): JSX.Element => {
   return (
@@ -40,6 +41,7 @@ const App = (): JSX.Element => {
           path="/diagram/entity-relationship/create"
           element={<CreateEntityRelationshipDiagram />}
         />
+        <Route path="/diagram/mermaid/create" element={<CreateMermaid />} />
         <Route
           path="/diagram/sequence/update/:contentId"
           element={<UpdateSequencDiagram />}

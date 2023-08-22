@@ -42,6 +42,7 @@ const IndexPT = ({
           <button onClick={() => onNavigate('entity-relationship')}>
             Entity-Relationship Diagrams
           </button>
+          <button onClick={() => onNavigate('mermaid')}>Mermaid</button>
         </div>
       </div>
     </>

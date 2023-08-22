@@ -45,6 +45,8 @@ const DiagramsCT = ({
           setTitle('Flow Diagrams');
         } else if (type === 'entity-relationship') {
           setTitle('Entity-Relationship Diagrams');
+        } else if (type === 'mermaid') {
+          setTitle('Mermaid');
         }
       }
     })();
