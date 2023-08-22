@@ -15,6 +15,7 @@
 - Sequence Diagram: 프로세스나 로직을 top down 방식으로 제작할 수 있게 도와주는 기능
 - Flow Diagram: 시나리오 Flow를 제작할 수 있게 도와주는 기능
 - Entity Relation Diagram: 개체관계형 데이터베이스 관계도를 제작할 수 있게 도와주는 기능
+- Mermaid: Sequence, Flow, Mind Map 등, 개발자들이 친숙하게 제작할 수 있도록 도와주는 기능
 - User Guide: 처음 사용하는 유저들을 위한 가이드 기능
 
 ---
@@ -58,6 +59,7 @@ Service Diagrams
 │  ├─ 📄global.d.ts
 │  └─ 📄index.tsx
 ├─ 📄.gitignore
+├─ 📄.gitmessage.txt
 ├─ 📄.prettierrc
 ├─ 📄package-lock.json
 ├─ 📄package.json
@@ -75,6 +77,7 @@ Service Diagrams
 - 📄global.d.ts: 타입스크립트가 지원하지 않는 타입을 추가하는 프로젝트 한정 글로벌 파일
 - 📄.prettierrc: 프리티어 설정 파일
 - 📄Todo.txt: 현재 프로젝트의 Todo List
+- 📄.gitmessage.txt: commit message 템플릿
 
 ---
 
@@ -98,7 +101,16 @@ Service Diagrams
 > > npm i --save react-sequence-diagram
 > ```
 
-#### 3. Driver JS
+#### 3. Mermaid
+
+> https://github.com/mermaid-js/mermaid<br/>
+> Mermaid를 이용한 Diagram 제작에 사용한 라이브러리
+>
+> ```terminal
+> > npm i --save mermaid
+> ```
+
+#### 4. Driver JS
 
 > https://driverjs.com<br/>
 > User Guide를 위해 사용한 라이브러리
