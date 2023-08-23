@@ -26,6 +26,9 @@ const CreateMermaidCT = ({
   Site->>mermaid: initialize
   Site->>mermaid: content loaded
   mermaid->>mermaidAPI: init
+
+  # http://mermaid.js.org/syntax/examples.html
+  # syntax 카테고리 참고
   `); // 다이어그램 내용
   const [isDone, setIsDone] = useState<string>('N'); // 완료 여부
   const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false); // 확인 팝업 활성 상태

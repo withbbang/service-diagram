@@ -103,7 +103,7 @@ Service Diagrams
 
 #### 3. Mermaid
 
-> https://github.com/mermaid-js/mermaid<br/>
+> http://mermaid.js.org/<br/>
 > Mermaid를 이용한 Diagram 제작에 사용한 라이브러리
 >
 > ```terminal

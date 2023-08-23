@@ -31,6 +31,8 @@ const CreateSequenceDiagramCT = ({
     Note right of A: Note to the right of A
     Note over A: Note over A
     Note over A, B: Note over both A and B
+
+    # https://bramp.github.io/js-sequence-diagrams 문법 참고
   `); // 다이어그램 내용
   const [isDone, setIsDone] = useState<string>('N'); // 완료 여부
   const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false); // 확인 팝업 활성 상태
