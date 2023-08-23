@@ -7,17 +7,18 @@ const initConfig = {
   theme: 'default',
   securityLevel: 'loose',
   fontFamily: 'monospace'
-};
+}; // mermaid 초기화 구성 변수
 
 const Mermaid = ({ content }: typeMermaid) => {
   const pre = document.querySelector('.mermaid');
 
-  // mermaid 컨텐츠 로드
+  // mermaid 초기화 및 컨텐츠 로드
   useEffect(() => {
     mermaid.initialize(initConfig);
     mermaid.contentLoaded();
   }, []);
 
+  // 실시간 다이어그램 수정을 위한 useEffect
   useEffect(() => {
     (async () => {
       try {
