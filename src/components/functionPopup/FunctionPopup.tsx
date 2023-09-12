@@ -90,6 +90,7 @@ const FunctionPopup = ({
               <SVG type="close" width="20px" height="20px" />
             </span>
             {children}
+            <button onClick={handleClose}>확인</button>
           </div>
         </div>
       ) : null}

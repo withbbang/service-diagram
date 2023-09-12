@@ -133,8 +133,7 @@
         resize: none;
       }
 
-      > textarea,
-      button {
+      > textarea {
         padding: 10px;
         border: solid 1px $less-light;
         border-radius: 10px;
@@ -142,15 +141,30 @@
         @include boxShadow('none');
       }
 
-      > textarea:focus,
-      button:hover {
+      > textarea:focus {
         @include boxShadow(4px 4px 2px 1px rgba(0, 0, 0, 0.2));
       }
 
-      > button,
-      select {
+      > select {
         cursor: pointer;
       }
+    }
+
+    > button {
+      @include boxShadow('none');
+      padding: 10px;
+      border: solid 1px $less-light;
+      border-radius: 10px;
+      background: $most-light;
+      width: 720px;
+      height: 40px;
+      margin-top: 10px;
+      box-sizing: border-box;
+      cursor: pointer;
+    }
+
+    > button:hover {
+      @include boxShadow(4px 4px 2px 1px rgba(0, 0, 0, 0.2));
     }
   }
 }

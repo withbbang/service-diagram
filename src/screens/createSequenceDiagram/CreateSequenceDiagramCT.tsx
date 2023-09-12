@@ -112,7 +112,6 @@ const CreateSequenceDiagramCT = ({
         onKeyDown={(e) => handleTextAreaTab(e)}
         ref={contentRef}
       />
-      <button onClick={handleCreateUpdatePopup}>확인</button>
     </div>
   );
 

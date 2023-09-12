@@ -134,7 +134,6 @@ const UpdateMermaidCT = ({
         onKeyDown={(e) => handleTextAreaTab(e)}
         ref={contentRef}
       />
-      <button onClick={handleUpdatePopup}>확인</button>
     </div>
   );
 

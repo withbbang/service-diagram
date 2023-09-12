@@ -134,7 +134,6 @@ const UpdateSequenceDiagramCT = ({
         onKeyDown={(e) => handleTextAreaTab(e)}
         ref={contentRef}
       />
-      <button onClick={handleUpdatePopup}>확인</button>
     </div>
   );
 
