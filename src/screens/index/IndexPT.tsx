@@ -43,6 +43,13 @@ const IndexPT = ({
             Entity-Relationship Diagrams
           </button>
           <button onClick={() => onNavigate('mermaid')}>Mermaid</button>
+          <button
+            onClick={() => {
+              throw Error('Test Error Report!');
+            }}
+          >
+            Test Error Report
+          </button>
         </div>
       </div>
     </>

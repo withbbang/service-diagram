@@ -5,6 +5,20 @@ import App from 'App';
 import store from 'middlewares/configureStore';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
+import * as Sentry from '@sentry/react';
+
+Sentry.init({
+  dsn: process.env.REACT_APP_SENTRY_DSN,
+  integrations: [
+    new Sentry.BrowserTracing({
+      tracePropagationTargets: ['localhost', /^https:\/\/yourserver\.io\/api/]
+    }),
+    new Sentry.Replay()
+  ],
+  tracesSampleRate: 1.0,
+  replaysSessionSampleRate: 0.1,
+  replaysOnErrorSampleRate: 1.0
+});
 
 const rootNode: HTMLElement | null = document.getElementById('root');
 
