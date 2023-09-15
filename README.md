@@ -17,6 +17,7 @@
 - Entity Relation Diagram: 개체관계형 데이터베이스 관계도를 제작할 수 있게 도와주는 기능
 - Mermaid: Sequence, Flow, Mind Map 등, 개발자들이 친숙하게 제작할 수 있도록 도와주는 기능
 - User Guide: 처음 사용하는 유저들을 위한 가이드 기능
+- Sentry: 프론트엔드에서 나타나는 오류로써, 데이터 영역, 화면 영역 그리고 예상할 수 없는 네트워크 이슈나 특정<br>브라우저 버전, 단말기 OS 업데이트 같은 외부 요인에 의한 오류나 예상치 못한 런타임 오류들을 리포트 해주는 기능
 
 ---
 
@@ -103,8 +104,8 @@ Service Diagrams
 
 #### 3. Mermaid
 
-> http://mermaid.js.org/<br/>
-> Mermaid를 이용한 Diagram 제작에 사용한 라이브러리
+> http://mermaid.js.org<br/>
+> Mermaid를 이용한 여러 Diagram 제작에 사용한 라이브러리
 >
 > ```terminal
 > > npm i --save mermaid
@@ -117,6 +118,15 @@ Service Diagrams
 >
 > ```terminal
 > > npm i --save driver.js
+> ```
+
+#### 5. Sentry
+
+> https://sentry.io<br/>
+> UI에서 나타나는 에러를 리포트하기 위해 사용한 라이브러리
+>
+> ```terminal
+> > npm i --save @sentry/react
 > ```
 
 ---
