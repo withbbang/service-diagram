@@ -4,16 +4,19 @@ import { connect } from 'react-redux';
 import { PropState } from 'middlewares/configureReducer';
 import { Action } from '@reduxjs/toolkit';
 import { SHA256 } from 'crypto-js';
+import { doc, getDoc } from 'firebase/firestore';
+import { getFirestore } from 'firebase/firestore';
 import {
   CommonState,
   handleLoaderFalse,
   handleLoaderTrue,
-  handleSetUid
+  handleSetUid,
+  handleSetGrade
 } from 'middlewares/reduxToolkits/commonSlice';
 import styles from './SignIn.module.scss';
 import Loader from 'components/loader';
 import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
-import { auth } from 'modules/utils';
+import { auth, app } from 'modules/utils';
 import { useNavigate } from 'react-router-dom';
 
 const mapStateToProps = (state: PropState): CommonState => {
@@ -30,6 +33,9 @@ const mapDispatchToProps = (dispatch: (actionFunction: Action<any>) => any) => {
     },
     handleSetUid: (uid: string): void => {
       dispatch(handleSetUid({ uid }));
+    },
+    handleSetGrade: (grade: number): void => {
+      dispatch(handleSetGrade({ grade }));
     }
   };
 };
@@ -38,10 +44,13 @@ const SignIn = ({
   uid,
   handleLoaderTrue,
   handleLoaderFalse,
-  handleSetUid
+  handleSetUid,
+  handleSetGrade
 }: typeSignIn): JSX.Element => {
   const navigate = useNavigate();
 
+  const db = getFirestore(app);
+  const type = 'authority';
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false);
@@ -59,7 +68,7 @@ const SignIn = ({
     }
   };
 
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
     if (!email) {
       setConfirmMessage('Empty Email Field');
       setConfirmPopupActive(true);
@@ -74,18 +83,47 @@ const SignIn = ({
 
     handleLoaderTrue();
 
-    const encryptPassword = SHA256(password).toString();
+    let encryptPassword;
+    try {
+      encryptPassword = SHA256(password).toString();
+    } catch (error) {
+      console.error(error);
+      setConfirmMessage('Password Encrypting Error');
+      setConfirmPopupActive(true);
+      handleLoaderFalse();
+      return;
+    }
 
-    signInWithEmailAndPassword(auth, email, encryptPassword)
-      .then((userCredential) => {
-        handleSetUid(userCredential.user.uid);
-        navigate('/', { replace: true });
-      })
-      .catch((error) => {
-        setConfirmMessage(error.message);
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        encryptPassword
+      );
+
+      const uid = userCredential.user.uid;
+      handleSetUid(uid);
+
+      const docSnap = await getDoc(doc(db, type, uid));
+
+      if (docSnap !== undefined && docSnap.exists()) {
+        const { grade } = docSnap.data();
+        handleSetGrade(grade);
+      } else {
+        setConfirmMessage('Nothing User Grade');
         setConfirmPopupActive(true);
-      })
-      .finally(() => handleLoaderFalse());
+        return;
+      }
+
+      navigate('/', { replace: true });
+    } catch (error) {
+      console.error(error);
+      setConfirmMessage('User Credential Error');
+      setConfirmPopupActive(true);
+      return;
+    } finally {
+      handleLoaderFalse();
+    }
   };
 
   const handleCancel = () => {
@@ -135,6 +173,7 @@ interface typeSignIn extends CommonState {
   handleLoaderTrue: () => void;
   handleLoaderFalse: () => void;
   handleSetUid: (uid: string) => void;
+  handleSetGrade: (grade: number) => void;
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignIn);

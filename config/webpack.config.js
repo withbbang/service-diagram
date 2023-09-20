@@ -573,7 +573,7 @@ module.exports = function (webpackEnv) {
     },
     plugins: [
       sentryWebpackPlugin({
-        authToken: process.env.SENTRY_AUTH_TOKEN,
+        authToken: process.env.REACT_APP_SENTRY_AUTH_TOKEN,
         org: 'bread-daaa4ed34',
         project: 'bread-diagrams'
       }),
