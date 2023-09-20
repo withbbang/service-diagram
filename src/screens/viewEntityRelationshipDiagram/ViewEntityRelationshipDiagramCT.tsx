@@ -85,6 +85,7 @@ const ViewEntityRelationshipDiagramCT = ({
           console.error(error);
           setConfirmMessage('Data Fetching Error');
           setConfirmPopupActive(true);
+          return handleLoaderFalse();
         }
 
         if (docSnap !== undefined && docSnap.exists()) {
@@ -96,8 +97,7 @@ const ViewEntityRelationshipDiagramCT = ({
           ) {
             setConfirmMessage('Invalid Detail ID!');
             setConfirmPopupActive(true);
-            handleLoaderFalse();
-            return;
+            return handleLoaderFalse();
           }
 
           const flow = JSON.parse(content);
@@ -139,7 +139,6 @@ const ViewEntityRelationshipDiagramCT = ({
           setConfirmMessage('Invalid Detail ID!');
           setConfirmPopupActive(true);
           handleLoaderFalse();
-          return;
         }
 
         handleLoaderFalse();

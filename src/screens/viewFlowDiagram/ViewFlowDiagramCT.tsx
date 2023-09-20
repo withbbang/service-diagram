@@ -61,6 +61,7 @@ const ViewFlowDiagramCT = ({
           console.error(error);
           setConfirmMessage('Data Fetching Error');
           setConfirmPopupActive(true);
+          return handleLoaderFalse();
         }
 
         if (docSnap !== undefined && docSnap.exists()) {
@@ -72,8 +73,7 @@ const ViewFlowDiagramCT = ({
           ) {
             setConfirmMessage('Invalid Detail ID!');
             setConfirmPopupActive(true);
-            handleLoaderFalse();
-            return;
+            return handleLoaderFalse();
           }
 
           const flow = JSON.parse(content);
@@ -98,8 +98,6 @@ const ViewFlowDiagramCT = ({
         } else {
           setConfirmMessage('Invalid Detail ID!');
           setConfirmPopupActive(true);
-          handleLoaderFalse();
-          return;
         }
 
         handleLoaderFalse();

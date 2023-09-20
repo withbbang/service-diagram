@@ -33,6 +33,7 @@ const ViewMermaidCT = ({
           console.error(error);
           setConfirmMessage('Data Fetching Error');
           setConfirmPopupActive(true);
+          return handleLoaderFalse();
         }
 
         if (docSnap !== undefined && docSnap.exists()) {
@@ -44,8 +45,7 @@ const ViewMermaidCT = ({
           ) {
             setConfirmMessage('Invalid Detail ID!');
             setConfirmPopupActive(true);
-            handleLoaderFalse();
-            return;
+            return handleLoaderFalse();
           }
 
           setTitle(title);
@@ -53,8 +53,6 @@ const ViewMermaidCT = ({
         } else {
           setConfirmMessage('Invalid Detail ID!');
           setConfirmPopupActive(true);
-          handleLoaderFalse();
-          return;
         }
 
         handleLoaderFalse();
