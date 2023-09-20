@@ -45,7 +45,7 @@ const IndexPT = ({
           <button onClick={() => onNavigate('mermaid')}>Mermaid</button>
           <button
             onClick={() => {
-              throw Error('Test Error Report!');
+              throw Error('Test Error Report!!!');
             }}
           >
             Test Error Report
