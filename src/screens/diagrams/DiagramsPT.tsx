@@ -9,6 +9,7 @@ import SVG from 'modules/SVG';
 const DiagramsPT = ({
   uid,
   uid_,
+  grade,
   type,
   title,
   contents,
@@ -52,7 +53,13 @@ const DiagramsPT = ({
         </div>
         <h2>{title}</h2>
         <div className={styles.innerWrap}>
-          <Card id={'0'} idx={-1} title={''} path={`/diagram/${type}/create`} />
+          <Card
+            id={'0'}
+            idx={-1}
+            title={''}
+            path={`/diagram/${type}/create`}
+            grade={grade}
+          />
           {Array.isArray(contents) &&
             contents.length > 0 &&
             contents.map((content: any, idx: number) => (
@@ -64,6 +71,7 @@ const DiagramsPT = ({
                 createDt={content.createDt}
                 type={type}
                 path={`/diagrams/${type}/${content.id}`}
+                grade={grade}
                 onDeleteBtn={onDeleteBtn}
               />
             ))}
@@ -76,6 +84,7 @@ const DiagramsPT = ({
 interface typeDiagramsPT {
   uid?: string;
   uid_: string;
+  grade?: number;
   type?: string;
   title: string;
   contents: Array<typeContent>;

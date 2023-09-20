@@ -9,7 +9,7 @@ import {
 import { app, auth } from 'modules/utils';
 import UpdateSequenceDiagramPT from './UpdateSequenceDiagramPT';
 import styles from 'components/functionPopup/FunctionPopup.module.scss';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
 import { onAuthStateChanged } from 'firebase/auth';
 
@@ -21,6 +21,7 @@ const UpdateSequenceDiagramCT = ({
   const db = getFirestore(app); // Firebase 객체
   const type = 'sequence'; // Firebase 컬렉션 이름
   const { contentId } = useParams();
+  const navigate = useNavigate();
 
   const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
   const [title, setTitle] = useState<string>(''); // 다이어그램 제목
@@ -42,14 +43,33 @@ const UpdateSequenceDiagramCT = ({
   useEffect(() => {
     if (uid !== undefined && uid !== null && uid !== '') {
       handleLoaderTrue();
-      onAuthStateChanged(auth, (user) => {
+      onAuthStateChanged(auth, async (user) => {
         if (user) {
           setUid_(user.uid);
+          const docSnap = await getDoc(doc(db, 'authority', user.uid));
+
+          if (docSnap !== undefined && docSnap.exists()) {
+            const { grade } = docSnap.data();
+
+            if (grade > 5) {
+              setConfirmMessage("You Don't Have Permission");
+              setConfirmPopupActive(true);
+              handleLoaderFalse();
+              navigate(-1);
+            }
+          } else {
+            setConfirmMessage('Nothing User Grade');
+            setConfirmPopupActive(true);
+          }
         }
         handleLoaderFalse();
       });
     } else {
       setUid_('');
+      setConfirmMessage("You Don't Have Permission");
+      setConfirmPopupActive(true);
+      handleLoaderFalse();
+      navigate(-1);
     }
   }, [uid]);
 

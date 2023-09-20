@@ -30,7 +30,7 @@ import {
   updateDoc
 } from 'firebase/firestore';
 import UpdateEntityRelationshipDiagramPT from './UpdateEntityRelationshipDiagramPT';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
 import { onAuthStateChanged } from 'firebase/auth';
 
@@ -77,6 +77,7 @@ const UpdateEntityRelationshipDiagramCT = ({
   const db = getFirestore(app); // Firebase 객체
   const type = 'entity-relationship'; // Firebase 컬렉션 이름
   const { contentId } = useParams();
+  const navigate = useNavigate();
 
   const tableTypes = useMemo(() => ({ table: Table }), []); // 커스텀 테이블 타입들
   const edgeTypes = useMemo(() => ({ normal: NormalEdge }), []); // 커스텀 엣지 타입들
@@ -122,14 +123,33 @@ const UpdateEntityRelationshipDiagramCT = ({
   useEffect(() => {
     if (uid !== undefined && uid !== null && uid !== '') {
       handleLoaderTrue();
-      onAuthStateChanged(auth, (user) => {
+      onAuthStateChanged(auth, async (user) => {
         if (user) {
           setUid_(user.uid);
+          const docSnap = await getDoc(doc(db, 'authority', user.uid));
+
+          if (docSnap !== undefined && docSnap.exists()) {
+            const { grade } = docSnap.data();
+
+            if (grade > 5) {
+              setConfirmMessage("You Don't Have Permission");
+              setConfirmPopupActive(true);
+              handleLoaderFalse();
+              navigate(-1);
+            }
+          } else {
+            setConfirmMessage('Nothing User Grade');
+            setConfirmPopupActive(true);
+          }
         }
         handleLoaderFalse();
       });
     } else {
       setUid_('');
+      setConfirmMessage("You Don't Have Permission");
+      setConfirmPopupActive(true);
+      handleLoaderFalse();
+      navigate(-1);
     }
   }, [uid]);
 

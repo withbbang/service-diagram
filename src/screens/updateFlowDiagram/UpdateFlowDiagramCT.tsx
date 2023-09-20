@@ -25,7 +25,7 @@ import SelfConnectingEdge from 'components/flow/customEdges/SelfConnectingEdge';
 import DiamondNode from 'components/flow/customNodes/DiamondNode';
 import RectangleNode from 'components/flow/customNodes/RectangleNode';
 import UpdateFlowDiagramPT from './UpdateFlowDiagramPT';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
 import { onAuthStateChanged } from 'firebase/auth';
 
@@ -51,6 +51,7 @@ const UpdateFlowDiagramCT = ({
   const db = getFirestore(app); // Firebase 객체
   const type = 'flow'; // Firebase 컬렉션 이름
   const { contentId } = useParams();
+  const navigate = useNavigate();
 
   const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
   const [id, setId] = useState<string>(''); // 노드 및 엣지 포커싱을 위한 id
@@ -87,11 +88,30 @@ const UpdateFlowDiagramCT = ({
   useEffect(() => {
     if (uid !== undefined && uid !== null && uid !== '') {
       handleLoaderTrue();
-      onAuthStateChanged(auth, (user) => {
+      onAuthStateChanged(auth, async (user) => {
         if (user) {
           setUid_(user.uid);
+          const docSnap = await getDoc(doc(db, 'authority', user.uid));
+
+          if (docSnap !== undefined && docSnap.exists()) {
+            const { grade } = docSnap.data();
+
+            if (grade > 5) {
+              setConfirmMessage("You Don't Have Permission");
+              setConfirmPopupActive(true);
+              handleLoaderFalse();
+              navigate(-1);
+            }
+          } else {
+            setConfirmMessage('Nothing User Grade');
+            setConfirmPopupActive(true);
+          }
         }
         handleLoaderFalse();
+        setConfirmMessage("You Don't Have Permission");
+        setConfirmPopupActive(true);
+        handleLoaderFalse();
+        navigate(-1);
       });
     } else {
       setUid_('');

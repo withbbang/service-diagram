@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { PropState } from 'middlewares/configureReducer';
@@ -8,8 +8,6 @@ import {
   handleLoaderFalse,
   handleLoaderTrue
 } from 'middlewares/reduxToolkits/commonSlice';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from 'modules/utils';
 import SVG from 'modules/SVG';
 import styles from './Card.module.scss';
 
@@ -29,30 +27,15 @@ const mapDispatchToProps = (dispatch: (actionFunction: Action<any>) => any) => {
 };
 
 const Card = ({
-  uid,
   id,
   title,
   createDt,
   type,
   path,
+  grade,
   onDeleteBtn
 }: typeCard): JSX.Element => {
   const navigate = useNavigate();
-  const [uid_, setUid_] = useState<string>('');
-
-  useEffect(() => {
-    if (uid !== undefined && uid !== null && uid !== '') {
-      handleLoaderTrue();
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          setUid_(user.uid);
-        }
-        handleLoaderFalse();
-      });
-    } else {
-      setUid_('');
-    }
-  }, [uid]);
 
   const handleUpdateBtn = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -70,12 +53,7 @@ const Card = ({
           </span>
         </div>
       )}
-      {id !== '0' &&
-      uid !== undefined &&
-      uid !== null &&
-      uid !== '' &&
-      uid_ !== '' &&
-      uid === uid_ ? (
+      {id !== '0' && grade !== undefined && grade < 10 ? (
         <div className={styles.floatBtns}>
           <span onClick={(e) => handleUpdateBtn(e)}>
             <SVG type="modify" width="20px" height="20px" />
@@ -105,6 +83,7 @@ interface typeCard extends CommonState {
   createDt?: string;
   type?: string;
   path: string;
+  grade?: number;
   onDeleteBtn?: (e: React.MouseEvent, selectedContentId: string) => void;
 }
 
