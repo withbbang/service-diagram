@@ -4,19 +4,16 @@ import { connect } from 'react-redux';
 import { PropState } from 'middlewares/configureReducer';
 import { Action } from '@reduxjs/toolkit';
 import { SHA256 } from 'crypto-js';
-import { doc, getDoc } from 'firebase/firestore';
-import { getFirestore } from 'firebase/firestore';
 import {
   CommonState,
   handleLoaderFalse,
   handleLoaderTrue,
-  handleSetUid,
-  handleSetGrade
+  handleSetUid
 } from 'middlewares/reduxToolkits/commonSlice';
 import styles from './SignIn.module.scss';
 import Loader from 'components/loader';
 import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
-import { auth, app } from 'modules/utils';
+import { auth } from 'modules/utils';
 import { useNavigate } from 'react-router-dom';
 
 const mapStateToProps = (state: PropState): CommonState => {
@@ -33,9 +30,6 @@ const mapDispatchToProps = (dispatch: (actionFunction: Action<any>) => any) => {
     },
     handleSetUid: (uid: string): void => {
       dispatch(handleSetUid({ uid }));
-    },
-    handleSetGrade: (grade: number): void => {
-      dispatch(handleSetGrade({ grade }));
     }
   };
 };
@@ -44,13 +38,10 @@ const SignIn = ({
   uid,
   handleLoaderTrue,
   handleLoaderFalse,
-  handleSetUid,
-  handleSetGrade
+  handleSetUid
 }: typeSignIn): JSX.Element => {
   const navigate = useNavigate();
 
-  const db = getFirestore(app);
-  const type = 'authority';
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false);
@@ -101,20 +92,7 @@ const SignIn = ({
         encryptPassword
       );
 
-      const uid = userCredential.user.uid;
-      handleSetUid(uid);
-
-      const docSnap = await getDoc(doc(db, type, uid));
-
-      if (docSnap !== undefined && docSnap.exists()) {
-        const { grade } = docSnap.data();
-        handleSetGrade(grade);
-      } else {
-        setConfirmMessage('Nothing User Grade');
-        setConfirmPopupActive(true);
-        return;
-      }
-
+      handleSetUid(userCredential.user.uid);
       navigate('/', { replace: true });
     } catch (error) {
       console.error(error);
@@ -173,7 +151,6 @@ interface typeSignIn extends CommonState {
   handleLoaderTrue: () => void;
   handleLoaderFalse: () => void;
   handleSetUid: (uid: string) => void;
-  handleSetGrade: (grade: number) => void;
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
