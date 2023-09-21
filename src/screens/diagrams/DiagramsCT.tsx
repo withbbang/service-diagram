@@ -64,8 +64,7 @@ const DiagramsCT = ({
           const docSnap = await getDoc(doc(db, 'authority', user.uid));
 
           if (docSnap !== undefined && docSnap.exists()) {
-            const { grade } = docSnap.data();
-            setGrade(grade);
+            setGrade(docSnap.data().grade);
           } else {
             setConfirmMessage('Nothing User Grade');
             setConfirmPopupActive(true);

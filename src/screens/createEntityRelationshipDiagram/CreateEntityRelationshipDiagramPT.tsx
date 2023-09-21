@@ -19,10 +19,10 @@ import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
 import styles from './CreateEntityRelationshipDiagram.module.scss';
 import 'reactflow/dist/style.css';
 import Column from 'components/entityRelationship/Column';
+import { handleHasPermission } from 'modules/utils';
 
 const CreateErdDiagramPT = ({
-  uid,
-  uid_,
+  grade,
   title,
   isDone,
   tableName,
@@ -125,11 +125,7 @@ const CreateErdDiagramPT = ({
             <button onClick={() => onRestore()}>
               Restore Temporary Diagrams
             </button>
-            {uid !== undefined &&
-            uid !== null &&
-            uid !== '' &&
-            uid_ !== '' &&
-            uid === uid_ ? (
+            {handleHasPermission(['c'], grade) ? (
               <button onClick={onSaveBtn}>Permanently Save Diagrams</button>
             ) : (
               ''
@@ -257,8 +253,7 @@ const CreateErdDiagramPT = ({
 };
 
 interface typeCreateErdDiagramPT {
-  uid?: string;
-  uid_: string;
+  grade?: number;
   title: string;
   isDone: string;
   tableName: string;

@@ -18,10 +18,10 @@ import Loader from 'components/loader';
 import styles from './CreateFlowDiagram.module.scss';
 import 'driver.js/dist/driver.css';
 import 'reactflow/dist/style.css';
+import { handleHasPermission } from 'modules/utils';
 
 const CreateFlowDiagramPT = ({
-  uid,
-  uid_,
+  grade,
   title,
   nodeName,
   edgeName,
@@ -130,11 +130,7 @@ const CreateFlowDiagramPT = ({
                 Temporarily Save Diagrams
               </button>
               <button onClick={onRestore}>Restore Temporary Diagrams</button>
-              {uid !== undefined &&
-              uid !== null &&
-              uid !== '' &&
-              uid_ !== '' &&
-              uid === uid_ ? (
+              {handleHasPermission(['c'], grade) ? (
                 <button onClick={onSaveBtn}>Permanently Save Diagrams</button>
               ) : (
                 ''
@@ -148,8 +144,7 @@ const CreateFlowDiagramPT = ({
 };
 
 interface typeCreateFlowDiagramPT {
-  uid?: string;
-  uid_: string;
+  grade?: number;
   title: string;
   nodeName: string;
   edgeName: string;

@@ -23,6 +23,8 @@ import NormalEdge from 'components/entityRelationship/CustomEdges/NormalEdge';
 import { typeColumn } from 'modules/types';
 import { app, auth, handleRandomString } from 'modules/utils';
 import {
+  doc,
+  getDoc,
   addDoc,
   collection,
   getFirestore,
@@ -78,7 +80,7 @@ const CreateErdDiagramCT = ({
   const tableTypes = useMemo(() => ({ table: Table }), []); // 커스텀 테이블 타입들
   const edgeTypes = useMemo(() => ({ normal: NormalEdge }), []); // 커스텀 엣지 타입들
 
-  const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
+  const [grade, setGrade] = useState<number | undefined>(); // 로그인 사용자 등급
   const [title, setTitle] = useState<string>(''); // 다이어그램 제목
   const [isDone, setIsDone] = useState<string>('N'); // 완료 여부
   const [tableName, setTableName] = useState<string>(initTableName); // 테이블 이름
@@ -119,14 +121,16 @@ const CreateErdDiagramCT = ({
   useEffect(() => {
     if (uid !== undefined && uid !== null && uid !== '') {
       handleLoaderTrue();
-      onAuthStateChanged(auth, (user) => {
+      onAuthStateChanged(auth, async (user) => {
         if (user) {
-          setUid_(user.uid);
+          const docSnap = await getDoc(doc(db, 'authority', user.uid));
+
+          if (docSnap !== undefined && docSnap.exists())
+            setGrade(docSnap.data().grade);
         }
+
         handleLoaderFalse();
       });
-    } else {
-      setUid_('');
     }
   }, [uid]);
 
@@ -554,8 +558,7 @@ const CreateErdDiagramCT = ({
 
   return (
     <CreateErdDiagramPT
-      uid={uid}
-      uid_={uid_}
+      grade={grade}
       title={title}
       isDone={isDone}
       tableName={tableName}

@@ -10,6 +10,7 @@ import {
 } from 'middlewares/reduxToolkits/commonSlice';
 import SVG from 'modules/SVG';
 import styles from './Card.module.scss';
+import { handleHasPermission } from 'modules/utils';
 
 const mapStateToProps = (state: PropState): CommonState => {
   return { ...state.common };
@@ -53,7 +54,7 @@ const Card = ({
           </span>
         </div>
       )}
-      {id !== '0' && grade !== undefined && grade < 10 ? (
+      {id !== '0' && handleHasPermission(['u', 'd'], grade) ? (
         <div className={styles.floatBtns}>
           <span onClick={(e) => handleUpdateBtn(e)}>
             <SVG type="modify" width="20px" height="20px" />

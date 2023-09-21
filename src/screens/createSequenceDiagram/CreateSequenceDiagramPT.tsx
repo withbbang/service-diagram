@@ -5,10 +5,10 @@ import SVG from 'modules/SVG';
 import FunctionPopup from 'components/functionPopup/FunctionPopup';
 import Loader from 'components/loader';
 import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
+import { handleHasPermission } from 'modules/utils';
 
 const CreateSequenceDiagramPT = ({
-  uid,
-  uid_,
+  grade,
   title,
   content,
   isFunctionPopupActive,
@@ -37,11 +37,7 @@ const CreateSequenceDiagramPT = ({
       />
       <div className={styles.wrap}>
         <div className={styles.innerWrap}>
-          {uid !== undefined &&
-          uid !== null &&
-          uid !== '' &&
-          uid_ !== '' &&
-          uid === uid_ ? (
+          {handleHasPermission(['c'], grade) ? (
             <button className={styles.saveBtn} onClick={onSaveBtn}>
               Save
             </button>
@@ -62,8 +58,7 @@ const CreateSequenceDiagramPT = ({
 };
 
 interface typeCreateSequenceDiagramPT {
-  uid?: string;
-  uid_: string;
+  grade?: number;
   title: string;
   content: string;
   isFunctionPopupActive: boolean;

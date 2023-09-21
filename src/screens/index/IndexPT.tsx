@@ -10,7 +10,8 @@ const IndexPT = ({
   onSignIn,
   // onSignUp,
   onSignOut,
-  onNavigate
+  onNavigate,
+  onTestErrorReport
 }: typeIndexPT): JSX.Element => {
   return (
     <>
@@ -43,13 +44,7 @@ const IndexPT = ({
             Entity-Relationship Diagrams
           </button>
           <button onClick={() => onNavigate('mermaid')}>Mermaid</button>
-          <button
-            onClick={() => {
-              throw Error('Test Error Report!!!');
-            }}
-          >
-            Test Error Report
-          </button>
+          <button onClick={() => onTestErrorReport()}>Test Error Report</button>
         </div>
       </div>
     </>
@@ -64,6 +59,7 @@ interface typeIndexPT {
   onSignUp: () => void;
   onSignOut: () => void;
   onNavigate: (type: string) => void;
+  onTestErrorReport: () => void;
 }
 
 export default IndexPT;

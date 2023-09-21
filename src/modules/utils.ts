@@ -36,6 +36,35 @@ export function handleConvertTimestamp(
     : `${hours}:${minutes}:${seconds}`;
 }
 
+/**
+ * 유저 권한 검증 함수
+ * @param {Array<string>} arrayOfPermission
+ * @param {number | undefined} grade
+ * @returns {boolean}
+ */
+export function handleHasPermission(
+  arrayOfPermission: Array<string>,
+  grade?: number
+): boolean {
+  // 게시물 및 유저 관리 권한
+  const permissions: { [key: number]: string } = {
+    0: 'crudm', // create, read, update, delete, modify member
+    5: 'crud', // create, read, update, delete
+    10: 'cr', // create, read
+    15: 'r' // read
+  };
+
+  if (grade !== undefined) {
+    const valueOfPermission = permissions[grade];
+
+    return arrayOfPermission.every((permission) =>
+      valueOfPermission.includes(permission)
+    );
+  } else {
+    return false;
+  }
+}
+
 export const app = initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_APP_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,

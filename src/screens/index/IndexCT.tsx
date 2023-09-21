@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import * as Sentry from '@sentry/react';
 import IndexPT from './IndexPT';
 import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -51,6 +52,14 @@ const IndexCT = ({
       : alert('Type 정의 오류!');
   };
 
+  const handleTestErrorReport = () => {
+    try {
+      throw new Error('Test Error Report!!!');
+    } catch (err) {
+      Sentry.captureException('Test Error Report!!!');
+    }
+  };
+
   return (
     <IndexPT
       uid={uid}
@@ -60,6 +69,7 @@ const IndexCT = ({
       onSignUp={handleSignUp}
       onSignOut={handleSignOut}
       onNavigate={handleNavigate}
+      onTestErrorReport={handleTestErrorReport}
     />
   );
 };

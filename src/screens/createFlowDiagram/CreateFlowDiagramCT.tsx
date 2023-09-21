@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
+  doc,
+  getDoc,
   addDoc,
   collection,
   getFirestore,
@@ -132,7 +134,7 @@ const CreateFlowDiagramCT = ({
   const db = getFirestore(app); // Firebase 객체
   const type = 'flow'; // Firebase 컬렉션 이름
 
-  const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
+  const [grade, setGrade] = useState<number | undefined>(); // 로그인 사용자 등급
   const [id, setId] = useState<string>(''); // 노드 및 엣지 포커싱을 위한 id
   const [title, setTitle] = useState<string>(''); // 다이어그램 제목
   const [nodeName, setNodeName] = useState<string>(''); // 노드 이름
@@ -172,14 +174,16 @@ const CreateFlowDiagramCT = ({
   useEffect(() => {
     if (uid !== undefined && uid !== null && uid !== '') {
       handleLoaderTrue();
-      onAuthStateChanged(auth, (user) => {
+      onAuthStateChanged(auth, async (user) => {
         if (user) {
-          setUid_(user.uid);
+          const docSnap = await getDoc(doc(db, 'authority', user.uid));
+
+          if (docSnap !== undefined && docSnap.exists())
+            setGrade(docSnap.data().grade);
         }
+
         handleLoaderFalse();
       });
-    } else {
-      setUid_('');
     }
   }, [uid]);
 
@@ -561,8 +565,7 @@ const CreateFlowDiagramCT = ({
 
   return (
     <CreateFlowDiagramPT
-      uid={uid}
-      uid_={uid_}
+      grade={grade}
       title={title}
       nodeName={nodeName}
       edgeName={edgeName}
