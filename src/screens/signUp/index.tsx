@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+  doc,
+  setDoc,
+  addDoc,
+  collection,
+  getFirestore,
+  serverTimestamp
+} from 'firebase/firestore';
 import { connect } from 'react-redux';
 import { PropState } from 'middlewares/configureReducer';
 import { Action } from '@reduxjs/toolkit';
@@ -12,7 +20,7 @@ import {
 import styles from './SignUp.module.scss';
 import Loader from 'components/loader';
 import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
-import { auth } from 'modules/utils';
+import { app, auth } from 'modules/utils';
 import { useNavigate } from 'react-router-dom';
 
 const mapStateToProps = (state: PropState): CommonState => {
@@ -35,6 +43,9 @@ const SignUp = ({
   handleLoaderTrue,
   handleLoaderFalse
 }: typeSignUp): JSX.Element => {
+  const db = getFirestore(app); // Firebase 객체
+  const type = 'authority'; // Firebase 컬렉션 이름
+
   const navigate = useNavigate();
 
   const [email, setEmail] = useState<string>('');
@@ -54,7 +65,7 @@ const SignUp = ({
     }
   };
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     if (!email) {
       setConfirmMessage('Empty Email Field');
       setConfirmPopupActive(true);
@@ -69,17 +80,34 @@ const SignUp = ({
 
     handleLoaderTrue();
 
-    const encryptPassword = SHA256(password).toString();
+    let encryptPassword;
+    try {
+      encryptPassword = SHA256(password).toString();
+    } catch (error) {
+      console.error(error);
+      setConfirmMessage('Password Encrypting Error');
+      setConfirmPopupActive(true);
+      return handleLoaderFalse();
+    }
 
-    createUserWithEmailAndPassword(auth, email, encryptPassword)
-      .then((userCredential) => {
-        navigate('/sign/in', { replace: true });
-      })
-      .catch((error) => {
-        setConfirmMessage(error.message);
-        setConfirmPopupActive(true);
-      })
-      .finally(() => handleLoaderFalse());
+    try {
+      const {
+        user: { uid }
+      } = await createUserWithEmailAndPassword(auth, email, encryptPassword);
+
+      await setDoc(doc(db, type, uid), {
+        grade: 20
+      });
+
+      navigate('/sign/in', { replace: true });
+    } catch (error) {
+      console.error(error);
+      setConfirmMessage('User Credential Error');
+      setConfirmPopupActive(true);
+      return;
+    } finally {
+      handleLoaderFalse();
+    }
   };
 
   const handleCancel = () => {

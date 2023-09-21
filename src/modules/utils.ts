@@ -51,7 +51,8 @@ export function handleHasPermission(
     0: 'crudm', // create, read, update, delete, modify member
     5: 'crud', // create, read, update, delete
     10: 'cr', // create, read
-    15: 'r' // read
+    15: 'r', // read
+    20: '' // no permission
   };
 
   if (grade !== undefined) {
