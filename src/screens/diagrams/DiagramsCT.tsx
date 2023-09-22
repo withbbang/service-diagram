@@ -33,7 +33,7 @@ const DiagramsCT = ({
   const { type } = useParams(); // 다이어그램 타입
 
   const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
-  const [grade, setGrade] = useState<number | undefined>(); // 유저 등급
+  const [grade, setGrade] = useState<number>(20); // 유저 등급
   const [title, setTitle] = useState<string>(''); // 선택한 다이어그램에 따른 제목
   const [contents, setContents] = useState<Array<typeContent>>([]); // 선택한 다이어그램들 배열 훅
   const [selectedContentId, setSelectedContentId] = useState<string>(''); // 다어그램들 중 선택한 놈 id
@@ -44,6 +44,10 @@ const DiagramsCT = ({
   useEffect(() => {
     handleSetTitle();
   }, []);
+
+  useEffect(() => {
+    type && handleGetContents(type);
+  }, [grade]);
 
   // 로그인 여부 판단 훅
   useEffect(() => {
@@ -61,13 +65,13 @@ const DiagramsCT = ({
             setConfirmPopupActive(true);
           }
         }
-        type && (await handleGetContents(type));
+
         handleLoaderFalse();
       });
     } else {
       setUid_('');
     }
-  }, [uid_]);
+  }, [uid]);
 
   // 로그인 여부에 따른 다이어그램들 가져오기
   const handleGetContents = async (type: string) => {
