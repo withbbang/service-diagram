@@ -6,7 +6,7 @@ import {
   serverTimestamp,
   updateDoc
 } from 'firebase/firestore';
-import { app, auth } from 'modules/utils';
+import { app, auth, handleHasPermission } from 'modules/utils';
 import UpdateMermaidPT from './UpdateMermaidPT';
 import styles from 'components/functionPopup/FunctionPopup.module.scss';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -51,7 +51,7 @@ const UpdateMermaidCT = ({
           if (docSnap !== undefined && docSnap.exists()) {
             const { grade } = docSnap.data();
 
-            if (grade > 5) {
+            if (!handleHasPermission(['u'], grade)) {
               setConfirmMessage("You Don't Have Permission");
               setConfirmPopupActive(true);
               handleLoaderFalse();

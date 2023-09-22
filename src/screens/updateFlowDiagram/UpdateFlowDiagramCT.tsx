@@ -6,7 +6,12 @@ import {
   serverTimestamp,
   updateDoc
 } from 'firebase/firestore';
-import { app, auth, handleRandomString } from 'modules/utils';
+import {
+  app,
+  auth,
+  handleHasPermission,
+  handleRandomString
+} from 'modules/utils';
 import {
   Connection,
   Edge,
@@ -96,7 +101,7 @@ const UpdateFlowDiagramCT = ({
           if (docSnap !== undefined && docSnap.exists()) {
             const { grade } = docSnap.data();
 
-            if (grade > 5) {
+            if (!handleHasPermission(['u'], grade)) {
               setConfirmMessage("You Don't Have Permission");
               setConfirmPopupActive(true);
               handleLoaderFalse();

@@ -21,7 +21,12 @@ import {
 import Table from 'components/entityRelationship/CustomNodes/Table';
 import NormalEdge from 'components/entityRelationship/CustomEdges/NormalEdge';
 import { typeColumn } from 'modules/types';
-import { app, auth, handleRandomString } from 'modules/utils';
+import {
+  app,
+  auth,
+  handleHasPermission,
+  handleRandomString
+} from 'modules/utils';
 import {
   doc,
   getDoc,
@@ -131,7 +136,7 @@ const UpdateEntityRelationshipDiagramCT = ({
           if (docSnap !== undefined && docSnap.exists()) {
             const { grade } = docSnap.data();
 
-            if (grade > 5) {
+            if (!handleHasPermission(['u'], grade)) {
               setConfirmMessage("You Don't Have Permission");
               setConfirmPopupActive(true);
               handleLoaderFalse();
