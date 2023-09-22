@@ -1,4 +1,4 @@
 [TODO]
-1. flow diagram, user guide 도중 특정 노드 및 엣지 포커징 on/off
-2. sequence diagram, user guide 생성
-3. entity relationship diagram, user guide 생성
+
+1. 오류가 sentry에 올라가지 않는 버그 잡아야함
+2. 최하 유저 등급이 보이는 다이어그램 제한 필요

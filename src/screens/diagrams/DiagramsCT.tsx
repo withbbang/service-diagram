@@ -12,7 +12,12 @@ import {
   orderBy
 } from 'firebase/firestore';
 import DiagramsPT from './DiagramsPT';
-import { app, auth, handleConvertTimestamp } from 'modules/utils';
+import {
+  app,
+  auth,
+  handleConvertTimestamp,
+  handleHasPermission
+} from 'modules/utils';
 import { typeContent } from 'modules/types';
 import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -37,22 +42,8 @@ const DiagramsCT = ({
 
   // 선택된 다이어그램에 따라 title 설정 및 다이어그램들 가져오기
   useEffect(() => {
-    (async () => {
-      if (type !== undefined) {
-        handleGetContents(type);
-
-        if (type === 'sequence') {
-          setTitle('Sequence Diagrams');
-        } else if (type === 'flow') {
-          setTitle('Flow Diagrams');
-        } else if (type === 'entity-relationship') {
-          setTitle('Entity-Relationship Diagrams');
-        } else if (type === 'mermaid') {
-          setTitle('Mermaid');
-        }
-      }
-    })();
-  }, [uid_]);
+    handleSetTitle();
+  }, []);
 
   // 로그인 여부 판단 훅
   useEffect(() => {
@@ -70,12 +61,13 @@ const DiagramsCT = ({
             setConfirmPopupActive(true);
           }
         }
+        type && (await handleGetContents(type));
         handleLoaderFalse();
       });
     } else {
       setUid_('');
     }
-  }, [uid]);
+  }, [uid_]);
 
   // 로그인 여부에 따른 다이어그램들 가져오기
   const handleGetContents = async (type: string) => {
@@ -87,7 +79,8 @@ const DiagramsCT = ({
         uid !== null &&
         uid !== '' &&
         uid_ !== '' &&
-        uid === uid_
+        uid === uid_ &&
+        handleHasPermission(['r'], grade)
           ? query(collection(db, type), orderBy('createDt', 'desc')) // 로그인 O
           : query(
               collection(db, type),
@@ -113,6 +106,20 @@ const DiagramsCT = ({
       setConfirmPopupActive(true);
     } finally {
       handleLoaderFalse();
+    }
+  };
+
+  const handleSetTitle = () => {
+    if (type !== undefined) {
+      if (type === 'sequence') {
+        setTitle('Sequence Diagrams');
+      } else if (type === 'flow') {
+        setTitle('Flow Diagrams');
+      } else if (type === 'entity-relationship') {
+        setTitle('Entity-Relationship Diagrams');
+      } else if (type === 'mermaid') {
+        setTitle('Mermaid');
+      }
     }
   };
 
