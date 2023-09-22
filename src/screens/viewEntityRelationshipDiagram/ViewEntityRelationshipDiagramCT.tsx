@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { getFirestore } from 'firebase/firestore';
-import { app } from 'modules/utils';
+import { app, handleHasPermission } from 'modules/utils';
 import { doc, getDoc } from 'firebase/firestore';
 import {
   Edge,
@@ -72,7 +72,7 @@ const ViewEntityRelationshipDiagramCT = ({
   const [edges, setEdges] = useEdgesState(initialEdges); // 엣지 수정 hook
   const { setViewport } = useReactFlow();
 
-  // 다이어그램 초기 불러오기
+  // 초기 다이어그램 불러오기
   useEffect(() => {
     (async () => {
       if (id !== undefined) {
@@ -93,7 +93,10 @@ const ViewEntityRelationshipDiagramCT = ({
 
           if (
             isDone !== 'Y' &&
-            (uid === undefined || uid === null || uid === '')
+            (uid === undefined ||
+              uid === null ||
+              uid === '' ||
+              !handleHasPermission(['r'], await handleGetGrade()))
           ) {
             setConfirmMessage('Invalid Detail ID!');
             setConfirmPopupActive(true);
@@ -148,6 +151,17 @@ const ViewEntityRelationshipDiagramCT = ({
       }
     })();
   }, []);
+
+  // 로그인 되어있을 경우 grade 반환 함수
+  const handleGetGrade = async () => {
+    if (uid !== undefined && uid !== null && uid !== '') {
+      const docSnap = await getDoc(doc(db, 'authority', uid));
+
+      if (docSnap !== undefined && docSnap.exists()) {
+        return docSnap.data().grade;
+      }
+    }
+  };
 
   // confirm 팝업 확인/취소 버튼
   const handleConfirm = () => {
