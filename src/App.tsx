@@ -25,16 +25,13 @@ const App = (): JSX.Element => {
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/diagrams/:type" element={<Diagrams />} />
+        <Route path="/diagram/sequence/:id" element={<ViewSequenceDiagram />} />
+        <Route path="/diagram/flow/:id" element={<ViewFlowDiagram />} />
         <Route
-          path="/diagrams/sequence/:id"
-          element={<ViewSequenceDiagram />}
-        />
-        <Route path="/diagrams/flow/:id" element={<ViewFlowDiagram />} />
-        <Route
-          path="/diagrams/entity-relationship/:id"
+          path="/diagram/entity-relationship/:id"
           element={<ViewEntityRelationshipDiagram />}
         />
-        <Route path="/diagrams/mermaid/:id" element={<ViewMermaid />} />
+        <Route path="/diagram/mermaid/:id" element={<ViewMermaid />} />
         <Route
           path="/diagram/sequence/create"
           element={<CreateSequencDiagram />}

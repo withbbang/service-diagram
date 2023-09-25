@@ -7,6 +7,7 @@ import {
   getFirestore,
   serverTimestamp
 } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 import { app, auth } from 'modules/utils';
 import CreateMermaidPT from './CreateMermaidPT';
 import styles from 'components/functionPopup/FunctionPopup.module.scss';
@@ -20,6 +21,7 @@ const CreateMermaidCT = ({
 }: typeCreateMermaidCT): JSX.Element => {
   const db = getFirestore(app); // Firebase 객체
   const type = 'mermaid'; // Firebase 컬렉션 이름
+  const navigate = useNavigate();
 
   const [grade, setGrade] = useState<number | undefined>(); // 로그인 사용자 등급
   const [title, setTitle] = useState<string>(''); // 다이어그램 제목
@@ -121,13 +123,15 @@ const CreateMermaidCT = ({
     setConfirmPopupActive(false);
     handleLoaderTrue();
     try {
-      await addDoc(collection(db, type), {
+      const { id } = await addDoc(collection(db, type), {
         title,
         content,
         isDone,
         createDt: serverTimestamp(),
         updateDt: ''
       });
+
+      navigate(`/diagram/${type}/${id}`, { replace: true });
     } catch (error) {
       console.error(error);
       setConfirmMessage('Data Saving Error');

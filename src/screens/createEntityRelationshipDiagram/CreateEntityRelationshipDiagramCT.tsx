@@ -18,6 +18,7 @@ import {
   Connection,
   useUpdateNodeInternals
 } from 'reactflow';
+import { useNavigate } from 'react-router-dom';
 import Table from 'components/entityRelationship/CustomNodes/Table';
 import NormalEdge from 'components/entityRelationship/CustomEdges/NormalEdge';
 import { typeColumn } from 'modules/types';
@@ -76,6 +77,7 @@ const CreateErdDiagramCT = ({
 }: typeCreateErdDiagramCT): JSX.Element => {
   const db = getFirestore(app); // Firebase 객체
   const type = 'entity-relationship'; // Firebase 컬렉션 이름
+  const navigate = useNavigate();
 
   const tableTypes = useMemo(() => ({ table: Table }), []); // 커스텀 테이블 타입들
   const edgeTypes = useMemo(() => ({ normal: NormalEdge }), []); // 커스텀 엣지 타입들
@@ -521,13 +523,15 @@ const CreateErdDiagramCT = ({
       setConfirmPopupActive(false);
       handleLoaderTrue();
       try {
-        await addDoc(collection(db, type), {
+        const { id } = await addDoc(collection(db, type), {
           title,
           content: JSON.stringify(rfInstance.toObject()),
           isDone,
           createDt: serverTimestamp(),
           updateDt: ''
         });
+
+        navigate(`/diagram/${type}/${id}`, { replace: true });
       } catch (error) {
         console.error(error);
         setConfirmMessage('Data Saving Error');

@@ -7,7 +7,7 @@ import {
   getFirestore,
   serverTimestamp
 } from 'firebase/firestore';
-import { app, auth, handleRandomString } from 'modules/utils';
+import { useNavigate } from 'react-router-dom';
 import {
   Connection,
   Edge,
@@ -23,6 +23,7 @@ import {
   ReactFlowProvider
 } from 'reactflow';
 import { driver } from 'driver.js';
+import { app, auth, handleRandomString } from 'modules/utils';
 import SelfConnectingEdge from 'components/flow/customEdges/SelfConnectingEdge';
 import DiamondNode from 'components/flow/customNodes/DiamondNode';
 import RectangleNode from 'components/flow/customNodes/RectangleNode';
@@ -133,6 +134,7 @@ const CreateFlowDiagramCT = ({
 }: typeCreateFlowDiagramCT): JSX.Element => {
   const db = getFirestore(app); // Firebase 객체
   const type = 'flow'; // Firebase 컬렉션 이름
+  const navigate = useNavigate();
 
   const [grade, setGrade] = useState<number | undefined>(); // 로그인 사용자 등급
   const [id, setId] = useState<string>(''); // 노드 및 엣지 포커싱을 위한 id
@@ -405,13 +407,15 @@ const CreateFlowDiagramCT = ({
     setConfirmPopupActive(false);
     handleLoaderTrue();
     try {
-      await addDoc(collection(db, type), {
+      const { id } = await addDoc(collection(db, type), {
         title,
         content: JSON.stringify(rfInstance.toObject()),
         isDone,
         createDt: serverTimestamp(),
         updateDt: ''
       });
+
+      navigate(`/diagram/${type}/${id}`, { replace: true });
     } catch (error) {
       console.error(error);
       setConfirmMessage('Data Saving Error');
