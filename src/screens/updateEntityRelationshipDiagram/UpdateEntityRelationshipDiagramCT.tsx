@@ -613,6 +613,8 @@ const UpdateEntityRelationshipDiagramCT = ({
             isDone,
             updateDt: serverTimestamp()
           });
+
+          navigate(`/diagram/${type}/${contentId}`);
         } catch (error) {
           console.error(error);
           setConfirmMessage('Data Updating Error');
