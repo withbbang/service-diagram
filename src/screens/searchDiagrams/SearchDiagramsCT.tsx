@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
-import { app, auth, handleConvertTimestamp } from 'modules/utils';
 import {
+  app,
+  auth,
+  handleConvertTimestamp,
+  handleHasPermission
+} from 'modules/utils';
+import {
+  doc,
+  getDoc,
   collection,
   getDocs,
   getFirestore,
@@ -18,9 +25,9 @@ const SearchDiagramsCT = ({
   handleLoaderFalse
 }: typeSearchDiagramsCT): JSX.Element => {
   const db = getFirestore(app); // Firebase 객체
-  const types = ['sequence', 'flow', 'entity-relationship']; // 다이어그램 타입들
+  const types = ['sequence', 'flow', 'entity-relationship', 'mermaid']; // 다이어그램 타입들
 
-  const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
+  const [grade, setGrade] = useState<number | undefined>(); // 로그인 사용자 등급
   const [snippet, setSnippet] = useState<string>(''); // 검색어
   const [didSearch, setDidSearch] = useState<boolean>(false); // 검색 여부
   const [contents, setContents] = useState<Array<any>>([]); // 선택한 다이어그램들 배열 훅
@@ -33,14 +40,15 @@ const SearchDiagramsCT = ({
   useEffect(() => {
     if (uid !== undefined && uid !== null && uid !== '') {
       handleLoaderTrue();
-      onAuthStateChanged(auth, (user) => {
+      onAuthStateChanged(auth, async (user) => {
         if (user) {
-          setUid_(user.uid);
+          const docSnap = await getDoc(doc(db, 'authority', user.uid));
+
+          if (docSnap !== undefined && docSnap.exists())
+            setGrade(docSnap.data().grade);
         }
         handleLoaderFalse();
       });
-    } else {
-      setUid_('');
     }
   }, [uid]);
 
@@ -48,35 +56,27 @@ const SearchDiagramsCT = ({
   const handleGetContents = async () => {
     handleLoaderTrue();
     try {
-      const queries =
-        uid !== undefined &&
-        uid !== null &&
-        uid !== '' &&
-        uid_ !== '' &&
-        uid === uid_
-          ? [
-              ...types.map((type) => {
-                return {
-                  type,
-                  query: query(
-                    collection(db, type),
-                    orderBy('createDt', 'desc')
-                  )
-                };
-              })
-            ] // 로그인 O
-          : [
-              ...types.map((type) => {
-                return {
-                  type,
-                  query: query(
-                    collection(db, type),
-                    where('isDone', '==', 'Y'),
-                    orderBy('createDt', 'desc')
-                  )
-                };
-              })
-            ]; // 로그인 X
+      const queries = handleHasPermission(['r'], grade)
+        ? [
+            ...types.map((type) => {
+              return {
+                type,
+                query: query(collection(db, type), orderBy('createDt', 'desc'))
+              };
+            })
+          ] // 로그인 O
+        : [
+            ...types.map((type) => {
+              return {
+                type,
+                query: query(
+                  collection(db, type),
+                  where('isDone', '==', 'Y'),
+                  orderBy('createDt', 'desc')
+                )
+              };
+            })
+          ]; // 로그인 X
 
       const querySnapshots = await Promise.all(
         queries.map(async ({ type, query }) => {
