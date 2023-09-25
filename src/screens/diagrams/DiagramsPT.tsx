@@ -70,7 +70,7 @@ const DiagramsPT = ({
                 title={content.title}
                 createDt={content.createDt}
                 type={type}
-                path={`/diagrams/${type}/${content.id}`}
+                path={`/diagram/${type}/${content.id}`}
                 grade={grade}
                 onDeleteBtn={onDeleteBtn}
               />
