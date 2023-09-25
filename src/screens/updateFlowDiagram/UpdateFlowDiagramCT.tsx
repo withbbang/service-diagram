@@ -104,8 +104,8 @@ const UpdateFlowDiagramCT = ({
             if (!handleHasPermission(['u'], grade)) {
               setConfirmMessage("You Don't Have Permission");
               setConfirmPopupActive(true);
-              handleLoaderFalse();
-              navigate(-1);
+            } else {
+              await handleSetContent();
             }
           } else {
             setConfirmMessage('Nothing User Grade');
@@ -113,60 +113,14 @@ const UpdateFlowDiagramCT = ({
           }
         }
         handleLoaderFalse();
-        setConfirmMessage("You Don't Have Permission");
-        setConfirmPopupActive(true);
-        handleLoaderFalse();
-        navigate(-1);
       });
     } else {
       setUid_('');
+      setConfirmMessage("You Don't Have Permission");
+      setConfirmPopupActive(true);
+      return handleLoaderFalse();
     }
   }, [uid]);
-
-  // 초기 다이어그램 불러오기
-  useEffect(() => {
-    (async () => {
-      if (contentId !== undefined) {
-        handleLoaderTrue();
-
-        let docSnap;
-        try {
-          docSnap = await getDoc(doc(db, type, contentId));
-        } catch (error) {
-          console.error(error);
-          setConfirmMessage('Data Fetching Error');
-          setConfirmPopupActive(true);
-        }
-
-        if (docSnap !== undefined && docSnap.exists()) {
-          const { title, content, isDone } = docSnap.data();
-
-          setTitle(title);
-          setIsDone(isDone);
-
-          if (content) {
-            const flow = JSON.parse(content);
-
-            if (flow) {
-              const { x = 0, y = 0, zoom = 1 } = flow.viewport;
-              setNodes(
-                flow.nodes.map((node: Node) => {
-                  const { data, width, height } = node;
-                  return { ...node, data: { ...data, width, height } };
-                }) || []
-              );
-              setEdges(flow.edges || []);
-              setViewport({ x, y, zoom });
-            }
-          }
-        }
-        handleLoaderFalse();
-      } else {
-        setConfirmMessage('No Document Detail ID!');
-        setConfirmPopupActive(true);
-      }
-    })();
-  }, []);
 
   // 노드 이름 변경시 작동
   useEffect(() => {
@@ -373,6 +327,46 @@ const UpdateFlowDiagramCT = ({
 
     restoreFlow();
   }, [setNodes, setViewport]);
+
+  // 초기 다이어그램 불러오기
+  const handleSetContent = async () => {
+    if (contentId !== undefined) {
+      let docSnap;
+      try {
+        docSnap = await getDoc(doc(db, type, contentId));
+      } catch (error) {
+        console.error(error);
+        setConfirmMessage('Data Fetching Error');
+        setConfirmPopupActive(true);
+      }
+
+      if (docSnap !== undefined && docSnap.exists()) {
+        const { title, content, isDone } = docSnap.data();
+
+        setTitle(title);
+        setIsDone(isDone);
+
+        if (content) {
+          const flow = JSON.parse(content);
+
+          if (flow) {
+            const { x = 0, y = 0, zoom = 1 } = flow.viewport;
+            setNodes(
+              flow.nodes.map((node: Node) => {
+                const { data, width, height } = node;
+                return { ...node, data: { ...data, width, height } };
+              }) || []
+            );
+            setEdges(flow.edges || []);
+            setViewport({ x, y, zoom });
+          }
+        }
+      }
+    } else {
+      setConfirmMessage('No Document Detail ID!');
+      setConfirmPopupActive(true);
+    }
+  };
 
   // 업데이트 버튼
   const handleUpdateBtn = async () => {

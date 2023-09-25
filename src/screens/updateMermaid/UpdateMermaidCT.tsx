@@ -54,8 +54,8 @@ const UpdateMermaidCT = ({
             if (!handleHasPermission(['u'], grade)) {
               setConfirmMessage("You Don't Have Permission");
               setConfirmPopupActive(true);
-              handleLoaderFalse();
-              navigate(-1);
+            } else {
+              await handleSetContent();
             }
           } else {
             setConfirmMessage('Nothing User Grade');
@@ -68,41 +68,9 @@ const UpdateMermaidCT = ({
       setUid_('');
       setConfirmMessage("You Don't Have Permission");
       setConfirmPopupActive(true);
-      handleLoaderFalse();
-      navigate(-1);
+      return handleLoaderFalse();
     }
   }, [uid]);
-
-  // 초기 다이어그램 가져오기
-  useEffect(() => {
-    (async () => {
-      if (contentId !== undefined) {
-        handleLoaderTrue();
-
-        let docSnap;
-        try {
-          docSnap = await getDoc(doc(db, type, contentId));
-        } catch (error) {
-          console.error(error);
-          setConfirmMessage('Data Fetching Error');
-          setConfirmPopupActive(true);
-        }
-
-        if (docSnap !== undefined && docSnap.exists()) {
-          const { title, content, isDone } = docSnap.data();
-
-          setTitle(title);
-          setContent(content);
-          setIsDone(isDone);
-        }
-
-        handleLoaderFalse();
-      } else {
-        setConfirmMessage('No Document Detail ID!');
-        setConfirmPopupActive(true);
-      }
-    })();
-  }, []);
 
   // 업데이트 버튼
   const handleUpdateBtn = async () => {
@@ -156,6 +124,31 @@ const UpdateMermaidCT = ({
       />
     </div>
   );
+
+  // 초기 다이어그램 불러오기
+  const handleSetContent = async () => {
+    if (contentId !== undefined) {
+      let docSnap;
+      try {
+        docSnap = await getDoc(doc(db, type, contentId));
+      } catch (error) {
+        console.error(error);
+        setConfirmMessage('Data Fetching Error');
+        setConfirmPopupActive(true);
+      }
+
+      if (docSnap !== undefined && docSnap.exists()) {
+        const { title, content, isDone } = docSnap.data();
+
+        setTitle(title);
+        setContent(content);
+        setIsDone(isDone);
+      }
+    } else {
+      setConfirmMessage('No Document Detail ID!');
+      setConfirmPopupActive(true);
+    }
+  };
 
   // confirm 팝업 확인 버튼
   const handleConfirm = async () => {
