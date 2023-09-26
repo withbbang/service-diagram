@@ -126,34 +126,38 @@ const UpdateEntityRelationshipDiagramCT = ({
 
   // 로그인 여부 판단 훅
   useEffect(() => {
-    if (uid !== undefined && uid !== null && uid !== '') {
-      handleLoaderTrue();
-      onAuthStateChanged(auth, async (user) => {
-        if (user) {
-          setUid_(user.uid);
-          const docSnap = await getDoc(doc(db, 'authority', user.uid));
+    try {
+      if (uid !== undefined && uid !== null && uid !== '') {
+        handleLoaderTrue();
+        onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            setUid_(user.uid);
+            const docSnap = await getDoc(doc(db, 'authority', user.uid));
 
-          if (docSnap !== undefined && docSnap.exists()) {
-            const { grade } = docSnap.data();
+            if (docSnap !== undefined && docSnap.exists()) {
+              const { grade } = docSnap.data();
 
-            if (!handleHasPermission(['u'], grade)) {
-              setConfirmMessage("You Don't Have Permission");
-              setConfirmPopupActive(true);
+              if (!handleHasPermission(['u'], grade)) {
+                throw Error("You Don't Have Permission");
+              } else {
+                await handleSetContent();
+              }
             } else {
-              await handleSetContent();
+              throw Error('Nothing User Grade');
             }
           } else {
-            setConfirmMessage('Nothing User Grade');
-            setConfirmPopupActive(true);
+            throw Error('No User');
           }
-        }
-        handleLoaderFalse();
-      });
-    } else {
+        });
+      } else {
+        throw Error('No User');
+      }
+    } catch (error: any) {
       setUid_('');
-      setConfirmMessage("You Don't Have Permission");
+      setConfirmMessage(error.message);
       setConfirmPopupActive(true);
-      return handleLoaderFalse();
+    } finally {
+      handleLoaderFalse();
     }
   }, [uid]);
 
@@ -531,6 +535,39 @@ const UpdateEntityRelationshipDiagramCT = ({
     );
   }, [tables, setTables]);
 
+  // 불러온 다이어그램에 hydrate
+  const handleInitItems = (flow: any) => {
+    const { x = 0, y = 0, zoom = 1 } = flow.viewport;
+    setTables(
+      [
+        ...flow.nodes.map((node: Node) => {
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              onSetSelectedTableIdxForUpdate: setSelectedTableIdxForUpdate,
+              onSetSelectedTableIdxForDelete: setSelectedTableIdxForDelete
+            }
+          };
+        })
+      ] || []
+    );
+    setEdges(
+      [
+        ...flow.edges.map((edge: Edge) => {
+          return {
+            ...edge,
+            data: {
+              ...edge.data,
+              onSetSelectedTableIdxForDelete: setSelectedEdgeIdxForDelete
+            }
+          };
+        })
+      ] || []
+    );
+    setViewport({ x, y, zoom });
+  };
+
   // 초기 다이어그램 불러오기
   const handleSetContent = async () => {
     if (contentId !== undefined) {
@@ -539,8 +576,7 @@ const UpdateEntityRelationshipDiagramCT = ({
         docSnap = await getDoc(doc(db, type, contentId));
       } catch (error) {
         console.error(error);
-        setConfirmMessage('Data Fetching Error');
-        setConfirmPopupActive(true);
+        throw Error('Data Fetching Error');
       }
 
       if (docSnap !== undefined && docSnap.exists()) {
@@ -552,45 +588,13 @@ const UpdateEntityRelationshipDiagramCT = ({
         if (content) {
           const flow = JSON.parse(content);
 
-          if (flow) {
-            const { x = 0, y = 0, zoom = 1 } = flow.viewport;
-            setTables(
-              [
-                ...flow.nodes.map((node: Node) => {
-                  return {
-                    ...node,
-                    data: {
-                      ...node.data,
-                      onSetSelectedTableIdxForUpdate:
-                        setSelectedTableIdxForUpdate,
-                      onSetSelectedTableIdxForDelete:
-                        setSelectedTableIdxForDelete
-                    }
-                  };
-                })
-              ] || []
-            );
-            setEdges(
-              [
-                ...flow.edges.map((edge: Edge) => {
-                  return {
-                    ...edge,
-                    data: {
-                      ...edge.data,
-                      onSetSelectedTableIdxForDelete:
-                        setSelectedEdgeIdxForDelete
-                    }
-                  };
-                })
-              ] || []
-            );
-            setViewport({ x, y, zoom });
-          }
+          if (flow) handleInitItems(flow);
         }
+      } else {
+        throw Error('No Content');
       }
     } else {
-      setConfirmMessage('No Document Detail ID!');
-      setConfirmPopupActive(true);
+      throw Error('No Document Detail ID!');
     }
   };
 

@@ -91,34 +91,38 @@ const UpdateFlowDiagramCT = ({
 
   // 로그인 여부 판단 훅
   useEffect(() => {
-    if (uid !== undefined && uid !== null && uid !== '') {
-      handleLoaderTrue();
-      onAuthStateChanged(auth, async (user) => {
-        if (user) {
-          setUid_(user.uid);
-          const docSnap = await getDoc(doc(db, 'authority', user.uid));
+    try {
+      if (uid !== undefined && uid !== null && uid !== '') {
+        handleLoaderTrue();
+        onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            setUid_(user.uid);
+            const docSnap = await getDoc(doc(db, 'authority', user.uid));
 
-          if (docSnap !== undefined && docSnap.exists()) {
-            const { grade } = docSnap.data();
+            if (docSnap !== undefined && docSnap.exists()) {
+              const { grade } = docSnap.data();
 
-            if (!handleHasPermission(['u'], grade)) {
-              setConfirmMessage("You Don't Have Permission");
-              setConfirmPopupActive(true);
+              if (!handleHasPermission(['u'], grade)) {
+                throw Error("You Don't Have Permission");
+              } else {
+                await handleSetContent();
+              }
             } else {
-              await handleSetContent();
+              throw Error('Nothing User Grade');
             }
           } else {
-            setConfirmMessage('Nothing User Grade');
-            setConfirmPopupActive(true);
+            throw Error('No User');
           }
-        }
-        handleLoaderFalse();
-      });
-    } else {
+        });
+      } else {
+        throw Error('No User');
+      }
+    } catch (error: any) {
       setUid_('');
-      setConfirmMessage("You Don't Have Permission");
+      setConfirmMessage(error.message);
       setConfirmPopupActive(true);
-      return handleLoaderFalse();
+    } finally {
+      handleLoaderFalse();
     }
   }, [uid]);
 
@@ -336,8 +340,7 @@ const UpdateFlowDiagramCT = ({
         docSnap = await getDoc(doc(db, type, contentId));
       } catch (error) {
         console.error(error);
-        setConfirmMessage('Data Fetching Error');
-        setConfirmPopupActive(true);
+        throw Error('Data Fetching Error');
       }
 
       if (docSnap !== undefined && docSnap.exists()) {
@@ -361,10 +364,11 @@ const UpdateFlowDiagramCT = ({
             setViewport({ x, y, zoom });
           }
         }
+      } else {
+        throw Error('No Content');
       }
     } else {
-      setConfirmMessage('No Document Detail ID!');
-      setConfirmPopupActive(true);
+      throw Error('No Document Detail ID!');
     }
   };
 
