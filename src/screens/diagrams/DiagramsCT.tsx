@@ -70,6 +70,7 @@ const DiagramsCT = ({
       });
     } else {
       setUid_('');
+      setGrade(20);
     }
   }, [uid]);
 
