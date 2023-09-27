@@ -3,8 +3,9 @@ import styles from './Diagrams.module.scss';
 import Card from 'components/card/Card';
 import Loader from 'components/loader';
 import { typeContent } from 'modules/types';
-import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
 import SVG from 'modules/SVG';
+import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
+import ErrorPopup from 'components/errorPopup/ErrorPopup';
 
 const DiagramsPT = ({
   uid,
@@ -15,13 +16,16 @@ const DiagramsPT = ({
   contents,
   confirmPopupActive,
   confirmMessage,
+  errorPopupActive,
+  errorMessage,
   onSearch,
   onSignIn,
   // onSignUp,
   onSignOut,
   onDeleteBtn,
   onConfirm,
-  onCancel
+  onCancel,
+  onErrorPopup
 }: typeDiagramsPT): JSX.Element => {
   return (
     <>
@@ -32,6 +36,11 @@ const DiagramsPT = ({
         confirmType=""
         onConfirm={onConfirm}
         onCancel={onCancel}
+      />
+      <ErrorPopup
+        isActive={errorPopupActive}
+        errorMessage={errorMessage}
+        onConfirm={onErrorPopup}
       />
       <div className={styles.wrap}>
         <div className={styles.signBtns}>
@@ -90,6 +99,8 @@ interface typeDiagramsPT {
   contents: Array<typeContent>;
   confirmPopupActive: boolean;
   confirmMessage: string;
+  errorPopupActive: boolean;
+  errorMessage: string;
   onSearch: () => void;
   onSignIn: () => void;
   onSignUp: () => void;
@@ -97,6 +108,7 @@ interface typeDiagramsPT {
   onDeleteBtn: (e: React.MouseEvent, selectedContentId: string) => void;
   onConfirm: () => void;
   onCancel: () => void;
+  onErrorPopup: () => void;
 }
 
 export default DiagramsPT;

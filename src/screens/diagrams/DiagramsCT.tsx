@@ -39,6 +39,8 @@ const DiagramsCT = ({
   const [selectedContentId, setSelectedContentId] = useState<string>(''); // 다어그램들 중 선택한 놈 id
   const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false); // 확인 팝업 활성 상태
   const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
+  const [errorPopupActive, setErrorPopupActive] = useState<boolean>(false); // 에러 팝업 활성 상태
+  const [errorMessage, setErrorMessage] = useState<string>(''); // 에러 팝업 내용 설정 훅
 
   // 선택된 다이어그램에 따라 title 설정 및 다이어그램들 가져오기
   useEffect(() => {
@@ -51,26 +53,35 @@ const DiagramsCT = ({
 
   // 로그인 여부 판단 훅
   useEffect(() => {
-    if (uid !== undefined && uid !== null && uid !== '') {
-      handleLoaderTrue();
-      onAuthStateChanged(auth, async (user) => {
-        if (user) {
-          setUid_(user.uid);
-          const docSnap = await getDoc(doc(db, 'authority', user.uid));
+    try {
+      if (uid !== undefined && uid !== null && uid !== '') {
+        handleLoaderTrue();
+        onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            setUid_(user.uid);
+            const docSnap = await getDoc(doc(db, 'authority', user.uid));
 
-          if (docSnap !== undefined && docSnap.exists()) {
-            setGrade(docSnap.data().grade);
+            if (docSnap !== undefined && docSnap.exists()) {
+              setGrade(docSnap.data().grade);
+            } else {
+              throw Error('No User Grade');
+            }
           } else {
-            setConfirmMessage('Nothing User Grade');
-            setConfirmPopupActive(true);
+            throw Error('No User');
           }
-        }
 
-        handleLoaderFalse();
-      });
-    } else {
+          handleLoaderFalse();
+        });
+      } else {
+        throw Error('No User');
+      }
+    } catch (error: any) {
       setUid_('');
       setGrade(20);
+      setErrorMessage(error.message);
+      setErrorPopupActive(true);
+    } finally {
+      handleLoaderFalse();
     }
   }, [uid]);
 
@@ -107,8 +118,8 @@ const DiagramsCT = ({
       );
     } catch (error) {
       console.error(error);
-      setConfirmMessage('Data Fetching Error');
-      setConfirmPopupActive(true);
+      setErrorMessage('Data Fetching Error');
+      setErrorPopupActive(true);
     } finally {
       handleLoaderFalse();
     }
@@ -142,6 +153,12 @@ const DiagramsCT = ({
 
   const handleSignOut = () => {
     handleSetUid('');
+  };
+
+  // error 팝업 확인 버튼
+  const handleErrorPopup = () => {
+    setErrorMessage('');
+    setErrorPopupActive(false);
   };
 
   // 삭제 버튼
@@ -188,6 +205,8 @@ const DiagramsCT = ({
       contents={contents}
       confirmPopupActive={confirmPopupActive}
       confirmMessage={confirmMessage}
+      errorPopupActive={errorPopupActive}
+      errorMessage={errorMessage}
       onSearch={handleSearch}
       onSignIn={handleSignIn}
       onSignUp={handleSignUp}
@@ -195,6 +214,7 @@ const DiagramsCT = ({
       onDeleteBtn={handleDeleteBtn}
       onConfirm={handleConfirm}
       onCancel={handleCancel}
+      onErrorPopup={handleErrorPopup}
     />
   );
 };
