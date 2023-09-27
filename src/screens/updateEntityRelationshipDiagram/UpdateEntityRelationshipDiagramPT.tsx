@@ -19,6 +19,7 @@ import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
 import styles from './UpdateEntityRelationshipDiagram.module.scss';
 import 'reactflow/dist/style.css';
 import Column from 'components/entityRelationship/Column';
+import ErrorPopup from 'components/errorPopup/ErrorPopup';
 
 const UpdateEntityRelationshipDiagramPT = ({
   uid,
@@ -40,6 +41,8 @@ const UpdateEntityRelationshipDiagramPT = ({
   edgeTypes,
   confirmMessage,
   confirmPopupActive,
+  errorPopupActive,
+  errorMessage,
   onSetTitle,
   onSetIsDone,
   onSetTableName,
@@ -68,7 +71,8 @@ const UpdateEntityRelationshipDiagramPT = ({
   onUpdateBtn,
   onAddHandle,
   onConfirm,
-  onCancel
+  onCancel,
+  onErrorPopup
 }: typeUpdateEntityRelationshipDiagramPT): JSX.Element => {
   return (
     <>
@@ -79,6 +83,11 @@ const UpdateEntityRelationshipDiagramPT = ({
         confirmType=""
         onConfirm={onConfirm}
         onCancel={onCancel}
+      />
+      <ErrorPopup
+        isActive={errorPopupActive}
+        errorMessage={errorMessage}
+        onConfirm={onErrorPopup}
       />
       <div className={styles.wrap}>
         <ReactFlow
@@ -277,6 +286,8 @@ interface typeUpdateEntityRelationshipDiagramPT {
   edgeTypes: EdgeTypes;
   confirmMessage: string;
   confirmPopupActive: boolean;
+  errorPopupActive: boolean;
+  errorMessage: string;
   onSetTitle: React.Dispatch<React.SetStateAction<string>>;
   onSetIsDone: React.Dispatch<React.SetStateAction<string>>;
   onSetTableName: React.Dispatch<React.SetStateAction<string>>;
@@ -312,6 +323,7 @@ interface typeUpdateEntityRelationshipDiagramPT {
   onAddHandle: () => void;
   onConfirm: () => void;
   onCancel: () => void;
+  onErrorPopup: () => void;
 }
 
 export default UpdateEntityRelationshipDiagramPT;

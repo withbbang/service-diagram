@@ -109,6 +109,8 @@ const UpdateEntityRelationshipDiagramCT = ({
   const [draggingIdx, setDraggingIdx] = useState<number>(-1); // 드래그 중인 컬럼 인덱스
   const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false); // 확인 팝업 활성 상태
   const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
+  const [errorPopupActive, setErrorPopupActive] = useState<boolean>(false); // 에러 팝업 활성 상태
+  const [errorMessage, setErrorMessage] = useState<string>(''); // 에러 팝업 내용 설정 훅
 
   // 다이어그램 제목 input 참조 객체
   const titleNameRef = useRef(
@@ -143,7 +145,7 @@ const UpdateEntityRelationshipDiagramCT = ({
                 await handleSetContent();
               }
             } else {
-              throw Error('Nothing User Grade');
+              throw Error('No User Grade');
             }
           } else {
             throw Error('No User');
@@ -154,8 +156,8 @@ const UpdateEntityRelationshipDiagramCT = ({
       }
     } catch (error: any) {
       setUid_('');
-      setConfirmMessage(error.message);
-      setConfirmPopupActive(true);
+      setErrorMessage(error.message);
+      setErrorPopupActive(true);
     } finally {
       handleLoaderFalse();
     }
@@ -621,14 +623,14 @@ const UpdateEntityRelationshipDiagramCT = ({
           navigate(`/diagram/${type}/${contentId}`);
         } catch (error) {
           console.error(error);
-          setConfirmMessage('Data Updating Error');
-          setConfirmPopupActive(true);
+          setErrorMessage('Data Updating Error');
+          setErrorPopupActive(true);
         } finally {
           handleLoaderFalse();
         }
       } else {
-        setConfirmMessage('No Document Detail ID!');
-        setConfirmPopupActive(true);
+        setErrorMessage('No Document Detail ID!');
+        setErrorPopupActive(true);
       }
     }
   };
@@ -649,6 +651,13 @@ const UpdateEntityRelationshipDiagramCT = ({
   const handleUpdateBtn = async () => {
     setConfirmMessage('Really Update?');
     setConfirmPopupActive(true);
+  };
+
+  // error 팝업 확인 버튼
+  const handleErrorPopup = () => {
+    setErrorMessage('');
+    setErrorPopupActive(false);
+    navigate(-1);
   };
 
   return (
@@ -673,6 +682,8 @@ const UpdateEntityRelationshipDiagramCT = ({
       edgeTypes={edgeTypes}
       confirmMessage={confirmMessage}
       confirmPopupActive={confirmPopupActive}
+      errorPopupActive={errorPopupActive}
+      errorMessage={errorMessage}
       onSetTitle={setTitle}
       onSetIsDone={setIsDone}
       onSetTableName={setTableName}
@@ -702,6 +713,7 @@ const UpdateEntityRelationshipDiagramCT = ({
       onAddHandle={handleAddHandle}
       onConfirm={handleConfirm}
       onCancel={handleCancel}
+      onErrorPopup={handleErrorPopup}
     />
   );
 };

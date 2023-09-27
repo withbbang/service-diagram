@@ -17,6 +17,7 @@ import Loader from 'components/loader';
 import styles from './UpdateFlowDiagram.module.scss';
 import 'reactflow/dist/style.css';
 import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
+import ErrorPopup from 'components/errorPopup/ErrorPopup';
 
 const UpdateFlowDiagramPT = ({
   uid,
@@ -35,6 +36,8 @@ const UpdateFlowDiagramPT = ({
   edgeTypes,
   confirmPopupActive,
   confirmMessage,
+  errorPopupActive,
+  errorMessage,
   onSetTitle,
   onSetNodeName,
   onSetEdgeName,
@@ -53,7 +56,8 @@ const UpdateFlowDiagramPT = ({
   onUpdateBtn,
   onConfirm,
   onCancel,
-  onInit
+  onInit,
+  onErrorPopup
 }: typeUpdateFlowDiagramPT): JSX.Element => {
   return (
     <>
@@ -64,6 +68,11 @@ const UpdateFlowDiagramPT = ({
         confirmType=""
         onConfirm={onConfirm}
         onCancel={onCancel}
+      />
+      <ErrorPopup
+        isActive={errorPopupActive}
+        errorMessage={errorMessage}
+        onConfirm={onErrorPopup}
       />
       <div className={styles.wrap}>
         <div className={styles.innerWrap}>
@@ -165,6 +174,8 @@ interface typeUpdateFlowDiagramPT {
   edgeTypes: EdgeTypes;
   confirmPopupActive: boolean;
   confirmMessage: string;
+  errorPopupActive: boolean;
+  errorMessage: string;
   onSetTitle: React.Dispatch<React.SetStateAction<string>>;
   onSetNodeName: React.Dispatch<React.SetStateAction<string>>;
   onSetEdgeName: React.Dispatch<React.SetStateAction<string>>;
@@ -184,6 +195,7 @@ interface typeUpdateFlowDiagramPT {
   onConfirm: () => void;
   onCancel: () => void;
   onInit: React.Dispatch<any>;
+  onErrorPopup: () => void;
 }
 
 export default UpdateFlowDiagramPT;

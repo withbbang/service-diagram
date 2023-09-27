@@ -5,6 +5,7 @@ import SVG from 'modules/SVG';
 import FunctionPopup from 'components/functionPopup/FunctionPopup';
 import Loader from 'components/loader';
 import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
+import ErrorPopup from 'components/errorPopup/ErrorPopup';
 
 const UpdateMermaidPT = ({
   uid,
@@ -15,10 +16,13 @@ const UpdateMermaidPT = ({
   children,
   confirmPopupActive,
   confirmMessage,
+  errorPopupActive,
+  errorMessage,
   onUpdatePopup,
   onUpdateBtn,
   onConfirm,
-  onCancel
+  onCancel,
+  onErrorPopup
 }: typeUpdateMermaidPT): JSX.Element => {
   return (
     <>
@@ -29,6 +33,11 @@ const UpdateMermaidPT = ({
         confirmType=""
         onConfirm={onConfirm}
         onCancel={onCancel}
+      />
+      <ErrorPopup
+        isActive={errorPopupActive}
+        errorMessage={errorMessage}
+        onConfirm={onErrorPopup}
       />
       <FunctionPopup
         isActive={isFunctionPopupActive}
@@ -70,10 +79,13 @@ interface typeUpdateMermaidPT {
   children: JSX.Element;
   confirmPopupActive: boolean;
   confirmMessage: string;
+  errorPopupActive: boolean;
+  errorMessage: string;
   onUpdatePopup: () => void;
   onUpdateBtn: () => void;
   onConfirm: () => void;
   onCancel: () => void;
+  onErrorPopup: () => void;
 }
 
 export default UpdateMermaidPT;
