@@ -8,31 +8,28 @@ import ReactFlow, {
   NodeTypes,
   EdgeTypes
 } from 'reactflow';
-import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
+import ErrorPopup from 'components/errorPopup/ErrorPopup';
 import Loader from 'components/loader';
 import styles from './ViewEntityRelationshipDiagram.module.scss';
 
 const EntityRelationdshipPT = ({
   title,
-  confirmPopupActive,
-  confirmMessage,
+  errorPopupActive,
+  errorMessage,
   tables,
   edges,
   tableTypes,
   edgeTypes,
-  onConfirm,
-  onCancel,
-  onInit
+  onInit,
+  onErrorPopup
 }: typeEntityRelationdshipPT): JSX.Element => {
   return (
     <>
       <Loader />
-      <ConfirmPopup
-        isActive={confirmPopupActive}
-        confirmMessage={confirmMessage}
-        confirmType=""
-        onConfirm={onConfirm}
-        onCancel={onCancel}
+      <ErrorPopup
+        isActive={errorPopupActive}
+        errorMessage={errorMessage}
+        onConfirm={onErrorPopup}
       />
       <div className={styles.wrap}>
         <div className={styles.innerWrap}>
@@ -60,15 +57,14 @@ const EntityRelationdshipPT = ({
 
 interface typeEntityRelationdshipPT {
   title: string;
-  confirmPopupActive: boolean;
-  confirmMessage: string;
   tables: Node<any, string | undefined>[];
   edges: Edge<any>[];
   tableTypes: NodeTypes;
   edgeTypes: EdgeTypes;
-  onConfirm: () => void;
-  onCancel: () => void;
+  errorPopupActive: boolean;
+  errorMessage: string;
   onInit: React.Dispatch<any>;
+  onErrorPopup: () => void;
 }
 
 export default EntityRelationdshipPT;

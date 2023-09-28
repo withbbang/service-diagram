@@ -8,31 +8,28 @@ import ReactFlow, {
   NodeTypes,
   EdgeTypes
 } from 'reactflow';
-import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
+import ErrorPopup from 'components/errorPopup/ErrorPopup';
 import Loader from 'components/loader';
 import styles from './ViewFlowDiagram.module.scss';
 
 const ViewFlowDiagramPT = ({
   title,
-  confirmPopupActive,
-  confirmMessage,
+  errorPopupActive,
+  errorMessage,
   nodes,
   edges,
   nodeTypes,
   edgeTypes,
-  onConfirm,
-  onCancel,
-  onInit
+  onInit,
+  onErrorPopup
 }: typeViewFlowDiagramPT): JSX.Element => {
   return (
     <>
       <Loader />
-      <ConfirmPopup
-        isActive={confirmPopupActive}
-        confirmMessage={confirmMessage}
-        confirmType=""
-        onConfirm={onConfirm}
-        onCancel={onCancel}
+      <ErrorPopup
+        isActive={errorPopupActive}
+        errorMessage={errorMessage}
+        onConfirm={onErrorPopup}
       />
       <div className={styles.wrap}>
         <div className={styles.innerWrap}>
@@ -60,15 +57,14 @@ const ViewFlowDiagramPT = ({
 
 interface typeViewFlowDiagramPT {
   title: string;
-  confirmPopupActive: boolean;
-  confirmMessage: string;
   nodes: Node<any, string | undefined>[];
   edges: Edge<any>[];
   nodeTypes: NodeTypes;
   edgeTypes: EdgeTypes;
-  onConfirm: () => void;
-  onCancel: () => void;
+  errorPopupActive: boolean;
+  errorMessage: string;
   onInit: React.Dispatch<any>;
+  onErrorPopup: () => void;
 }
 
 export default ViewFlowDiagramPT;

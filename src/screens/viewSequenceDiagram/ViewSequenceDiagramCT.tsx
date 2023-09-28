@@ -18,51 +18,51 @@ const ViewSequenceDiagramCT = ({
 
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>(``);
-  const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false); // 확인 팝업 활성 상태
-  const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
+  const [errorPopupActive, setErrorPopupActive] = useState<boolean>(false); // 에러 팝업 활성 상태
+  const [errorMessage, setErrorMessage] = useState<string>(''); // 에러 팝업 내용 설정 훅
 
   // 초기 다이어그램 불러오기
   useEffect(() => {
     (async () => {
-      if (id !== undefined) {
-        handleLoaderTrue();
+      try {
+        if (id !== undefined) {
+          handleLoaderTrue();
 
-        let docSnap;
-        try {
-          docSnap = await getDoc(doc(db, type, id));
-        } catch (error) {
-          console.error(error);
-          setConfirmMessage('Data Fetching Error');
-          setConfirmPopupActive(true);
-          return handleLoaderFalse();
-        }
-
-        if (docSnap !== undefined && docSnap.exists()) {
-          const { title, content, isDone } = docSnap.data();
-
-          if (
-            isDone !== 'Y' &&
-            (uid === undefined ||
-              uid === null ||
-              uid === '' ||
-              !handleHasPermission(['r'], await handleGetGrade()))
-          ) {
-            setConfirmMessage('Invalid Detail ID!');
-            setConfirmPopupActive(true);
-            return handleLoaderFalse();
+          let docSnap;
+          try {
+            docSnap = await getDoc(doc(db, type, id));
+          } catch (error) {
+            console.error(error);
+            throw Error('Data Fetching Error');
           }
 
-          setTitle(title);
-          setContent(content);
-        } else {
-          setConfirmMessage('Invalid Detail ID!');
-          setConfirmPopupActive(true);
-        }
+          if (docSnap !== undefined && docSnap.exists()) {
+            const { title, content, isDone } = docSnap.data();
 
+            if (
+              isDone !== 'Y' &&
+              (uid === undefined ||
+                uid === null ||
+                uid === '' ||
+                !handleHasPermission(['r'], await handleGetGrade()))
+            ) {
+              throw Error('Invalid Detail ID');
+            }
+
+            setTitle(title);
+            setContent(content);
+          } else {
+            throw Error('Invalid Detail ID');
+          }
+        } else {
+          throw Error('No Document Detail ID');
+        }
+      } catch (error: any) {
+        console.error(error);
+        setErrorMessage(error.message);
+        setErrorPopupActive(true);
+      } finally {
         handleLoaderFalse();
-      } else {
-        setConfirmMessage('No Document Detail ID!');
-        setConfirmPopupActive(true);
       }
     })();
   }, []);
@@ -78,8 +78,10 @@ const ViewSequenceDiagramCT = ({
     }
   };
 
-  // confirm 팝업 확인/취소 버튼
-  const handleConfirm = () => {
+  // error 팝업 확인 버튼
+  const handleErrorPopup = () => {
+    setErrorMessage('');
+    setErrorPopupActive(false);
     navigate(-1);
   };
 
@@ -87,10 +89,9 @@ const ViewSequenceDiagramCT = ({
     <ViewSequenceDiagramPT
       title={title}
       content={content}
-      confirmPopupActive={confirmPopupActive}
-      confirmMessage={confirmMessage}
-      onConfirm={handleConfirm}
-      onCancel={handleConfirm}
+      errorPopupActive={errorPopupActive}
+      errorMessage={errorMessage}
+      onErrorPopup={handleErrorPopup}
     />
   );
 };

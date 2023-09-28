@@ -64,8 +64,8 @@ const ViewEntityRelationshipDiagramCT = ({
   const edgeTypes = useMemo(() => ({ normal: NormalEdge }), []); // 커스텀 엣지 타입들
 
   const [title, setTitle] = useState<string>(''); // 다이어그램 타이틀
-  const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false); // 확인 팝업 활성 상태
-  const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
+  const [errorPopupActive, setErrorPopupActive] = useState<boolean>(false); // 에러 팝업 활성 상태
+  const [errorMessage, setErrorMessage] = useState<string>(''); // 에러 팝업 내용 설정 훅
 
   const [rfInstance, setRfInstance] = useState<any>(null); // 로컬스토리지 일시 저장용 다이어그램 인스턴스
   const [tables, setTables] = useNodesState(initialTables); // 테이블 수정 hook
@@ -74,82 +74,83 @@ const ViewEntityRelationshipDiagramCT = ({
 
   // 초기 다이어그램 불러오기
   useEffect(() => {
-    (async () => {
-      if (id !== undefined) {
-        handleLoaderTrue();
+    try {
+      (async () => {
+        if (id !== undefined) {
+          handleLoaderTrue();
 
-        let docSnap;
-        try {
-          docSnap = await getDoc(doc(db, type, id));
-        } catch (error) {
-          console.error(error);
-          setConfirmMessage('Data Fetching Error');
-          setConfirmPopupActive(true);
-          return handleLoaderFalse();
-        }
-
-        if (docSnap !== undefined && docSnap.exists()) {
-          const { title, content, isDone } = docSnap.data();
-
-          if (
-            isDone !== 'Y' &&
-            (uid === undefined ||
-              uid === null ||
-              uid === '' ||
-              !handleHasPermission(['r'], await handleGetGrade()))
-          ) {
-            setConfirmMessage('Invalid Detail ID!');
-            setConfirmPopupActive(true);
-            return handleLoaderFalse();
+          let docSnap;
+          try {
+            docSnap = await getDoc(doc(db, type, id));
+          } catch (error) {
+            console.error(error);
+            throw Error('Data Fetching Error');
           }
 
-          const flow = JSON.parse(content);
+          if (docSnap !== undefined && docSnap.exists()) {
+            const { title, content, isDone } = docSnap.data();
 
-          if (flow) {
-            const { x = 0, y = 0, zoom = 1 } = flow.viewport;
-            setTables(
-              [
-                ...flow.nodes.map((node: Node) => {
-                  return {
-                    ...node,
-                    connectable: false,
-                    data: {
-                      ...node.data,
-                      editPossible: false
-                    }
-                  };
-                })
-              ] || []
-            );
-            setEdges(
-              [
-                ...flow.edges.map((edge: Edge) => {
-                  return {
-                    ...edge,
-                    data: {
-                      ...edge.data,
-                      editPossible: false
-                    }
-                  };
-                })
-              ] || []
-            );
-            setViewport({ x, y, zoom });
+            if (
+              isDone !== 'Y' &&
+              (uid === undefined ||
+                uid === null ||
+                uid === '' ||
+                !handleHasPermission(['r'], await handleGetGrade()))
+            ) {
+              throw Error('Invalid Detail ID');
+            }
+
+            const flow = JSON.parse(content);
+
+            if (flow) {
+              const { x = 0, y = 0, zoom = 1 } = flow.viewport;
+              setTables(
+                [
+                  ...flow.nodes.map((node: Node) => {
+                    return {
+                      ...node,
+                      connectable: false,
+                      data: {
+                        ...node.data,
+                        editPossible: false
+                      }
+                    };
+                  })
+                ] || []
+              );
+              setEdges(
+                [
+                  ...flow.edges.map((edge: Edge) => {
+                    return {
+                      ...edge,
+                      data: {
+                        ...edge.data,
+                        editPossible: false
+                      }
+                    };
+                  })
+                ] || []
+              );
+              setViewport({ x, y, zoom });
+            }
+
+            setTitle(title);
+          } else {
+            throw Error('Invalid Detail ID');
           }
 
-          setTitle(title);
-        } else {
-          setConfirmMessage('Invalid Detail ID!');
-          setConfirmPopupActive(true);
           handleLoaderFalse();
+        } else {
+          throw Error('No Document Detail ID');
         }
-
-        handleLoaderFalse();
-      } else {
-        setConfirmMessage('No Document Detail ID!');
-        setConfirmPopupActive(true);
-      }
-    })();
+      })();
+    } catch (error: any) {
+      console.error(error);
+      setErrorMessage(error.message);
+      setErrorPopupActive(true);
+    } finally {
+      handleLoaderFalse();
+    }
   }, []);
 
   // 로그인 되어있을 경우 grade 반환 함수
@@ -163,8 +164,10 @@ const ViewEntityRelationshipDiagramCT = ({
     }
   };
 
-  // confirm 팝업 확인/취소 버튼
-  const handleConfirm = () => {
+  // error 팝업 확인 버튼
+  const handleErrorPopup = () => {
+    setErrorMessage('');
+    setErrorPopupActive(false);
     navigate(-1);
   };
 
@@ -175,11 +178,10 @@ const ViewEntityRelationshipDiagramCT = ({
       edges={edges}
       tableTypes={tableTypes}
       edgeTypes={edgeTypes}
-      confirmPopupActive={confirmPopupActive}
-      confirmMessage={confirmMessage}
-      onConfirm={handleConfirm}
-      onCancel={handleConfirm}
+      errorPopupActive={errorPopupActive}
+      errorMessage={errorMessage}
       onInit={setRfInstance}
+      onErrorPopup={handleErrorPopup}
     />
   );
 };

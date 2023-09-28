@@ -1,26 +1,23 @@
 import React from 'react';
 import Sequence from 'react-sequence-diagram';
-import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
+import ErrorPopup from 'components/errorPopup/ErrorPopup';
 import Loader from 'components/loader';
 import styles from './ViewSequenceDiagram.module.scss';
 
 const ViewSequenceDiagramPT = ({
   title,
   content,
-  confirmPopupActive,
-  confirmMessage,
-  onConfirm,
-  onCancel
+  errorPopupActive,
+  errorMessage,
+  onErrorPopup
 }: typeViewSequenceDiagramPT): JSX.Element => {
   return (
     <>
       <Loader />
-      <ConfirmPopup
-        isActive={confirmPopupActive}
-        confirmMessage={confirmMessage}
-        confirmType=""
-        onConfirm={onConfirm}
-        onCancel={onCancel}
+      <ErrorPopup
+        isActive={errorPopupActive}
+        errorMessage={errorMessage}
+        onConfirm={onErrorPopup}
       />
       <div className={styles.wrap}>
         <div className={styles.innerWrap}>
@@ -37,10 +34,9 @@ const ViewSequenceDiagramPT = ({
 interface typeViewSequenceDiagramPT {
   title: string;
   content: string;
-  confirmPopupActive: boolean;
-  confirmMessage: string;
-  onConfirm: () => void;
-  onCancel: () => void;
+  errorPopupActive: boolean;
+  errorMessage: string;
+  onErrorPopup: () => void;
 }
 
 export default ViewSequenceDiagramPT;

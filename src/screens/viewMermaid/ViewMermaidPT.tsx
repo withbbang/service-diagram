@@ -1,26 +1,23 @@
 import React from 'react';
 import Mermaid from 'components/mermaid';
-import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
+import ErrorPopup from 'components/errorPopup/ErrorPopup';
 import Loader from 'components/loader';
 import styles from './ViewMermaid.module.scss';
 
 const ViewMermaidPT = ({
   title,
   content,
-  confirmPopupActive,
-  confirmMessage,
-  onConfirm,
-  onCancel
+  errorPopupActive,
+  errorMessage,
+  onErrorPopup
 }: typeViewMermaidPT): JSX.Element => {
   return (
     <>
       <Loader />
-      <ConfirmPopup
-        isActive={confirmPopupActive}
-        confirmMessage={confirmMessage}
-        confirmType=""
-        onConfirm={onConfirm}
-        onCancel={onCancel}
+      <ErrorPopup
+        isActive={errorPopupActive}
+        errorMessage={errorMessage}
+        onConfirm={onErrorPopup}
       />
       <div className={styles.wrap}>
         <div className={styles.innerWrap}>
@@ -37,10 +34,9 @@ const ViewMermaidPT = ({
 interface typeViewMermaidPT {
   title: string;
   content: string;
-  confirmPopupActive: boolean;
-  confirmMessage: string;
-  onConfirm: () => void;
-  onCancel: () => void;
+  errorPopupActive: boolean;
+  errorMessage: string;
+  onErrorPopup: () => void;
 }
 
 export default ViewMermaidPT;
