@@ -41,6 +41,8 @@ const CreateSequenceDiagramCT = ({
   const [isDone, setIsDone] = useState<string>('N'); // 완료 여부
   const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false); // 확인 팝업 활성 상태
   const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
+  const [errorPopupActive, setErrorPopupActive] = useState<boolean>(false); // 에러 팝업 활성 상태
+  const [errorMessage, setErrorMessage] = useState<string>(''); // 에러 팝업 내용 설정 훅
 
   // 다이어그램 제목 input 참조 객체
   const titleRef = React.useRef() as React.MutableRefObject<HTMLInputElement>;
@@ -138,8 +140,8 @@ const CreateSequenceDiagramCT = ({
       navigate(`/diagram/${type}/${id}`, { replace: true });
     } catch (error) {
       console.error(error);
-      setConfirmMessage('Data Saving Error');
-      setConfirmPopupActive(true);
+      setErrorMessage('Data Saving Error');
+      setErrorPopupActive(true);
     } finally {
       handleLoaderFalse();
     }
@@ -151,6 +153,12 @@ const CreateSequenceDiagramCT = ({
     setConfirmPopupActive(false);
   };
 
+  // error 팝업 확인 버튼
+  const handleErrorPopup = () => {
+    setErrorMessage('');
+    setErrorPopupActive(false);
+  };
+
   return (
     <CreateSequenceDiagramPT
       grade={grade}
@@ -160,10 +168,13 @@ const CreateSequenceDiagramCT = ({
       children={handleChildren}
       confirmPopupActive={confirmPopupActive}
       confirmMessage={confirmMessage}
+      errorPopupActive={errorPopupActive}
+      errorMessage={errorMessage}
       onCreateUpdatePopup={handleCreateUpdatePopup}
       onSaveBtn={handleSaveBtn}
       onConfirm={handleConfirm}
       onCancel={handleCancel}
+      onErrorPopup={handleErrorPopup}
     />
   );
 };

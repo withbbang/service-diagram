@@ -16,6 +16,7 @@ import Loader from 'components/loader';
 import SVG from 'modules/SVG';
 import { typeColumn } from 'modules/types';
 import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
+import ErrorPopup from 'components/errorPopup/ErrorPopup';
 import styles from './CreateEntityRelationshipDiagram.module.scss';
 import 'reactflow/dist/style.css';
 import Column from 'components/entityRelationship/Column';
@@ -40,6 +41,8 @@ const CreateErdDiagramPT = ({
   edgeTypes,
   confirmMessage,
   confirmPopupActive,
+  errorPopupActive,
+  errorMessage,
   onSetTitle,
   onSetIsDone,
   onSetTableName,
@@ -68,7 +71,8 @@ const CreateErdDiagramPT = ({
   onSaveBtn,
   onAddHandle,
   onConfirm,
-  onCancel
+  onCancel,
+  onErrorPopup
 }: typeCreateErdDiagramPT): JSX.Element => {
   return (
     <>
@@ -79,6 +83,11 @@ const CreateErdDiagramPT = ({
         confirmType=""
         onConfirm={onConfirm}
         onCancel={onCancel}
+      />
+      <ErrorPopup
+        isActive={errorPopupActive}
+        errorMessage={errorMessage}
+        onConfirm={onErrorPopup}
       />
       <div className={styles.wrap}>
         <ReactFlow
@@ -272,6 +281,8 @@ interface typeCreateErdDiagramPT {
   edgeTypes: EdgeTypes;
   confirmMessage: string;
   confirmPopupActive: boolean;
+  errorPopupActive: boolean;
+  errorMessage: string;
   onSetTitle: React.Dispatch<React.SetStateAction<string>>;
   onSetIsDone: React.Dispatch<React.SetStateAction<string>>;
   onSetTableName: React.Dispatch<React.SetStateAction<string>>;
@@ -307,6 +318,7 @@ interface typeCreateErdDiagramPT {
   onAddHandle: () => void;
   onConfirm: () => void;
   onCancel: () => void;
+  onErrorPopup: () => void;
 }
 
 export default CreateErdDiagramPT;

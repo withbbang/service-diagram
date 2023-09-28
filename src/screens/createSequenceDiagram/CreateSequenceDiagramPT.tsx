@@ -5,6 +5,7 @@ import SVG from 'modules/SVG';
 import FunctionPopup from 'components/functionPopup/FunctionPopup';
 import Loader from 'components/loader';
 import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
+import ErrorPopup from 'components/errorPopup/ErrorPopup';
 import { handleHasPermission } from 'modules/utils';
 
 const CreateSequenceDiagramPT = ({
@@ -15,10 +16,13 @@ const CreateSequenceDiagramPT = ({
   children,
   confirmPopupActive,
   confirmMessage,
+  errorPopupActive,
+  errorMessage,
   onCreateUpdatePopup,
   onSaveBtn,
   onConfirm,
-  onCancel
+  onCancel,
+  onErrorPopup
 }: typeCreateSequenceDiagramPT): JSX.Element => {
   return (
     <>
@@ -29,6 +33,11 @@ const CreateSequenceDiagramPT = ({
         confirmType=""
         onConfirm={onConfirm}
         onCancel={onCancel}
+      />
+      <ErrorPopup
+        isActive={errorPopupActive}
+        errorMessage={errorMessage}
+        onConfirm={onErrorPopup}
       />
       <FunctionPopup
         isActive={isFunctionPopupActive}
@@ -65,10 +74,13 @@ interface typeCreateSequenceDiagramPT {
   children: JSX.Element;
   confirmPopupActive: boolean;
   confirmMessage: string;
+  errorPopupActive: boolean;
+  errorMessage: string;
   onCreateUpdatePopup: () => void;
   onSaveBtn: () => void;
   onConfirm: () => void;
   onCancel: () => void;
+  onErrorPopup: () => void;
 }
 
 export default CreateSequenceDiagramPT;

@@ -36,6 +36,8 @@ const CreateFlowDiagramPT = ({
   edgeTypes,
   confirmPopupActive,
   confirmMessage,
+  errorPopupActive,
+  errorMessage,
   onSetTitle,
   onSetNodeName,
   onSetEdgeName,
@@ -54,7 +56,8 @@ const CreateFlowDiagramPT = ({
   onSaveBtn,
   onConfirm,
   onCancel,
-  onInit
+  onInit,
+  onErrorPopup
 }: typeCreateFlowDiagramPT): JSX.Element => {
   return (
     <>
@@ -159,6 +162,8 @@ interface typeCreateFlowDiagramPT {
   edgeTypes: EdgeTypes;
   confirmPopupActive: boolean;
   confirmMessage: string;
+  errorPopupActive: boolean;
+  errorMessage: string;
   onSetTitle: React.Dispatch<React.SetStateAction<string>>;
   onSetNodeName: React.Dispatch<React.SetStateAction<string>>;
   onSetEdgeName: React.Dispatch<React.SetStateAction<string>>;
@@ -178,6 +183,7 @@ interface typeCreateFlowDiagramPT {
   onConfirm: () => void;
   onCancel: () => void;
   onInit: React.Dispatch<any>;
+  onErrorPopup: () => void;
 }
 
 export default CreateFlowDiagramPT;

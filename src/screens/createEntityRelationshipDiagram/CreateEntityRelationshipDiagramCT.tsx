@@ -104,6 +104,8 @@ const CreateErdDiagramCT = ({
   const [draggingIdx, setDraggingIdx] = useState<number>(-1); // 드래그 중인 컬럼 인덱스
   const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false); // 확인 팝업 활성 상태
   const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
+  const [errorPopupActive, setErrorPopupActive] = useState<boolean>(false); // 에러 팝업 활성 상태
+  const [errorMessage, setErrorMessage] = useState<string>(''); // 에러 팝업 내용 설정 훅
 
   // 다이어그램 제목 input 참조 객체
   const titleNameRef = useRef(
@@ -534,8 +536,8 @@ const CreateErdDiagramCT = ({
         navigate(`/diagram/${type}/${id}`, { replace: true });
       } catch (error) {
         console.error(error);
-        setConfirmMessage('Data Saving Error');
-        setConfirmPopupActive(true);
+        setErrorMessage('Data Saving Error');
+        setErrorPopupActive(true);
       } finally {
         handleLoaderFalse();
       }
@@ -560,6 +562,12 @@ const CreateErdDiagramCT = ({
     setConfirmPopupActive(true);
   };
 
+  // error 팝업 확인 버튼
+  const handleErrorPopup = () => {
+    setErrorMessage('');
+    setErrorPopupActive(false);
+  };
+
   return (
     <CreateErdDiagramPT
       grade={grade}
@@ -581,6 +589,8 @@ const CreateErdDiagramCT = ({
       edgeTypes={edgeTypes}
       confirmMessage={confirmMessage}
       confirmPopupActive={confirmPopupActive}
+      errorPopupActive={errorPopupActive}
+      errorMessage={errorMessage}
       onSetTitle={setTitle}
       onSetIsDone={setIsDone}
       onSetTableName={setTableName}
@@ -610,6 +620,7 @@ const CreateErdDiagramCT = ({
       onAddHandle={handleAddHandle}
       onConfirm={handleConfirm}
       onCancel={handleCancel}
+      onErrorPopup={handleErrorPopup}
     />
   );
 };
