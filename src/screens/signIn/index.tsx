@@ -12,7 +12,7 @@ import {
 } from 'middlewares/reduxToolkits/commonSlice';
 import styles from './SignIn.module.scss';
 import Loader from 'components/loader';
-import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
+import ErrorPopup from 'components/errorPopup/ErrorPopup';
 import { auth } from 'modules/utils';
 import { useNavigate } from 'react-router-dom';
 
@@ -44,8 +44,8 @@ const SignIn = ({
 
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false);
-  const [confirmMessage, setConfirmMessage] = useState<string>('');
+  const [errorPopupActive, setErrorPopupActive] = useState<boolean>(false); // 에러 팝업 활성 상태
+  const [errorMessage, setErrorMessage] = useState<string>(''); // 에러 팝업 내용 설정 훅
 
   useEffect(() => {
     if (uid !== undefined && uid !== null && uid !== '') {
@@ -61,14 +61,14 @@ const SignIn = ({
 
   const handleSignIn = async () => {
     if (!email) {
-      setConfirmMessage('Empty Email Field');
-      setConfirmPopupActive(true);
+      setErrorMessage('Empty Email Field');
+      setErrorPopupActive(true);
       return;
     }
 
     if (!password) {
-      setConfirmMessage('Empty Password Field');
-      setConfirmPopupActive(true);
+      setErrorMessage('Empty Password Field');
+      setErrorPopupActive(true);
       return;
     }
 
@@ -79,10 +79,11 @@ const SignIn = ({
       encryptPassword = SHA256(password).toString();
     } catch (error) {
       console.error(error);
-      setConfirmMessage('Password Encrypting Error');
-      setConfirmPopupActive(true);
-      handleLoaderFalse();
+      setErrorMessage('Password Encrypting Error');
+      setErrorPopupActive(true);
       return;
+    } finally {
+      handleLoaderFalse();
     }
 
     try {
@@ -96,28 +97,27 @@ const SignIn = ({
       navigate('/', { replace: true });
     } catch (error) {
       console.error(error);
-      setConfirmMessage('User Credential Error');
-      setConfirmPopupActive(true);
+      setErrorMessage('User Credential Error');
+      setErrorPopupActive(true);
       return;
     } finally {
       handleLoaderFalse();
     }
   };
 
-  const handleCancel = () => {
-    setConfirmMessage('');
-    setConfirmPopupActive(false);
+  // error 팝업 확인 버튼
+  const handleErrorPopup = () => {
+    setErrorMessage('');
+    setErrorPopupActive(false);
   };
 
   return (
     <>
       <Loader />
-      <ConfirmPopup
-        isActive={confirmPopupActive}
-        confirmMessage={confirmMessage}
-        confirmType=""
-        onConfirm={handleCancel}
-        onCancel={handleCancel}
+      <ErrorPopup
+        isActive={errorPopupActive}
+        errorMessage={errorMessage}
+        onConfirm={handleErrorPopup}
       />
       <div className={styles.wrap}>
         <div className={styles.innerWrap}>
