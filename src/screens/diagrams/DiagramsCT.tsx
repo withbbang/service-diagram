@@ -69,8 +69,6 @@ const DiagramsCT = ({
           } else {
             throw Error('No User');
           }
-
-          handleLoaderFalse();
         });
       } else {
         throw Error('No User');
