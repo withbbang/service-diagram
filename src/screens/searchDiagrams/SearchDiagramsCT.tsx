@@ -27,28 +27,43 @@ const SearchDiagramsCT = ({
   const db = getFirestore(app); // Firebase 객체
   const types = ['sequence', 'flow', 'entity-relationship', 'mermaid']; // 다이어그램 타입들
 
+  const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
   const [grade, setGrade] = useState<number | undefined>(); // 로그인 사용자 등급
   const [snippet, setSnippet] = useState<string>(''); // 검색어
   const [didSearch, setDidSearch] = useState<boolean>(false); // 검색 여부
   const [contents, setContents] = useState<Array<any>>([]); // 선택한 다이어그램들 배열 훅
-  const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false); // 확인 팝업 활성 상태
-  const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
+  const [errorPopupActive, setErrorPopupActive] = useState<boolean>(false); // 에러 팝업 활성 상태
+  const [errorMessage, setErrorMessage] = useState<string>(''); // 에러 팝업 내용 설정 훅
 
   const snippetRef = React.useRef() as React.MutableRefObject<HTMLInputElement>; // 검색 input 접근 객체
 
   // 로그인 여부 판단 훅
   useEffect(() => {
-    if (uid !== undefined && uid !== null && uid !== '') {
-      handleLoaderTrue();
-      onAuthStateChanged(auth, async (user) => {
-        if (user) {
-          const docSnap = await getDoc(doc(db, 'authority', user.uid));
+    try {
+      if (uid !== undefined && uid !== null && uid !== '') {
+        handleLoaderTrue();
+        onAuthStateChanged(auth, async (user) => {
+          if (user) {
+            setUid_(user.uid);
+            const docSnap = await getDoc(doc(db, 'authority', user.uid));
 
-          if (docSnap !== undefined && docSnap.exists())
-            setGrade(docSnap.data().grade);
-        }
-        handleLoaderFalse();
-      });
+            if (docSnap !== undefined && docSnap.exists()) {
+              setGrade(docSnap.data().grade);
+            } else {
+              throw Error('No User Grade');
+            }
+          } else {
+            throw Error('No User');
+          }
+        });
+      } else {
+        throw Error('No User');
+      }
+    } catch (error: any) {
+      setUid_('');
+      setGrade(20);
+    } finally {
+      handleLoaderFalse();
     }
   }, [uid]);
 
@@ -56,30 +71,39 @@ const SearchDiagramsCT = ({
   const handleGetContents = async () => {
     handleLoaderTrue();
     try {
-      const queries = handleHasPermission(['r'], grade)
-        ? [
-            ...types.map((type) => {
-              return {
-                type,
-                query: query(collection(db, type), orderBy('createDt', 'desc'))
-              };
-            })
-          ] // 로그인 O
-        : [
-            ...types.map((type) => {
-              return {
-                type,
-                query: query(
-                  collection(db, type),
-                  where('isDone', '==', 'Y'),
-                  orderBy('createDt', 'desc')
-                )
-              };
-            })
-          ]; // 로그인 X
+      const q =
+        uid !== undefined &&
+        uid !== null &&
+        uid !== '' &&
+        uid_ !== '' &&
+        uid === uid_ &&
+        handleHasPermission(['r'], grade)
+          ? [
+              ...types.map((type) => {
+                return {
+                  type,
+                  query: query(
+                    collection(db, type),
+                    orderBy('createDt', 'desc')
+                  )
+                };
+              })
+            ] // 로그인 O & 읽기 권한 있음
+          : [
+              ...types.map((type) => {
+                return {
+                  type,
+                  query: query(
+                    collection(db, type),
+                    where('isDone', '==', 'Y'),
+                    orderBy('createDt', 'desc')
+                  )
+                };
+              })
+            ]; // 로그인 X | 읽기 권한 없음
 
       const querySnapshots = await Promise.all(
-        queries.map(async ({ type, query }) => {
+        q.map(async ({ type, query }) => {
           return {
             type,
             docs: await getDocs(query)
@@ -108,8 +132,8 @@ const SearchDiagramsCT = ({
       });
     } catch (error) {
       console.error(error);
-      setConfirmMessage('Data Fetching Error');
-      setConfirmPopupActive(true);
+      setErrorMessage('Data Fetching Error');
+      setErrorPopupActive(true);
     } finally {
       handleLoaderFalse();
     }
@@ -123,8 +147,8 @@ const SearchDiagramsCT = ({
     }
 
     if (!snippet) {
-      setConfirmMessage('No Search Word');
-      setConfirmPopupActive(true);
+      setErrorMessage('No Search Word');
+      setErrorPopupActive(true);
       handleBlur();
       return;
     }
@@ -139,10 +163,10 @@ const SearchDiagramsCT = ({
     snippetRef && snippetRef.current.blur();
   };
 
-  // confirm 팝업 취소 버튼
-  const handleCancel = () => {
-    setConfirmMessage('');
-    setConfirmPopupActive(false);
+  // error 팝업 확인 버튼
+  const handleErrorPopup = () => {
+    setErrorMessage('');
+    setErrorPopupActive(false);
   };
 
   return (
@@ -150,12 +174,12 @@ const SearchDiagramsCT = ({
       snippet={snippet}
       didSearch={didSearch}
       contents={contents}
-      confirmPopupActive={confirmPopupActive}
-      confirmMessage={confirmMessage}
       snippetRef={snippetRef}
+      errorPopupActive={errorPopupActive}
+      errorMessage={errorMessage}
       onSetSnippet={setSnippet}
       onSearchDiagrams={handleSearchDiagrams}
-      onCancel={handleCancel}
+      onErrorPopup={handleErrorPopup}
     />
   );
 };

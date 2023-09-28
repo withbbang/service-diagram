@@ -1,6 +1,6 @@
 import React from 'react';
 import Loader from 'components/loader';
-import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
+import ErrorPopup from 'components/errorPopup/ErrorPopup';
 import Card from 'components/card/Card';
 import styles from './SearchDiagrams.module.scss';
 
@@ -8,22 +8,20 @@ const SearchDiagramsPT = ({
   snippet,
   didSearch,
   contents,
-  confirmPopupActive,
-  confirmMessage,
+  errorPopupActive,
+  errorMessage,
   snippetRef,
   onSetSnippet,
   onSearchDiagrams,
-  onCancel
+  onErrorPopup
 }: typeSearchDiagramsPT): JSX.Element => {
   return (
     <>
       <Loader />
-      <ConfirmPopup
-        isActive={confirmPopupActive}
-        confirmMessage={confirmMessage}
-        confirmType=""
-        onConfirm={onCancel}
-        onCancel={onCancel}
+      <ErrorPopup
+        isActive={errorPopupActive}
+        errorMessage={errorMessage}
+        onConfirm={onErrorPopup}
       />
       <div className={styles.wrap}>
         <div className={styles.innerWrap}>
@@ -72,12 +70,12 @@ interface typeSearchDiagramsPT {
   snippet: string;
   didSearch: boolean;
   contents: Array<any>;
-  confirmPopupActive: boolean;
-  confirmMessage: string;
+  errorPopupActive: boolean;
+  errorMessage: string;
   snippetRef: React.MutableRefObject<HTMLInputElement>;
   onSetSnippet: React.Dispatch<React.SetStateAction<string>>;
   onSearchDiagrams: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  onCancel: () => void;
+  onErrorPopup: () => void;
 }
 
 export default SearchDiagramsPT;
