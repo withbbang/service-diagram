@@ -76,8 +76,6 @@ const DiagramsCT = ({
     } catch (error: any) {
       setUid_('');
       setGrade(20);
-      setErrorMessage(error.message);
-      setErrorPopupActive(true);
     } finally {
       handleLoaderFalse();
     }
