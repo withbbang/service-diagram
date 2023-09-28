@@ -151,12 +151,6 @@ const DiagramsCT = ({
     handleSetUid('');
   };
 
-  // error 팝업 확인 버튼
-  const handleErrorPopup = () => {
-    setErrorMessage('');
-    setErrorPopupActive(false);
-  };
-
   // 삭제 버튼
   const handleDeleteBtn = async (
     e: React.MouseEvent,
@@ -170,17 +164,23 @@ const DiagramsCT = ({
 
   // confirm 팝업 확인 버튼
   const handleConfirm = async () => {
-    if (type !== undefined) {
+    try {
       handleLoaderTrue();
-      await deleteDoc(doc(db, type, selectedContentId));
-      setConfirmMessage('');
-      setConfirmPopupActive(false);
-      setSelectedContentId('');
-      await handleGetContents(type);
+      if (type !== undefined) {
+        await deleteDoc(doc(db, type, selectedContentId));
+        setConfirmMessage('');
+        setConfirmPopupActive(false);
+        setSelectedContentId('');
+        await handleGetContents(type);
+      } else {
+        setErrorMessage('No Document Detail Type');
+        setErrorPopupActive(true);
+      }
+    } catch (error: any) {
+      setErrorMessage('Data Deleting Error');
+      setErrorPopupActive(true);
+    } finally {
       handleLoaderFalse();
-    } else {
-      setConfirmMessage('No Document Detail Type!');
-      setConfirmPopupActive(true);
     }
   };
 
@@ -189,6 +189,12 @@ const DiagramsCT = ({
     setConfirmMessage('');
     setSelectedContentId('');
     setConfirmPopupActive(false);
+  };
+
+  // error 팝업 확인 버튼
+  const handleErrorPopup = () => {
+    setErrorMessage('');
+    setErrorPopupActive(false);
   };
 
   return (
