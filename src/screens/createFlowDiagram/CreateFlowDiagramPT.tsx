@@ -14,6 +14,7 @@ import ReactFlow, {
   EdgeMouseHandler
 } from 'reactflow';
 import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
+import ErrorPopup from 'components/errorPopup/ErrorPopup';
 import Loader from 'components/loader';
 import styles from './CreateFlowDiagram.module.scss';
 import 'driver.js/dist/driver.css';
@@ -68,6 +69,11 @@ const CreateFlowDiagramPT = ({
         confirmType=""
         onConfirm={onConfirm}
         onCancel={onCancel}
+      />
+      <ErrorPopup
+        isActive={errorPopupActive}
+        errorMessage={errorMessage}
+        onConfirm={onErrorPopup}
       />
       <div className={styles.wrap}>
         <div className={styles.innerWrap}>

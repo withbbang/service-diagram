@@ -47,9 +47,7 @@ const IndexCT = ({
   };
 
   const handleNavigate = (type: string) => {
-    type !== undefined
-      ? navigate(`diagrams/${type}`)
-      : alert('Type 정의 오류!');
+    type !== undefined && navigate(`diagrams/${type}`);
   };
 
   const handleTestErrorReport = () => {

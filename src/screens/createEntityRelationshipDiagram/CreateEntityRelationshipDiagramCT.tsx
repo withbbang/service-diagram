@@ -486,7 +486,8 @@ const CreateErdDiagramCT = ({
         }
         handleLoaderFalse();
       } else {
-        alert('Nothing Restored');
+        setErrorMessage('Nothing Restored');
+        setErrorPopupActive(true);
         return;
       }
     };

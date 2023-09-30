@@ -111,6 +111,8 @@ const UpdateEntityRelationshipDiagramCT = ({
   const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
   const [errorPopupActive, setErrorPopupActive] = useState<boolean>(false); // 에러 팝업 활성 상태
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러 팝업 내용 설정 훅
+  const [errorPopupHasCallback, setErrorPopupHasCallback] =
+    useState<boolean>(false); // 에러 팝업 확인 콜백 여부 훅
 
   // 다이어그램 제목 input 참조 객체
   const titleNameRef = useRef(
@@ -158,6 +160,7 @@ const UpdateEntityRelationshipDiagramCT = ({
       setUid_('');
       setErrorMessage(error.message);
       setErrorPopupActive(true);
+      setErrorPopupHasCallback(true);
     } finally {
       handleLoaderFalse();
     }
@@ -511,7 +514,9 @@ const UpdateEntityRelationshipDiagramCT = ({
         }
         handleLoaderFalse();
       } else {
-        alert('Nothing Restored');
+        setErrorMessage('Nothing Restored');
+        setErrorPopupActive(true);
+        setErrorPopupHasCallback(false);
         return;
       }
     };
@@ -625,12 +630,14 @@ const UpdateEntityRelationshipDiagramCT = ({
           console.error(error);
           setErrorMessage('Data Updating Error');
           setErrorPopupActive(true);
+          setErrorPopupHasCallback(true);
         } finally {
           handleLoaderFalse();
         }
       } else {
         setErrorMessage('No Document Detail ID!');
         setErrorPopupActive(true);
+        setErrorPopupHasCallback(true);
       }
     }
   };
@@ -657,7 +664,7 @@ const UpdateEntityRelationshipDiagramCT = ({
   const handleErrorPopup = () => {
     setErrorMessage('');
     setErrorPopupActive(false);
-    navigate(-1);
+    errorPopupHasCallback && navigate(-1);
   };
 
   return (

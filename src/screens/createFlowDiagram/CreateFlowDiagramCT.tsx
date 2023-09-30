@@ -389,7 +389,8 @@ const CreateFlowDiagramCT = ({
         }
         handleLoaderFalse();
       } else {
-        alert('Nothing Restored');
+        setErrorMessage('Nothing Restored');
+        setErrorPopupActive(true);
         return;
       }
     };
