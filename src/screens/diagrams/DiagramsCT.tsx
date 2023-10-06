@@ -34,6 +34,7 @@ const DiagramsCT = ({
 
   const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
   const [grade, setGrade] = useState<number>(20); // 유저 등급
+  const [corporate, setCorporate] = useState<string>(''); // 유저 기업
   const [title, setTitle] = useState<string>(''); // 선택한 다이어그램에 따른 제목
   const [contents, setContents] = useState<Array<typeContent>>([]); // 선택한 다이어그램들 배열 훅
   const [selectedContentId, setSelectedContentId] = useState<string>(''); // 다어그램들 중 선택한 놈 id
@@ -49,7 +50,7 @@ const DiagramsCT = ({
 
   useEffect(() => {
     type && handleGetContents(type);
-  }, [grade]);
+  }, [grade, corporate]);
 
   // 로그인 여부 판단 훅
   useEffect(() => {
@@ -62,9 +63,12 @@ const DiagramsCT = ({
             const docSnap = await getDoc(doc(db, 'authority', user.uid));
 
             if (docSnap !== undefined && docSnap.exists()) {
-              setGrade(docSnap.data().grade);
+              const { grade, corporate } = docSnap.data();
+
+              setGrade(grade);
+              setCorporate(corporate);
             } else {
-              throw Error('No User Grade');
+              throw Error('No User Info');
             }
           } else {
             throw Error('No User');
@@ -86,14 +90,21 @@ const DiagramsCT = ({
     handleLoaderTrue();
 
     try {
+      console.log(corporate);
       const q =
         uid !== undefined &&
         uid !== null &&
         uid !== '' &&
         uid_ !== '' &&
         uid === uid_ &&
-        handleHasPermission(['r'], grade)
-          ? query(collection(db, type), orderBy('createDt', 'desc')) // 로그인 O
+        handleHasPermission(['r'], grade) // 로그인 O
+          ? corporate === 'ALL'
+            ? query(collection(db, type), orderBy('createDt', 'desc')) // 전체 보기
+            : query(
+                collection(db, type),
+                where('corporate', 'in', ['ALL', corporate]),
+                orderBy('createDt', 'desc')
+              ) // 특정 기업만 보기
           : query(
               collection(db, type),
               where('isDone', '==', 'Y'),
