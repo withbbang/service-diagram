@@ -37,14 +37,14 @@ const ViewSequenceDiagramCT = ({
           }
 
           if (docSnap !== undefined && docSnap.exists()) {
-            const { title, content, isDone } = docSnap.data();
+            const { title, content, isDone, corporate } = docSnap.data();
 
             if (
               isDone !== 'Y' &&
               (uid === undefined ||
                 uid === null ||
                 uid === '' ||
-                !handleHasPermission(['r'], await handleGetGrade()))
+                !handleHasPermission(['r'], await handleGetGrade(corporate)))
             ) {
               throw Error('Invalid Detail ID');
             }
@@ -68,12 +68,14 @@ const ViewSequenceDiagramCT = ({
   }, []);
 
   // 로그인 되어있을 경우 grade 반환 함수
-  const handleGetGrade = async () => {
+  const handleGetGrade = async (corp?: string) => {
     if (uid !== undefined && uid !== null && uid !== '') {
       const docSnap = await getDoc(doc(db, 'authority', uid));
 
       if (docSnap !== undefined && docSnap.exists()) {
-        return docSnap.data().grade;
+        const { grade, corporate } = docSnap.data();
+
+        if (corporate === 'ALL' || corporate === corp) return grade;
       }
     }
   };
