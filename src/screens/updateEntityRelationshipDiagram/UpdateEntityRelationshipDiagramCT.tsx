@@ -132,27 +132,7 @@ const UpdateEntityRelationshipDiagramCT = ({
   useEffect(() => {
     try {
       if (uid !== undefined && uid !== null && uid !== '') {
-        handleLoaderTrue();
-        onAuthStateChanged(auth, async (user) => {
-          if (user) {
-            setUid_(user.uid);
-            const docSnap = await getDoc(doc(db, 'authority', user.uid));
-
-            if (docSnap !== undefined && docSnap.exists()) {
-              const { grade } = docSnap.data();
-
-              if (!handleHasPermission(['u'], grade)) {
-                throw Error("You Don't Have Permission");
-              } else {
-                await handleSetContent();
-              }
-            } else {
-              throw Error('No User Grade');
-            }
-          } else {
-            throw Error('No User');
-          }
-        });
+        handleCheckAuthStateChanged();
       } else {
         throw Error('No User');
       }
@@ -161,8 +141,6 @@ const UpdateEntityRelationshipDiagramCT = ({
       setErrorMessage(error.message);
       setErrorPopupActive(true);
       setErrorPopupHasCallback(true);
-    } finally {
-      handleLoaderFalse();
     }
   }, [uid]);
 
@@ -217,6 +195,41 @@ const UpdateEntityRelationshipDiagramCT = ({
       setConfirmPopupActive(false);
     }
   }, [selectedTableIdxForDelete]);
+
+  // 상태저장된 로그인 정보와 서버에 저장된 정보가 동일한지 확인하는 함수
+  const handleCheckAuthStateChanged = () => {
+    handleLoaderTrue();
+    onAuthStateChanged(auth, async (user) => {
+      try {
+        if (user) {
+          setUid_(user.uid);
+
+          const docSnap = await getDoc(doc(db, 'authority', user.uid));
+
+          if (docSnap !== undefined && docSnap.exists()) {
+            const { grade } = docSnap.data();
+
+            if (!handleHasPermission(['u'], grade)) {
+              throw Error("You Don't Have Permission");
+            } else {
+              await handleSetContent();
+            }
+          } else {
+            throw Error('No User Grade');
+          }
+        } else {
+          throw Error('No User');
+        }
+      } catch (error: any) {
+        setUid_('');
+        setErrorMessage(error.message);
+        setErrorPopupActive(true);
+        setErrorPopupHasCallback(true);
+      } finally {
+        handleLoaderFalse();
+      }
+    });
+  };
 
   // 수정할 컬럼 input 접근
   const handleColumnInputChange = useCallback(

@@ -97,27 +97,7 @@ const UpdateFlowDiagramCT = ({
   useEffect(() => {
     try {
       if (uid !== undefined && uid !== null && uid !== '') {
-        handleLoaderTrue();
-        onAuthStateChanged(auth, async (user) => {
-          if (user) {
-            setUid_(user.uid);
-            const docSnap = await getDoc(doc(db, 'authority', user.uid));
-
-            if (docSnap !== undefined && docSnap.exists()) {
-              const { grade } = docSnap.data();
-
-              if (!handleHasPermission(['u'], grade)) {
-                throw Error("You Don't Have Permission");
-              } else {
-                await handleSetContent();
-              }
-            } else {
-              throw Error('No User Grade');
-            }
-          } else {
-            throw Error('No User');
-          }
-        });
+        handleCheckAuthStateChanged();
       } else {
         throw Error('No User');
       }
@@ -126,8 +106,6 @@ const UpdateFlowDiagramCT = ({
       setErrorMessage(error.message);
       setErrorPopupActive(true);
       setErrorPopupHasCallback(true);
-    } finally {
-      handleLoaderFalse();
     }
   }, [uid]);
 
@@ -162,6 +140,41 @@ const UpdateFlowDiagramCT = ({
       })
     );
   }, [edgeName, setEdges]);
+
+  // 상태저장된 로그인 정보와 서버에 저장된 정보가 동일한지 확인하는 함수
+  const handleCheckAuthStateChanged = () => {
+    handleLoaderTrue();
+    onAuthStateChanged(auth, async (user) => {
+      try {
+        if (user) {
+          setUid_(user.uid);
+
+          const docSnap = await getDoc(doc(db, 'authority', user.uid));
+
+          if (docSnap !== undefined && docSnap.exists()) {
+            const { grade } = docSnap.data();
+
+            if (!handleHasPermission(['u'], grade)) {
+              throw Error("You Don't Have Permission");
+            } else {
+              await handleSetContent();
+            }
+          } else {
+            throw Error('No User Grade');
+          }
+        } else {
+          throw Error('No User');
+        }
+      } catch (error: any) {
+        setUid_('');
+        setErrorMessage(error.message);
+        setErrorPopupActive(true);
+        setErrorPopupHasCallback(true);
+      } finally {
+        handleLoaderFalse();
+      }
+    });
+  };
 
   // 엣지로 노드와 연결하는 순간 동작하는 메소드
   const handleConnect = useCallback(
