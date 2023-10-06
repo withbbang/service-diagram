@@ -2,7 +2,7 @@ import { typeSVG } from './types';
 
 const SVG = (props: typeSVG): JSX.Element => {
   switch (props.type) {
-    case 'company':
+    case 'corporate':
       return (
         <svg
           fill={props.fill ? props.fill : '#000'}

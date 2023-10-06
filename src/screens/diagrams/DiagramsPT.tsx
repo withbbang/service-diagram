@@ -77,6 +77,7 @@ const DiagramsPT = ({
                 idx={idx}
                 id={content.id}
                 title={content.title}
+                corporate={content.corporate}
                 createDt={content.createDt}
                 type={type}
                 path={`/diagram/${type}/${content.id}`}

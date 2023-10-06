@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   width: 45%;
-  padding: 3%;
+  padding: 3% 30px;
   margin: 20px 0;
   border-radius: 30px;
   box-sizing: border-box;
@@ -59,12 +59,22 @@
   > span {
     font-size: 0.9rem;
     position: absolute;
+  }
+
+  .cardInfo {
+    width: calc(100% - 60px);
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
     bottom: 15px;
-    right: 30px;
+
+    > span {
+      display: flex;
+      align-items: center;
+    }
   }
 
   .add {
-    position: absolute;
     top: calc(50% - 50px);
     left: calc(50% - 50px);
   }

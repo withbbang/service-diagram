@@ -39,5 +39,6 @@ export interface typeCustomEdge extends EdgeProps {}
 
 export interface typeContent extends DocumentData {
   id: string;
+  corporate: string;
   title: string;
 }

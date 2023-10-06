@@ -30,6 +30,7 @@ const mapDispatchToProps = (dispatch: (actionFunction: Action<any>) => any) => {
 const Card = ({
   id,
   title,
+  corporate,
   createDt,
   type,
   path,
@@ -67,7 +68,16 @@ const Card = ({
         ''
       )}
       <h3>{title}</h3>
-      <span>{createDt && createDt}</span>
+      <div className={styles.cardInfo}>
+        {corporate && (
+          <span>
+            {/* TODO: 나중에 주석 풀것 */}
+            {/* <SVG type="corporate" width="18px" height="18px" />
+            &nbsp;{corporate} */}
+          </span>
+        )}
+        <span>{createDt && createDt}</span>
+      </div>
       {id === '0' && (
         <span className={styles.add}>
           <SVG type="add" width="100px" height="100px" />
@@ -81,6 +91,7 @@ interface typeCard extends CommonState {
   idx: number;
   id: string;
   title: string;
+  corporate?: string;
   createDt?: string;
   type?: string;
   path: string;
