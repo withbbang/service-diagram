@@ -29,6 +29,7 @@ const SearchDiagramsCT = ({
 
   const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
   const [grade, setGrade] = useState<number | undefined>(); // 로그인 사용자 등급
+  const [corporate, setCorporate] = useState<string>('');
   const [snippet, setSnippet] = useState<string>(''); // 검색어
   const [didSearch, setDidSearch] = useState<boolean>(false); // 검색 여부
   const [contents, setContents] = useState<Array<any>>([]); // 선택한 다이어그램들 배열 훅
@@ -48,16 +49,13 @@ const SearchDiagramsCT = ({
             const docSnap = await getDoc(doc(db, 'authority', user.uid));
 
             if (docSnap !== undefined && docSnap.exists()) {
-              setGrade(docSnap.data().grade);
-            } else {
-              throw Error('No User Grade');
+              const { grade, corporate } = docSnap.data();
+
+              setGrade(grade);
+              setCorporate(corporate);
             }
-          } else {
-            throw Error('No User');
           }
         });
-      } else {
-        throw Error('No User');
       }
     } catch (error: any) {
       setUid_('');
@@ -77,18 +75,31 @@ const SearchDiagramsCT = ({
         uid !== '' &&
         uid_ !== '' &&
         uid === uid_ &&
-        handleHasPermission(['r'], grade)
-          ? [
-              ...types.map((type) => {
-                return {
-                  type,
-                  query: query(
-                    collection(db, type),
-                    orderBy('createDt', 'desc')
-                  )
-                };
-              })
-            ] // 로그인 O & 읽기 권한 있음
+        handleHasPermission(['r'], grade) // 로그인 O
+          ? corporate === 'ALL'
+            ? [
+                ...types.map((type) => {
+                  return {
+                    type,
+                    query: query(
+                      collection(db, type),
+                      orderBy('createDt', 'desc')
+                    )
+                  };
+                })
+              ] // 전체 보기
+            : [
+                ...types.map((type) => {
+                  return {
+                    type,
+                    query: query(
+                      collection(db, type),
+                      where('corporate', 'in', ['ALL', corporate]),
+                      orderBy('createDt', 'desc')
+                    )
+                  };
+                })
+              ] // 특정 기업만 보기
           : [
               ...types.map((type) => {
                 return {
@@ -100,7 +111,7 @@ const SearchDiagramsCT = ({
                   )
                 };
               })
-            ]; // 로그인 X | 읽기 권한 없음
+            ]; // 로그인 X
 
       const querySnapshots = await Promise.all(
         q.map(async ({ type, query }) => {

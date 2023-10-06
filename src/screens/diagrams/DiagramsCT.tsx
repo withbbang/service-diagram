@@ -67,15 +67,9 @@ const DiagramsCT = ({
 
               setGrade(grade);
               setCorporate(corporate);
-            } else {
-              throw Error('No User Info');
             }
-          } else {
-            throw Error('No User');
           }
         });
-      } else {
-        throw Error('No User');
       }
     } catch (error: any) {
       setUid_('');
@@ -90,7 +84,6 @@ const DiagramsCT = ({
     handleLoaderTrue();
 
     try {
-      console.log(corporate);
       const q =
         uid !== undefined &&
         uid !== null &&
