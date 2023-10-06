@@ -356,6 +356,7 @@ const UpdateFlowDiagramCT = ({
   const handleSetContent = async (corp?: string) => {
     if (contentId !== undefined) {
       let docSnap;
+
       try {
         docSnap = await getDoc(doc(db, type, contentId));
       } catch (error) {
