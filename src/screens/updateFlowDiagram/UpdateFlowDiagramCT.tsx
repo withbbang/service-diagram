@@ -152,12 +152,12 @@ const UpdateFlowDiagramCT = ({
           const docSnap = await getDoc(doc(db, 'authority', user.uid));
 
           if (docSnap !== undefined && docSnap.exists()) {
-            const { grade } = docSnap.data();
+            const { grade, corporate } = docSnap.data();
 
             if (!handleHasPermission(['u'], grade)) {
               throw Error("You Don't Have Permission");
             } else {
-              await handleSetContent();
+              await handleSetContent(corporate);
             }
           } else {
             throw Error('No User Grade');
@@ -353,7 +353,7 @@ const UpdateFlowDiagramCT = ({
   }, [setNodes, setViewport]);
 
   // 초기 다이어그램 불러오기
-  const handleSetContent = async () => {
+  const handleSetContent = async (corp?: string) => {
     if (contentId !== undefined) {
       let docSnap;
       try {
@@ -364,12 +364,12 @@ const UpdateFlowDiagramCT = ({
       }
 
       if (docSnap !== undefined && docSnap.exists()) {
-        const { title, content, isDone } = docSnap.data();
+        const { title, content, isDone, corporate } = docSnap.data();
 
-        setTitle(title);
-        setIsDone(isDone);
+        if (corp === 'ALL' || corporate === corp) {
+          setTitle(title);
+          setIsDone(isDone);
 
-        if (content) {
           const flow = JSON.parse(content);
 
           if (flow) {
@@ -383,6 +383,8 @@ const UpdateFlowDiagramCT = ({
             setEdges(flow.edges || []);
             setViewport({ x, y, zoom });
           }
+        } else {
+          throw Error("You Don't Have Permission");
         }
       } else {
         throw Error('No Content');
