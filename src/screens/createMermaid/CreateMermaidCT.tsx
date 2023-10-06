@@ -8,7 +8,7 @@ import {
   serverTimestamp
 } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
-import { app, auth } from 'modules/utils';
+import { app, auth, handleHasPermission } from 'modules/utils';
 import CreateMermaidPT from './CreateMermaidPT';
 import styles from 'components/functionPopup/FunctionPopup.module.scss';
 import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
@@ -91,23 +91,25 @@ const CreateMermaidCT = ({
   // 기능 팝업 내부 dom
   const handleChildren = (
     <div className={styles.contentBox}>
-      <div className={styles.option}>
-        <input
-          placeholder="TITLE"
-          type="text"
-          id="title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          ref={titleRef}
-        />
-        <div className={styles.select}>
-          <label>Complete</label>
-          <select value={isDone} onChange={(e) => setIsDone(e.target.value)}>
-            <option value={'N'}>N</option>
-            <option value={'Y'}>Y</option>
-          </select>
+      {handleHasPermission(['c'], grade) && (
+        <div className={styles.option}>
+          <input
+            placeholder="TITLE"
+            type="text"
+            id="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            ref={titleRef}
+          />
+          <div className={styles.select}>
+            <label>Complete</label>
+            <select value={isDone} onChange={(e) => setIsDone(e.target.value)}>
+              <option value={'N'}>N</option>
+              <option value={'Y'}>Y</option>
+            </select>
+          </div>
         </div>
-      </div>
+      )}
       <textarea
         placeholder="CONTENT"
         id="content"

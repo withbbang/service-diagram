@@ -24,6 +24,7 @@ const UpdateSequenceDiagramCT = ({
   const navigate = useNavigate();
 
   const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
+  const [grade, setGrade] = useState<number | undefined>(); // 로그인 사용자 등급
   const [title, setTitle] = useState<string>(''); // 다이어그램 제목
   const [content, setContent] = useState<string>(``); // 다이어그램 내용
   const [isDone, setIsDone] = useState<string>('N'); // 완료 여부
@@ -68,6 +69,7 @@ const UpdateSequenceDiagramCT = ({
 
           if (docSnap !== undefined && docSnap.exists()) {
             const { grade, corporate } = docSnap.data();
+            setGrade(grade);
 
             if (!handleHasPermission(['u'], grade)) {
               throw Error("You Don't Have Permission");
@@ -115,23 +117,25 @@ const UpdateSequenceDiagramCT = ({
   // 기능 팝업 내부 dom
   const handleChildren = (
     <div className={styles.contentBox}>
-      <div className={styles.option}>
-        <input
-          placeholder="TITLE"
-          type="text"
-          id="title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          ref={titleRef}
-        />
-        <div className={styles.select}>
-          <label>Complete</label>
-          <select value={isDone} onChange={(e) => setIsDone(e.target.value)}>
-            <option value={'N'}>N</option>
-            <option value={'Y'}>Y</option>
-          </select>
+      {handleHasPermission(['u'], grade) && (
+        <div className={styles.option}>
+          <input
+            placeholder="TITLE"
+            type="text"
+            id="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            ref={titleRef}
+          />
+          <div className={styles.select}>
+            <label>Complete</label>
+            <select value={isDone} onChange={(e) => setIsDone(e.target.value)}>
+              <option value={'N'}>N</option>
+              <option value={'Y'}>Y</option>
+            </select>
+          </div>
         </div>
-      </div>
+      )}
       <textarea
         placeholder="CONTENT"
         id="content"
