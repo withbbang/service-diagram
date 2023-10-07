@@ -36,15 +36,27 @@ const IndexPT = ({
         </div>
         <h1>Service Diagrams</h1>
         <div className={styles.buttons}>
-          <button onClick={() => onNavigate('sequence')}>
-            Sequence Diagrams
-          </button>
-          <button onClick={() => onNavigate('flow')}>Flow Diagrams</button>
-          <button onClick={() => onNavigate('entity-relationship')}>
-            Entity-Relationship Diagrams
-          </button>
-          <button onClick={() => onNavigate('mermaid')}>Mermaid</button>
-          <button onClick={() => onTestErrorReport()}>Test Error Report</button>
+          <div>
+            <button onClick={() => onNavigate('sequence')}>
+              Sequence Diagrams
+            </button>
+          </div>
+          <div>
+            <button onClick={() => onNavigate('flow')}>Flow Diagrams</button>
+          </div>
+          <div>
+            <button onClick={() => onNavigate('entity-relationship')}>
+              Entity-Relationship Diagrams
+            </button>
+          </div>
+          <div>
+            <button onClick={() => onNavigate('mermaid')}>Mermaid</button>
+          </div>
+          <div>
+            <button onClick={() => onTestErrorReport()}>
+              Test Error Report
+            </button>
+          </div>
         </div>
       </div>
     </>

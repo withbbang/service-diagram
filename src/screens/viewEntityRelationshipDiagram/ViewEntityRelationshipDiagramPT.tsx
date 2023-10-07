@@ -10,6 +10,7 @@ import ReactFlow, {
 } from 'reactflow';
 import ErrorPopup from 'components/errorPopup/ErrorPopup';
 import Loader from 'components/loader';
+import SVG from 'modules/SVG';
 import styles from './ViewEntityRelationshipDiagram.module.scss';
 
 const EntityRelationdshipPT = ({
@@ -21,7 +22,8 @@ const EntityRelationdshipPT = ({
   tableTypes,
   edgeTypes,
   onInit,
-  onErrorPopup
+  onErrorPopup,
+  onBack
 }: typeEntityRelationdshipPT): JSX.Element => {
   return (
     <>
@@ -44,6 +46,11 @@ const EntityRelationdshipPT = ({
             <Controls />
             <MiniMap />
             <Background gap={12} size={1} />
+            <div className={styles.backBtn}>
+              <span onClick={onBack}>
+                <SVG type="back" width="30px" height="30px" />
+              </span>
+            </div>
             <div className={styles.updatenode__controls}>
               <label>Title:</label>
               <input value={title} disabled />
@@ -65,6 +72,7 @@ interface typeEntityRelationdshipPT {
   errorMessage: string;
   onInit: React.Dispatch<any>;
   onErrorPopup: () => void;
+  onBack: () => void;
 }
 
 export default EntityRelationdshipPT;

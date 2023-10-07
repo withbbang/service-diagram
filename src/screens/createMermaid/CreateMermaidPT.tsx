@@ -22,7 +22,8 @@ const CreateMermaidPT = ({
   onSaveBtn,
   onConfirm,
   onCancel,
-  onErrorPopup
+  onErrorPopup,
+  onBack
 }: typeCreateMermaidPT): JSX.Element => {
   return (
     <>
@@ -45,6 +46,11 @@ const CreateMermaidPT = ({
         onClose={onCreateUpdatePopup}
       />
       <div className={styles.wrap}>
+        <div className={styles.backBtn}>
+          <span onClick={onBack}>
+            <SVG type="back" width="30px" height="30px" />
+          </span>
+        </div>
         <div className={styles.innerWrap}>
           {handleHasPermission(['c'], grade) ? (
             <button className={styles.saveBtn} onClick={onSaveBtn}>
@@ -81,6 +87,7 @@ interface typeCreateMermaidPT {
   onConfirm: () => void;
   onCancel: () => void;
   onErrorPopup: () => void;
+  onBack: () => void;
 }
 
 export default CreateMermaidPT;

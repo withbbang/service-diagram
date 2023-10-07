@@ -87,6 +87,10 @@ const ViewMermaidCT = ({
     navigate(-1);
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   return (
     <ViewMermaidPT
       title={title}
@@ -94,6 +98,7 @@ const ViewMermaidCT = ({
       errorPopupActive={errorPopupActive}
       errorMessage={errorMessage}
       onErrorPopup={handleErrorPopup}
+      onBack={handleBack}
     />
   );
 };

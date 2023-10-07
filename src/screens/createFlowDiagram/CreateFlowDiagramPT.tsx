@@ -16,10 +16,11 @@ import ReactFlow, {
 import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
 import ErrorPopup from 'components/errorPopup/ErrorPopup';
 import Loader from 'components/loader';
-import styles from './CreateFlowDiagram.module.scss';
+import { handleHasPermission } from 'modules/utils';
+import SVG from 'modules/SVG';
 import 'driver.js/dist/driver.css';
 import 'reactflow/dist/style.css';
-import { handleHasPermission } from 'modules/utils';
+import styles from './CreateFlowDiagram.module.scss';
 
 const CreateFlowDiagramPT = ({
   grade,
@@ -55,6 +56,7 @@ const CreateFlowDiagramPT = ({
   onTemporarilySave,
   onRestore,
   onSaveBtn,
+  onBack,
   onConfirm,
   onCancel,
   onInit,
@@ -94,6 +96,11 @@ const CreateFlowDiagramPT = ({
             <Controls />
             <MiniMap />
             <Background gap={12} size={1} />
+            <div className={styles.backBtn}>
+              <span onClick={onBack}>
+                <SVG type="back" width="30px" height="30px" />
+              </span>
+            </div>
             <div className={styles.updatenode__controls}>
               <label>Title Label:</label>
               <input
@@ -186,6 +193,7 @@ interface typeCreateFlowDiagramPT {
   onTemporarilySave: () => void;
   onRestore: () => void;
   onSaveBtn: () => void;
+  onBack: () => void;
   onConfirm: () => void;
   onCancel: () => void;
   onInit: React.Dispatch<any>;

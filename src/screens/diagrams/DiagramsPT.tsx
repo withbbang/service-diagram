@@ -20,8 +20,9 @@ const DiagramsPT = ({
   errorMessage,
   onSearch,
   onSignIn,
-  // onSignUp,
+  onSignUp,
   onSignOut,
+  onBack,
   onDeleteBtn,
   onConfirm,
   onCancel,
@@ -43,6 +44,11 @@ const DiagramsPT = ({
         onConfirm={onErrorPopup}
       />
       <div className={styles.wrap}>
+        <div className={styles.backBtn}>
+          <span onClick={onBack}>
+            <SVG type="back" width="30px" height="30px" />
+          </span>
+        </div>
         <div className={styles.signBtns}>
           <span onClick={onSearch}>
             <SVG type="search" width="30px" height="30px" />
@@ -106,6 +112,7 @@ interface typeDiagramsPT {
   onSignIn: () => void;
   onSignUp: () => void;
   onSignOut: () => void;
+  onBack: () => void;
   onDeleteBtn: (e: React.MouseEvent, selectedContentId: string) => void;
   onConfirm: () => void;
   onCancel: () => void;

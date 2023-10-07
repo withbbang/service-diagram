@@ -563,6 +563,10 @@ const CreateErdDiagramCT = ({
     setConfirmPopupActive(true);
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   // error 팝업 확인 버튼
   const handleErrorPopup = () => {
     setErrorMessage('');
@@ -618,6 +622,7 @@ const CreateErdDiagramCT = ({
       onRestore={handleRestore}
       onInit={setRfInstance}
       onSaveBtn={handleSaveBtn}
+      onBack={handleBack}
       onAddHandle={handleAddHandle}
       onConfirm={handleConfirm}
       onCancel={handleCancel}

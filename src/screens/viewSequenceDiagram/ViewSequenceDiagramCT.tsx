@@ -87,6 +87,10 @@ const ViewSequenceDiagramCT = ({
     navigate(-1);
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   return (
     <ViewSequenceDiagramPT
       title={title}
@@ -94,6 +98,7 @@ const ViewSequenceDiagramCT = ({
       errorPopupActive={errorPopupActive}
       errorMessage={errorMessage}
       onErrorPopup={handleErrorPopup}
+      onBack={handleBack}
     />
   );
 };

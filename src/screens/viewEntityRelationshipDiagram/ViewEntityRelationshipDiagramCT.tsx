@@ -173,6 +173,10 @@ const ViewEntityRelationshipDiagramCT = ({
     navigate(-1);
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   return (
     <ViewEntityRelationshipDiagramPT
       title={title}
@@ -184,6 +188,7 @@ const ViewEntityRelationshipDiagramCT = ({
       errorMessage={errorMessage}
       onInit={setRfInstance}
       onErrorPopup={handleErrorPopup}
+      onBack={handleBack}
     />
   );
 };

@@ -221,6 +221,10 @@ const UpdateMermaidCT = ({
     navigate(-1);
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   return (
     <UpdateMermaidPT
       uid={uid}
@@ -238,6 +242,7 @@ const UpdateMermaidCT = ({
       onConfirm={handleConfirm}
       onCancel={handleCancel}
       onErrorPopup={handleErrorPopup}
+      onBack={handleBack}
     />
   );
 };

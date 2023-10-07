@@ -673,6 +673,10 @@ const UpdateEntityRelationshipDiagramCT = ({
     setConfirmPopupActive(true);
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   // error 팝업 확인 버튼
   const handleErrorPopup = () => {
     setErrorMessage('');
@@ -730,6 +734,7 @@ const UpdateEntityRelationshipDiagramCT = ({
       onRestore={handleRestore}
       onInit={setRfInstance}
       onUpdateBtn={handleUpdateBtn}
+      onBack={handleBack}
       onAddHandle={handleAddHandle}
       onConfirm={handleConfirm}
       onCancel={handleCancel}

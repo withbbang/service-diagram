@@ -17,12 +17,12 @@ import {
   handleLoaderFalse,
   handleLoaderTrue
 } from 'middlewares/reduxToolkits/commonSlice';
-import styles from './SignUp.module.scss';
 import Loader from 'components/loader';
-import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
+import SVG from 'modules/SVG';
 import ErrorPopup from 'components/errorPopup/ErrorPopup';
 import { app, auth } from 'modules/utils';
 import { useNavigate } from 'react-router-dom';
+import styles from './SignUp.module.scss';
 
 const mapStateToProps = (state: PropState): CommonState => {
   return { ...state.common };
@@ -119,6 +119,10 @@ const SignUp = ({
     setErrorPopupActive(false);
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   return (
     <>
       <Loader />
@@ -128,6 +132,11 @@ const SignUp = ({
         onConfirm={handleErrorPopup}
       />
       <div className={styles.wrap}>
+        <div className={styles.backBtn}>
+          <span onClick={handleBack}>
+            <SVG type="back" width="30px" height="30px" />
+          </span>
+        </div>
         <div className={styles.innerWrap}>
           <h2>Sign Up</h2>
           <div className={styles.inputDiv}>

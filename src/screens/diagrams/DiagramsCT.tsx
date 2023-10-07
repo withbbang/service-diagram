@@ -156,6 +156,10 @@ const DiagramsCT = ({
     handleSetUid('');
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   // 삭제 버튼
   const handleDeleteBtn = async (
     e: React.MouseEvent,
@@ -218,6 +222,7 @@ const DiagramsCT = ({
       onSignIn={handleSignIn}
       onSignUp={handleSignUp}
       onSignOut={handleSignOut}
+      onBack={handleBack}
       onDeleteBtn={handleDeleteBtn}
       onConfirm={handleConfirm}
       onCancel={handleCancel}

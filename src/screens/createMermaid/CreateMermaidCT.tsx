@@ -160,6 +160,10 @@ const CreateMermaidCT = ({
     setErrorPopupActive(false);
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   return (
     <CreateMermaidPT
       grade={grade}
@@ -176,6 +180,7 @@ const CreateMermaidCT = ({
       onConfirm={handleConfirm}
       onCancel={handleCancel}
       onErrorPopup={handleErrorPopup}
+      onBack={handleBack}
     />
   );
 };

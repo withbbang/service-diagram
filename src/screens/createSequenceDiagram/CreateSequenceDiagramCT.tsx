@@ -164,6 +164,10 @@ const CreateSequenceDiagramCT = ({
     setErrorPopupActive(false);
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   return (
     <CreateSequenceDiagramPT
       grade={grade}
@@ -180,6 +184,7 @@ const CreateSequenceDiagramCT = ({
       onConfirm={handleConfirm}
       onCancel={handleCancel}
       onErrorPopup={handleErrorPopup}
+      onBack={handleBack}
     />
   );
 };

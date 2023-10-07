@@ -22,7 +22,8 @@ const UpdateMermaidPT = ({
   onUpdateBtn,
   onConfirm,
   onCancel,
-  onErrorPopup
+  onErrorPopup,
+  onBack
 }: typeUpdateMermaidPT): JSX.Element => {
   return (
     <>
@@ -45,6 +46,11 @@ const UpdateMermaidPT = ({
         onClose={onUpdatePopup}
       />
       <div className={styles.wrap}>
+        <div className={styles.backBtn}>
+          <span onClick={onBack}>
+            <SVG type="back" width="30px" height="30px" />
+          </span>
+        </div>
         <div className={styles.innerWrap}>
           {uid !== undefined &&
           uid !== null &&
@@ -86,6 +92,7 @@ interface typeUpdateMermaidPT {
   onConfirm: () => void;
   onCancel: () => void;
   onErrorPopup: () => void;
+  onBack: () => void;
 }
 
 export default UpdateMermaidPT;

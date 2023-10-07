@@ -2,6 +2,7 @@ import React from 'react';
 import Mermaid from 'components/mermaid';
 import ErrorPopup from 'components/errorPopup/ErrorPopup';
 import Loader from 'components/loader';
+import SVG from 'modules/SVG';
 import styles from './ViewMermaid.module.scss';
 
 const ViewMermaidPT = ({
@@ -9,7 +10,8 @@ const ViewMermaidPT = ({
   content,
   errorPopupActive,
   errorMessage,
-  onErrorPopup
+  onErrorPopup,
+  onBack
 }: typeViewMermaidPT): JSX.Element => {
   return (
     <>
@@ -20,6 +22,11 @@ const ViewMermaidPT = ({
         onConfirm={onErrorPopup}
       />
       <div className={styles.wrap}>
+        <div className={styles.backBtn}>
+          <span onClick={onBack}>
+            <SVG type="back" width="30px" height="30px" />
+          </span>
+        </div>
         <div className={styles.innerWrap}>
           <h2 className={styles.title}>{title}</h2>
           <div className={styles.content}>
@@ -37,6 +44,7 @@ interface typeViewMermaidPT {
   errorPopupActive: boolean;
   errorMessage: string;
   onErrorPopup: () => void;
+  onBack: () => void;
 }
 
 export default ViewMermaidPT;

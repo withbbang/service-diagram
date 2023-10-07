@@ -401,6 +401,10 @@ const UpdateFlowDiagramCT = ({
     setConfirmPopupActive(true);
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   // confirm 팝업 확인 버튼
   const handleConfirm = async () => {
     if (contentId !== undefined) {
@@ -479,6 +483,7 @@ const UpdateFlowDiagramCT = ({
       onTemporarilySave={handleTemporarilySave}
       onRestore={handleRestore}
       onUpdateBtn={handleUpdateBtn}
+      onBack={handleBack}
       onConfirm={handleConfirm}
       onCancel={handleCancel}
       onInit={setRfInstance}

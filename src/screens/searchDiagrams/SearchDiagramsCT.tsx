@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
 import {
   app,
@@ -24,6 +25,7 @@ const SearchDiagramsCT = ({
   handleLoaderTrue,
   handleLoaderFalse
 }: typeSearchDiagramsCT): JSX.Element => {
+  const navigate = useNavigate(); // router 제어 훅
   const db = getFirestore(app); // Firebase 객체
   const types = ['sequence', 'flow', 'entity-relationship', 'mermaid']; // 다이어그램 타입들
 
@@ -170,6 +172,10 @@ const SearchDiagramsCT = ({
     handleBlur();
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   const handleBlur = () => {
     snippetRef && snippetRef.current.blur();
   };
@@ -190,6 +196,7 @@ const SearchDiagramsCT = ({
       errorMessage={errorMessage}
       onSetSnippet={setSnippet}
       onSearchDiagrams={handleSearchDiagrams}
+      onBack={handleBack}
       onErrorPopup={handleErrorPopup}
     />
   );

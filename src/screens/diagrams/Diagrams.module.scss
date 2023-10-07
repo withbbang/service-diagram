@@ -8,6 +8,20 @@
   padding-top: 40px;
   @include background($more-light);
 
+  .backBtn {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+
+    > span {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+  }
+
   .signBtns {
     display: flex;
     align-items: center;

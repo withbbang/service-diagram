@@ -2,6 +2,7 @@ import React from 'react';
 import Loader from 'components/loader';
 import ErrorPopup from 'components/errorPopup/ErrorPopup';
 import Card from 'components/card/Card';
+import SVG from 'modules/SVG';
 import styles from './SearchDiagrams.module.scss';
 
 const SearchDiagramsPT = ({
@@ -13,6 +14,7 @@ const SearchDiagramsPT = ({
   snippetRef,
   onSetSnippet,
   onSearchDiagrams,
+  onBack,
   onErrorPopup
 }: typeSearchDiagramsPT): JSX.Element => {
   return (
@@ -24,6 +26,11 @@ const SearchDiagramsPT = ({
         onConfirm={onErrorPopup}
       />
       <div className={styles.wrap}>
+        <div className={styles.backBtn}>
+          <span onClick={onBack}>
+            <SVG type="back" width="30px" height="30px" />
+          </span>
+        </div>
         <div className={styles.innerWrap}>
           <div className={styles.option}>
             <input
@@ -75,6 +82,7 @@ interface typeSearchDiagramsPT {
   snippetRef: React.MutableRefObject<HTMLInputElement>;
   onSetSnippet: React.Dispatch<React.SetStateAction<string>>;
   onSearchDiagrams: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  onBack: () => void;
   onErrorPopup: () => void;
 }
 

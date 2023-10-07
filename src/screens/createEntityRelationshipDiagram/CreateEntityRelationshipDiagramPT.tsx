@@ -69,6 +69,7 @@ const CreateErdDiagramPT = ({
   onRestore,
   onInit,
   onSaveBtn,
+  onBack,
   onAddHandle,
   onConfirm,
   onCancel,
@@ -106,6 +107,11 @@ const CreateErdDiagramPT = ({
           <Controls />
           <MiniMap />
           <Background gap={12} size={1} />
+          <div className={styles.backBtn}>
+            <span onClick={onBack}>
+              <SVG type="back" width="30px" height="30px" />
+            </span>
+          </div>
           <div className={styles.updatetable__controls}>
             <label>Title:</label>
             <input
@@ -315,6 +321,7 @@ interface typeCreateErdDiagramPT {
   onRestore: () => void;
   onInit: React.Dispatch<any>;
   onSaveBtn: () => void;
+  onBack: () => void;
   onAddHandle: () => void;
   onConfirm: () => void;
   onCancel: () => void;

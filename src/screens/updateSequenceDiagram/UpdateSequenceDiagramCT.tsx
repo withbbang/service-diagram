@@ -221,6 +221,10 @@ const UpdateSequenceDiagramCT = ({
     navigate(-1);
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   return (
     <UpdateSequenceDiagramPT
       uid={uid}
@@ -238,6 +242,7 @@ const UpdateSequenceDiagramCT = ({
       onConfirm={handleConfirm}
       onCancel={handleCancel}
       onErrorPopup={handleErrorPopup}
+      onBack={handleBack}
     />
   );
 };

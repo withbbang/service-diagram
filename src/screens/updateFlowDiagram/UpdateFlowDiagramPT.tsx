@@ -14,10 +14,11 @@ import ReactFlow, {
   EdgeMouseHandler
 } from 'reactflow';
 import Loader from 'components/loader';
-import styles from './UpdateFlowDiagram.module.scss';
-import 'reactflow/dist/style.css';
 import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
 import ErrorPopup from 'components/errorPopup/ErrorPopup';
+import SVG from 'modules/SVG';
+import styles from './UpdateFlowDiagram.module.scss';
+import 'reactflow/dist/style.css';
 
 const UpdateFlowDiagramPT = ({
   uid,
@@ -54,6 +55,7 @@ const UpdateFlowDiagramPT = ({
   onTemporarilySave,
   onRestore,
   onUpdateBtn,
+  onBack,
   onConfirm,
   onCancel,
   onInit,
@@ -93,6 +95,11 @@ const UpdateFlowDiagramPT = ({
             <Controls />
             <MiniMap />
             <Background gap={12} size={1} />
+            <div className={styles.backBtn}>
+              <span onClick={onBack}>
+                <SVG type="back" width="30px" height="30px" />
+              </span>
+            </div>
             <div className={styles.updatenode__controls}>
               <label>Title Label:</label>
               <input
@@ -196,6 +203,7 @@ interface typeUpdateFlowDiagramPT {
   onCancel: () => void;
   onInit: React.Dispatch<any>;
   onErrorPopup: () => void;
+  onBack: () => void;
 }
 
 export default UpdateFlowDiagramPT;

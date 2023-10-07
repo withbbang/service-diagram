@@ -132,6 +132,10 @@ const ViewFlowDiagramCT = ({
     navigate(-1);
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   return (
     <ViewFlowDiagramPT
       title={title}
@@ -143,6 +147,7 @@ const ViewFlowDiagramCT = ({
       errorMessage={errorMessage}
       onInit={setRfInstance}
       onErrorPopup={handleErrorPopup}
+      onBack={handleBack}
     />
   );
 };

@@ -2,6 +2,7 @@ import React from 'react';
 import Sequence from 'react-sequence-diagram';
 import ErrorPopup from 'components/errorPopup/ErrorPopup';
 import Loader from 'components/loader';
+import SVG from 'modules/SVG';
 import styles from './ViewSequenceDiagram.module.scss';
 
 const ViewSequenceDiagramPT = ({
@@ -9,7 +10,8 @@ const ViewSequenceDiagramPT = ({
   content,
   errorPopupActive,
   errorMessage,
-  onErrorPopup
+  onErrorPopup,
+  onBack
 }: typeViewSequenceDiagramPT): JSX.Element => {
   return (
     <>
@@ -20,6 +22,11 @@ const ViewSequenceDiagramPT = ({
         onConfirm={onErrorPopup}
       />
       <div className={styles.wrap}>
+        <div className={styles.backBtn}>
+          <span onClick={onBack}>
+            <SVG type="back" width="30px" height="30px" />
+          </span>
+        </div>
         <div className={styles.innerWrap}>
           <h2 className={styles.title}>{title}</h2>
           <div className={styles.content}>
@@ -37,6 +44,7 @@ interface typeViewSequenceDiagramPT {
   errorPopupActive: boolean;
   errorMessage: string;
   onErrorPopup: () => void;
+  onBack: () => void;
 }
 
 export default ViewSequenceDiagramPT;
