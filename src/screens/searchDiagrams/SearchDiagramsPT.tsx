@@ -60,6 +60,7 @@ const SearchDiagramsPT = ({
                     idx={idx}
                     id={content.id}
                     title={content.title}
+                    corporate={content.corporate}
                     createDt={content.createDt}
                     type={content.type}
                     path={`/diagram/${content.type}/${content.id}`}

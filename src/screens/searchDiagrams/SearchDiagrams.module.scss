@@ -59,6 +59,12 @@
       }
     }
 
+    @include mobile {
+      .option {
+        width: 90%;
+      }
+    }
+
     .contents {
       width: 100%;
       display: flex;

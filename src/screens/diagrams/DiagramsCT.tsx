@@ -111,8 +111,8 @@ const DiagramsCT = ({
 
           return {
             id: doc.id,
-            corporate,
             title,
+            corporate,
             createDt: handleConvertTimestamp(createDt.toDate(), 'date')
           };
         })
