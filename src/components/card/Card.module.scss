@@ -88,3 +88,13 @@
     display: flex;
   }
 }
+
+@include mobile {
+  .wrap {
+    width: 100%;
+
+    .floatBtns {
+      display: flex;
+    }
+  }
+}

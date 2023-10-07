@@ -45,3 +45,19 @@
     flex-wrap: wrap;
   }
 }
+
+@include mobile {
+  .wrap {
+    padding-top: 100px;
+
+    > h2 {
+      word-break: break-word;
+      text-align: center;
+    }
+
+    .innerWrap {
+      flex-direction: column;
+      flex-wrap: nowrap;
+    }
+  }
+}

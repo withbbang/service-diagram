@@ -118,16 +118,19 @@ const UpdateSequenceDiagramCT = ({
   const handleChildren = (
     <div className={styles.contentBox}>
       {handleHasPermission(['u'], grade) && (
-        <div className={styles.option}>
-          <input
-            placeholder="TITLE"
-            type="text"
-            id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            ref={titleRef}
-          />
-          <div className={styles.select}>
+        <div className={styles.options}>
+          <div className={styles.option}>
+            <label>Title</label>
+            <input
+              placeholder="TITLE"
+              type="text"
+              id="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              ref={titleRef}
+            />
+          </div>
+          <div className={styles.option}>
             <label>Complete</label>
             <select value={isDone} onChange={(e) => setIsDone(e.target.value)}>
               <option value={'N'}>N</option>

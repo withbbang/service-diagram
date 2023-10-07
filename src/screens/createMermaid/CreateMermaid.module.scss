@@ -38,6 +38,12 @@
     }
   }
 
+  @include mobile {
+    .innerWrap {
+      padding: 100px 10% 10% 10%;
+    }
+  }
+
   .createUpdateBtn {
     width: 35px;
     height: 35px;
