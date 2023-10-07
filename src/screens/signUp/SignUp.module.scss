@@ -21,7 +21,7 @@
   }
 
   .innerWrap {
-    width: 45%;
+    width: 40%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -58,8 +58,12 @@
       cursor: pointer;
       padding: 10px 0;
     }
+  }
 
-    @include mobile {
+  @include mobile {
+    .innerWrap {
+      width: 70%;
+
       .inputDiv {
         flex-direction: column;
         align-items: unset;

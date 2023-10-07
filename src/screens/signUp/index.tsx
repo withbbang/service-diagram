@@ -140,7 +140,7 @@ const SignUp = ({
         <div className={styles.innerWrap}>
           <h2>Sign Up</h2>
           <div className={styles.inputDiv}>
-            <label>Email:</label>
+            <label>Email</label>
             <input
               value={email}
               type="email"
@@ -149,7 +149,7 @@ const SignUp = ({
             />
           </div>
           <div className={styles.inputDiv}>
-            <label>Password:</label>
+            <label>Password</label>
             <input
               value={password}
               type="password"
