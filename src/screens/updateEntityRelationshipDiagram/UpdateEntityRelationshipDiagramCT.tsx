@@ -28,9 +28,12 @@ import {
   handleRandomString
 } from 'modules/utils';
 import {
+  collection,
   doc,
   getDoc,
+  getDocs,
   getFirestore,
+  query,
   serverTimestamp,
   updateDoc
 } from 'firebase/firestore';
@@ -89,6 +92,9 @@ const UpdateEntityRelationshipDiagramCT = ({
 
   const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
   const [title, setTitle] = useState<string>(''); // 다이어그램 제목
+  const [grade, setGrade] = useState<number | undefined>(); // 로그인 사용자 등급
+  const [corporate, setCorporate] = useState<string>('ALL'); // 회사 이름
+  const [corporates, setCorporates] = useState<Array<string>>([]); // 회사 이름들
   const [isDone, setIsDone] = useState<string>('N'); // 완료 여부
   const [tableName, setTableName] = useState<string>(initTableName); // 테이블 이름
   const [tableComment, setTableComment] = useState<string>(''); // 테이블 설명
@@ -118,6 +124,10 @@ const UpdateEntityRelationshipDiagramCT = ({
   const titleNameRef = useRef(
     null
   ) as React.MutableRefObject<HTMLInputElement | null>;
+  // 기업이름 select 참조 객체
+  const corporateRef = React.useRef(
+    null
+  ) as React.MutableRefObject<HTMLSelectElement | null>;
   // 완료여부 select 참조 객체
   const isDoneRef = React.useRef(
     null
@@ -196,6 +206,29 @@ const UpdateEntityRelationshipDiagramCT = ({
     }
   }, [selectedTableIdxForDelete]);
 
+  // 유저 권한에 따른 초기 회사 목록 가져오기
+  useEffect(() => {
+    handleHasPermission(['c'], grade) && handleGetCorporates();
+  }, [grade]);
+
+  // 회사 목록 가져오기
+  const handleGetCorporates = async () => {
+    handleLoaderTrue();
+
+    try {
+      const q = query(collection(db, 'corporate'));
+      const querySnapshot = await getDocs(q);
+
+      setCorporates(querySnapshot.docs.map((doc) => doc.data().name));
+    } catch (error) {
+      console.error(error);
+      setErrorMessage('Data Fetching Error');
+      setErrorPopupActive(true);
+    } finally {
+      handleLoaderFalse();
+    }
+  };
+
   // 상태저장된 로그인 정보와 서버에 저장된 정보가 동일한지 확인하는 함수
   const handleCheckAuthStateChanged = () => {
     handleLoaderTrue();
@@ -208,6 +241,8 @@ const UpdateEntityRelationshipDiagramCT = ({
 
           if (docSnap !== undefined && docSnap.exists()) {
             const { grade, corporate } = docSnap.data();
+
+            setGrade(grade);
 
             if (!handleHasPermission(['u'], grade)) {
               throw Error("You Don't Have Permission");
@@ -446,6 +481,8 @@ const UpdateEntityRelationshipDiagramCT = ({
   const handleBlur = (type: string) => {
     if (type === 'title' && titleNameRef && titleNameRef.current) {
       titleNameRef.current.blur();
+    } else if (type === 'corporate' && corporateRef && corporateRef.current) {
+      corporateRef.current.blur();
     } else if (type === 'isDone' && isDoneRef && isDoneRef.current) {
       isDoneRef.current.blur();
     }
@@ -689,6 +726,8 @@ const UpdateEntityRelationshipDiagramCT = ({
       uid={uid}
       uid_={uid_}
       title={title}
+      corporate={corporate}
+      corporates={corporates}
       isDone={isDone}
       tableName={tableName}
       tableComment={tableComment}
@@ -699,6 +738,7 @@ const UpdateEntityRelationshipDiagramCT = ({
       targetRelation={targetRelation}
       columns={columns}
       titleNameRef={titleNameRef}
+      corporateRef={corporateRef}
       isDoneRef={isDoneRef}
       tables={tables}
       edges={edges}
@@ -709,6 +749,7 @@ const UpdateEntityRelationshipDiagramCT = ({
       errorPopupActive={errorPopupActive}
       errorMessage={errorMessage}
       onSetTitle={setTitle}
+      onSetCorporate={setCorporate}
       onSetIsDone={setIsDone}
       onSetTableName={setTableName}
       onSetTableComment={setTableComment}

@@ -25,6 +25,8 @@ const UpdateEntityRelationshipDiagramPT = ({
   uid,
   uid_,
   title,
+  corporate,
+  corporates,
   isDone,
   tableName,
   tableComment,
@@ -34,6 +36,7 @@ const UpdateEntityRelationshipDiagramPT = ({
   targetRelation,
   columns,
   titleNameRef,
+  corporateRef,
   isDoneRef,
   tables,
   edges,
@@ -44,6 +47,7 @@ const UpdateEntityRelationshipDiagramPT = ({
   errorPopupActive,
   errorMessage,
   onSetTitle,
+  onSetCorporate,
   onSetIsDone,
   onSetTableName,
   onSetTableComment,
@@ -121,6 +125,17 @@ const UpdateEntityRelationshipDiagramPT = ({
               onBlur={() => onBlur('title')}
               ref={titleNameRef}
             />
+            <label>Corporate:</label>
+            <select
+              value={corporate}
+              onChange={(e) => onSetCorporate(e.target.value)}
+              onBlur={() => onBlur('corporate')}
+              ref={corporateRef}
+            >
+              {corporates.map((corporate) => (
+                <option value={corporate}>{corporate}</option>
+              ))}
+            </select>
             <label>Complete:</label>
             <select
               value={isDone}
@@ -275,6 +290,8 @@ interface typeUpdateEntityRelationshipDiagramPT {
   uid?: string;
   uid_: string;
   title: string;
+  corporate: string;
+  corporates: Array<string>;
   isDone: string;
   tableName: string;
   tableComment: string;
@@ -285,6 +302,7 @@ interface typeUpdateEntityRelationshipDiagramPT {
   targetRelation: string;
   columns: Array<typeColumn>;
   titleNameRef: React.MutableRefObject<HTMLInputElement | null>;
+  corporateRef: React.MutableRefObject<HTMLSelectElement | null>;
   isDoneRef: React.MutableRefObject<HTMLSelectElement | null>;
   tables: Node<any, string | undefined>[];
   edges: Edge<any>[];
@@ -295,6 +313,7 @@ interface typeUpdateEntityRelationshipDiagramPT {
   errorPopupActive: boolean;
   errorMessage: string;
   onSetTitle: React.Dispatch<React.SetStateAction<string>>;
+  onSetCorporate: React.Dispatch<React.SetStateAction<string>>;
   onSetIsDone: React.Dispatch<React.SetStateAction<string>>;
   onSetTableName: React.Dispatch<React.SetStateAction<string>>;
   onSetTableComment: React.Dispatch<React.SetStateAction<string>>;

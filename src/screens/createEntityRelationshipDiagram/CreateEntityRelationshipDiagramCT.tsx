@@ -22,14 +22,21 @@ import { useNavigate } from 'react-router-dom';
 import Table from 'components/entityRelationship/CustomNodes/Table';
 import NormalEdge from 'components/entityRelationship/CustomEdges/NormalEdge';
 import { typeColumn } from 'modules/types';
-import { app, auth, handleRandomString } from 'modules/utils';
+import {
+  app,
+  auth,
+  handleHasPermission,
+  handleRandomString
+} from 'modules/utils';
 import {
   doc,
   getDoc,
   addDoc,
   collection,
   getFirestore,
-  serverTimestamp
+  serverTimestamp,
+  query,
+  getDocs
 } from 'firebase/firestore';
 import CreateErdDiagramPT from './CreateEntityRelationshipDiagramPT';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -83,6 +90,8 @@ const CreateErdDiagramCT = ({
   const edgeTypes = useMemo(() => ({ normal: NormalEdge }), []); // 커스텀 엣지 타입들
 
   const [grade, setGrade] = useState<number | undefined>(); // 로그인 사용자 등급
+  const [corporate, setCorporate] = useState<string>('ALL'); // 회사 이름
+  const [corporates, setCorporates] = useState<Array<string>>([]); // 회사 이름들
   const [title, setTitle] = useState<string>(''); // 다이어그램 제목
   const [isDone, setIsDone] = useState<string>('N'); // 완료 여부
   const [tableName, setTableName] = useState<string>(initTableName); // 테이블 이름
@@ -111,6 +120,10 @@ const CreateErdDiagramCT = ({
   const titleNameRef = useRef(
     null
   ) as React.MutableRefObject<HTMLInputElement | null>;
+  // 기업이름 select 참조 객체
+  const corporateRef = React.useRef(
+    null
+  ) as React.MutableRefObject<HTMLSelectElement | null>;
   // 완료여부 select 참조 객체
   const isDoneRef = React.useRef(
     null
@@ -189,6 +202,29 @@ const CreateErdDiagramCT = ({
       setConfirmPopupActive(false);
     }
   }, [selectedTableIdxForDelete]);
+
+  // 유저 권한에 따른 초기 회사 목록 가져오기
+  useEffect(() => {
+    handleHasPermission(['c'], grade) && handleGetCorporates();
+  }, [grade]);
+
+  // 회사 목록 가져오기
+  const handleGetCorporates = async () => {
+    handleLoaderTrue();
+
+    try {
+      const q = query(collection(db, 'corporate'));
+      const querySnapshot = await getDocs(q);
+
+      setCorporates(querySnapshot.docs.map((doc) => doc.data().name));
+    } catch (error) {
+      console.error(error);
+      setErrorMessage('Data Fetching Error');
+      setErrorPopupActive(true);
+    } finally {
+      handleLoaderFalse();
+    }
+  };
 
   // 수정할 컬럼 input 접근
   const handleColumnInputChange = useCallback(
@@ -405,6 +441,8 @@ const CreateErdDiagramCT = ({
   const handleBlur = (type: string) => {
     if (type === 'title' && titleNameRef && titleNameRef.current) {
       titleNameRef.current.blur();
+    } else if (type === 'corporate' && corporateRef && corporateRef.current) {
+      corporateRef.current.blur();
     } else if (type === 'isDone' && isDoneRef && isDoneRef.current) {
       isDoneRef.current.blur();
     }
@@ -577,6 +615,8 @@ const CreateErdDiagramCT = ({
     <CreateErdDiagramPT
       grade={grade}
       title={title}
+      corporate={corporate}
+      corporates={corporates}
       isDone={isDone}
       tableName={tableName}
       tableComment={tableComment}
@@ -587,6 +627,7 @@ const CreateErdDiagramCT = ({
       targetRelation={targetRelation}
       columns={columns}
       titleNameRef={titleNameRef}
+      corporateRef={corporateRef}
       isDoneRef={isDoneRef}
       tables={tables}
       edges={edges}
@@ -597,6 +638,7 @@ const CreateErdDiagramCT = ({
       errorPopupActive={errorPopupActive}
       errorMessage={errorMessage}
       onSetTitle={setTitle}
+      onSetCorporate={setCorporate}
       onSetIsDone={setIsDone}
       onSetTableName={setTableName}
       onSetTableComment={setTableComment}

@@ -5,7 +5,9 @@ import {
   addDoc,
   collection,
   getFirestore,
-  serverTimestamp
+  serverTimestamp,
+  query,
+  getDocs
 } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -23,7 +25,12 @@ import {
   ReactFlowProvider
 } from 'reactflow';
 import { driver } from 'driver.js';
-import { app, auth, handleRandomString } from 'modules/utils';
+import {
+  app,
+  auth,
+  handleHasPermission,
+  handleRandomString
+} from 'modules/utils';
 import SelfConnectingEdge from 'components/flow/customEdges/SelfConnectingEdge';
 import DiamondNode from 'components/flow/customNodes/DiamondNode';
 import RectangleNode from 'components/flow/customNodes/RectangleNode';
@@ -137,6 +144,8 @@ const CreateFlowDiagramCT = ({
   const navigate = useNavigate();
 
   const [grade, setGrade] = useState<number | undefined>(); // 로그인 사용자 등급
+  const [corporate, setCorporate] = useState<string>('ALL'); // 회사 이름
+  const [corporates, setCorporates] = useState<Array<string>>([]); // 회사 이름들
   const [id, setId] = useState<string>(''); // 노드 및 엣지 포커싱을 위한 id
   const [title, setTitle] = useState<string>(''); // 다이어그램 제목
   const [nodeName, setNodeName] = useState<string>(''); // 노드 이름
@@ -161,6 +170,10 @@ const CreateFlowDiagramCT = ({
   const edgeNameRef = React.useRef(
     null
   ) as React.MutableRefObject<HTMLInputElement | null>;
+  // 기업이름 select 참조 객체
+  const corporateRef = React.useRef(
+    null
+  ) as React.MutableRefObject<HTMLSelectElement | null>;
   // 완료 여부 select 참조 객체
   const isDoneRef = React.useRef(
     null
@@ -222,6 +235,29 @@ const CreateFlowDiagramCT = ({
       })
     );
   }, [edgeName, setEdges]);
+
+  // 유저 권한에 따른 초기 회사 목록 가져오기
+  useEffect(() => {
+    handleHasPermission(['c'], grade) && handleGetCorporates();
+  }, [grade]);
+
+  // 회사 목록 가져오기
+  const handleGetCorporates = async () => {
+    handleLoaderTrue();
+
+    try {
+      const q = query(collection(db, 'corporate'));
+      const querySnapshot = await getDocs(q);
+
+      setCorporates(querySnapshot.docs.map((doc) => doc.data().name));
+    } catch (error) {
+      console.error(error);
+      setErrorMessage('Data Fetching Error');
+      setErrorPopupActive(true);
+    } finally {
+      handleLoaderFalse();
+    }
+  };
 
   // 엣지로 노드와 연결하는 순간 동작하는 메소드
   const handleConnect = useCallback(
@@ -329,6 +365,8 @@ const CreateFlowDiagramCT = ({
     } else if (type === 'edge' && edgeNameRef && edgeNameRef.current) {
       setEdgeName('');
       edgeNameRef.current.blur();
+    } else if (type === 'corporate' && corporateRef && corporateRef.current) {
+      corporateRef.current.blur();
     } else if (type === 'isDone' && isDoneRef && isDoneRef.current) {
       isDoneRef.current.blur();
     }
@@ -586,10 +624,13 @@ const CreateFlowDiagramCT = ({
       title={title}
       nodeName={nodeName}
       edgeName={edgeName}
+      corporate={corporate}
+      corporates={corporates}
       isDone={isDone}
       titleNameRef={titleNameRef}
       nodeNameRef={nodeNameRef}
       edgeNameRef={edgeNameRef}
+      corporateRef={corporateRef}
       isDoneRef={isDoneRef}
       nodes={nodes}
       edges={edges}
@@ -602,6 +643,7 @@ const CreateFlowDiagramCT = ({
       onSetTitle={setTitle}
       onSetNodeName={setNodeName}
       onSetEdgeName={setEdgeName}
+      onSetCorporate={setCorporate}
       onSetIsDone={setIsDone}
       onNodesDelete={handleNodesDelete}
       onNodesChange={handleNodesChange}

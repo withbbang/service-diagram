@@ -27,10 +27,13 @@ const CreateFlowDiagramPT = ({
   title,
   nodeName,
   edgeName,
+  corporate,
+  corporates,
   isDone,
   titleNameRef,
   nodeNameRef,
   edgeNameRef,
+  corporateRef,
   isDoneRef,
   nodes,
   edges,
@@ -43,6 +46,7 @@ const CreateFlowDiagramPT = ({
   onSetTitle,
   onSetNodeName,
   onSetEdgeName,
+  onSetCorporate,
   onSetIsDone,
   onNodesDelete,
   onNodesChange,
@@ -126,6 +130,17 @@ const CreateFlowDiagramPT = ({
                 onBlur={() => onBlur('edge')}
                 ref={edgeNameRef}
               />
+              <label>Corporate:</label>
+              <select
+                value={corporate}
+                onChange={(e) => onSetCorporate(e.target.value)}
+                onBlur={() => onBlur('corporate')}
+                ref={corporateRef}
+              >
+                {corporates.map((corporate) => (
+                  <option value={corporate}>{corporate}</option>
+                ))}
+              </select>
               <label>Complete:</label>
               <select
                 value={isDone}
@@ -164,10 +179,13 @@ interface typeCreateFlowDiagramPT {
   title: string;
   nodeName: string;
   edgeName: string;
+  corporate: string;
+  corporates: Array<string>;
   isDone: string;
   titleNameRef: React.MutableRefObject<HTMLInputElement | null>;
   nodeNameRef: React.MutableRefObject<HTMLInputElement | null>;
   edgeNameRef: React.MutableRefObject<HTMLInputElement | null>;
+  corporateRef: React.MutableRefObject<HTMLSelectElement | null>;
   isDoneRef: React.MutableRefObject<HTMLSelectElement | null>;
   nodes: Node<any, string | undefined>[];
   edges: Edge<any>[];
@@ -180,6 +198,7 @@ interface typeCreateFlowDiagramPT {
   onSetTitle: React.Dispatch<React.SetStateAction<string>>;
   onSetNodeName: React.Dispatch<React.SetStateAction<string>>;
   onSetEdgeName: React.Dispatch<React.SetStateAction<string>>;
+  onSetCorporate: React.Dispatch<React.SetStateAction<string>>;
   onSetIsDone: React.Dispatch<React.SetStateAction<string>>;
   onNodesDelete: (deleted: Array<Node>) => void;
   onNodesChange: OnNodesChange;

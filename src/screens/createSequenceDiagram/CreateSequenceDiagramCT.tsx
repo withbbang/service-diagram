@@ -5,7 +5,9 @@ import {
   addDoc,
   collection,
   getFirestore,
-  serverTimestamp
+  serverTimestamp,
+  query,
+  getDocs
 } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { app, auth, handleHasPermission } from 'modules/utils';
@@ -39,6 +41,8 @@ const CreateSequenceDiagramCT = ({
     # https://bramp.github.io/js-sequence-diagrams 문법 참고
   `); // 다이어그램 내용
   const [isDone, setIsDone] = useState<string>('N'); // 완료 여부
+  const [corporate, setCorporate] = useState<string>('ALL'); // 회사 이름
+  const [corporates, setCorporates] = useState<Array<string>>([]); // 회사 이름들
   const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false); // 확인 팝업 활성 상태
   const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
   const [errorPopupActive, setErrorPopupActive] = useState<boolean>(false); // 에러 팝업 활성 상태
@@ -70,6 +74,29 @@ const CreateSequenceDiagramCT = ({
     }
   }, [uid]);
 
+  // 유저 권한에 따른 초기 회사 목록 가져오기
+  useEffect(() => {
+    handleHasPermission(['c'], grade) && handleGetCorporates();
+  }, [grade]);
+
+  // 회사 목록 가져오기
+  const handleGetCorporates = async () => {
+    handleLoaderTrue();
+
+    try {
+      const q = query(collection(db, 'corporate'));
+      const querySnapshot = await getDocs(q);
+
+      setCorporates(querySnapshot.docs.map((doc) => doc.data().name));
+    } catch (error) {
+      console.error(error);
+      setErrorMessage('Data Fetching Error');
+      setErrorPopupActive(true);
+    } finally {
+      handleLoaderFalse();
+    }
+  };
+
   // 저장 버튼
   const handleSaveBtn = async () => {
     setConfirmMessage('Really Save?');
@@ -95,7 +122,7 @@ const CreateSequenceDiagramCT = ({
   // 기능 팝업 내부 dom
   const handleChildren = (
     <div className={styles.contentBox}>
-      {handleHasPermission(['u'], grade) && (
+      {handleHasPermission(['c'], grade) && (
         <div className={styles.options}>
           <div className={styles.option}>
             <label>Title</label>
@@ -107,6 +134,17 @@ const CreateSequenceDiagramCT = ({
               onChange={(e) => setTitle(e.target.value)}
               ref={titleRef}
             />
+          </div>
+          <div className={styles.option}>
+            <label>Corporate</label>
+            <select
+              value={corporate}
+              onChange={(e) => setCorporate(e.target.value)}
+            >
+              {corporates.map((corporate) => (
+                <option value={corporate}>{corporate}</option>
+              ))}
+            </select>
           </div>
           <div className={styles.option}>
             <label>Complete</label>

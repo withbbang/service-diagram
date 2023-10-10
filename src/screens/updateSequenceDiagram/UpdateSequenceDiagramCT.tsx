@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import {
+  collection,
   doc,
   getDoc,
+  getDocs,
   getFirestore,
+  query,
   serverTimestamp,
   updateDoc
 } from 'firebase/firestore';
@@ -25,6 +28,8 @@ const UpdateSequenceDiagramCT = ({
 
   const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
   const [grade, setGrade] = useState<number | undefined>(); // 로그인 사용자 등급
+  const [corporate, setCorporate] = useState<string>('ALL'); // 회사 이름
+  const [corporates, setCorporates] = useState<Array<string>>([]); // 회사 이름들
   const [title, setTitle] = useState<string>(''); // 다이어그램 제목
   const [content, setContent] = useState<string>(``); // 다이어그램 내용
   const [isDone, setIsDone] = useState<string>('N'); // 완료 여부
@@ -92,6 +97,29 @@ const UpdateSequenceDiagramCT = ({
     });
   };
 
+  // 유저 권한에 따른 초기 회사 목록 가져오기
+  useEffect(() => {
+    handleHasPermission(['u'], grade) && handleGetCorporates();
+  }, [grade]);
+
+  // 회사 목록 가져오기
+  const handleGetCorporates = async () => {
+    handleLoaderTrue();
+
+    try {
+      const q = query(collection(db, 'corporate'));
+      const querySnapshot = await getDocs(q);
+
+      setCorporates(querySnapshot.docs.map((doc) => doc.data().name));
+    } catch (error) {
+      console.error(error);
+      setErrorMessage('Data Fetching Error');
+      setErrorPopupActive(true);
+    } finally {
+      handleLoaderFalse();
+    }
+  };
+
   // 업데이트 버튼
   const handleUpdateBtn = async () => {
     setConfirmMessage('Really Update?');
@@ -129,6 +157,17 @@ const UpdateSequenceDiagramCT = ({
               onChange={(e) => setTitle(e.target.value)}
               ref={titleRef}
             />
+          </div>
+          <div className={styles.option}>
+            <label>Corporate</label>
+            <select
+              value={corporate}
+              onChange={(e) => setCorporate(e.target.value)}
+            >
+              {corporates.map((corporate) => (
+                <option value={corporate}>{corporate}</option>
+              ))}
+            </select>
           </div>
           <div className={styles.option}>
             <label>Complete</label>

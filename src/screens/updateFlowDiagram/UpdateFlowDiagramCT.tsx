@@ -1,8 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
+  collection,
   doc,
   getDoc,
+  getDocs,
   getFirestore,
+  query,
   serverTimestamp,
   updateDoc
 } from 'firebase/firestore';
@@ -63,6 +66,9 @@ const UpdateFlowDiagramCT = ({
   const [title, setTitle] = useState<string>(''); // 다이어그램 제목
   const [nodeName, setNodeName] = useState<string>(''); // 노드 이름
   const [edgeName, setEdgeName] = useState<string>(''); // 엣지 이름
+  const [grade, setGrade] = useState<number | undefined>(); // 로그인 사용자 등급
+  const [corporate, setCorporate] = useState<string>('ALL'); // 회사 이름
+  const [corporates, setCorporates] = useState<Array<string>>([]); // 회사 이름들
   const [isDone, setIsDone] = useState<string>('N'); // 완료 여부
   const [rfInstance, setRfInstance] = useState<any>(null); // 로컬스토리지 일시 저장용 다이어그램 인스턴스
   const { setViewport } = useReactFlow(); // 전체젹인 뷰 관련 객체
@@ -85,6 +91,10 @@ const UpdateFlowDiagramCT = ({
   const edgeNameRef = React.useRef(
     null
   ) as React.MutableRefObject<HTMLInputElement | null>;
+  // 기업이름 select 참조 객체
+  const corporateRef = React.useRef(
+    null
+  ) as React.MutableRefObject<HTMLSelectElement | null>;
   // 완료 여부 select 참조 객체
   const isDoneRef = React.useRef(
     null
@@ -141,6 +151,29 @@ const UpdateFlowDiagramCT = ({
     );
   }, [edgeName, setEdges]);
 
+  // 유저 권한에 따른 초기 회사 목록 가져오기
+  useEffect(() => {
+    handleHasPermission(['c'], grade) && handleGetCorporates();
+  }, [grade]);
+
+  // 회사 목록 가져오기
+  const handleGetCorporates = async () => {
+    handleLoaderTrue();
+
+    try {
+      const q = query(collection(db, 'corporate'));
+      const querySnapshot = await getDocs(q);
+
+      setCorporates(querySnapshot.docs.map((doc) => doc.data().name));
+    } catch (error) {
+      console.error(error);
+      setErrorMessage('Data Fetching Error');
+      setErrorPopupActive(true);
+    } finally {
+      handleLoaderFalse();
+    }
+  };
+
   // 상태저장된 로그인 정보와 서버에 저장된 정보가 동일한지 확인하는 함수
   const handleCheckAuthStateChanged = () => {
     handleLoaderTrue();
@@ -153,6 +186,8 @@ const UpdateFlowDiagramCT = ({
 
           if (docSnap !== undefined && docSnap.exists()) {
             const { grade, corporate } = docSnap.data();
+
+            setGrade(grade);
 
             if (!handleHasPermission(['u'], grade)) {
               throw Error("You Don't Have Permission");
@@ -282,6 +317,8 @@ const UpdateFlowDiagramCT = ({
     } else if (type === 'edge' && edgeNameRef && edgeNameRef.current) {
       setEdgeName('');
       edgeNameRef.current.blur();
+    } else if (type === 'corporate' && corporateRef && corporateRef.current) {
+      corporateRef.current.blur();
     } else if (type === 'isDone' && isDoneRef && isDoneRef.current) {
       isDoneRef.current.blur();
     }
@@ -454,10 +491,13 @@ const UpdateFlowDiagramCT = ({
       title={title}
       nodeName={nodeName}
       edgeName={edgeName}
+      corporate={corporate}
+      corporates={corporates}
       isDone={isDone}
       titleNameRef={titleNameRef}
       nodeNameRef={nodeNameRef}
       edgeNameRef={edgeNameRef}
+      corporateRef={corporateRef}
       isDoneRef={isDoneRef}
       nodes={nodes}
       edges={edges}
@@ -470,6 +510,7 @@ const UpdateFlowDiagramCT = ({
       onSetTitle={setTitle}
       onSetNodeName={setNodeName}
       onSetEdgeName={setEdgeName}
+      onSetCorporate={setCorporate}
       onSetIsDone={setIsDone}
       onNodesDelete={handleNodesDelete}
       onNodesChange={handleNodesChange}
