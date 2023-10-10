@@ -6,7 +6,8 @@ import {
   addDoc,
   collection,
   getFirestore,
-  serverTimestamp
+  serverTimestamp,
+  getDoc
 } from 'firebase/firestore';
 import { connect } from 'react-redux';
 import { PropState } from 'middlewares/configureReducer';
@@ -23,6 +24,7 @@ import ErrorPopup from 'components/errorPopup/ErrorPopup';
 import { app, auth } from 'modules/utils';
 import { useNavigate } from 'react-router-dom';
 import styles from './SignUp.module.scss';
+import { async } from '@firebase/util';
 
 const mapStateToProps = (state: PropState): CommonState => {
   return { ...state.common };
@@ -50,6 +52,7 @@ const SignUp = ({
   const navigate = useNavigate();
 
   const [email, setEmail] = useState<string>('');
+  const [company, setCompany] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [errorPopupActive, setErrorPopupActive] = useState<boolean>(false); // 에러 팝업 활성 상태
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러 팝업 내용 설정 훅
@@ -79,35 +82,67 @@ const SignUp = ({
       return;
     }
 
-    handleLoaderTrue();
-
-    let encryptPassword;
-    try {
-      encryptPassword = SHA256(password).toString();
-    } catch (error) {
-      console.error(error);
-      setErrorMessage('Password Encrypting Error');
+    if (!company) {
+      setErrorMessage('Empty Company Field');
       setErrorPopupActive(true);
-      return handleLoaderFalse();
+      return;
     }
 
+    handleLoaderTrue();
+
+    try {
+      const encryptPassword = handleEncryptPassword(password);
+      await handleVerifyCompany();
+      await handleCreateUser(encryptPassword);
+    } catch (error: any) {
+      setErrorMessage(error.message);
+      setErrorPopupActive(true);
+    } finally {
+      handleLoaderFalse();
+    }
+  };
+
+  // 비밀번호 암호화
+  const handleEncryptPassword = (password: string) => {
+    try {
+      return SHA256(password).toString();
+    } catch (error) {
+      console.error(error);
+      throw Error('Password Encrypting Error');
+    }
+  };
+
+  // 회사 이름 검수
+  const handleVerifyCompany = async () => {
+    try {
+      const docSnap = await getDoc(doc(db, 'company', company));
+
+      if (!docSnap.exists())
+        await setDoc(doc(db, 'company', company), {
+          name: company
+        });
+    } catch (error) {
+      console.error(error);
+      throw Error('Company Setting Error');
+    }
+  };
+
+  // 유저 생성
+  const handleCreateUser = async (encryptPassword: string) => {
     try {
       const {
         user: { uid }
       } = await createUserWithEmailAndPassword(auth, email, encryptPassword);
 
       await setDoc(doc(db, type, uid), {
-        grade: 20
+        grade: 20,
+        company
       });
 
       navigate('/sign/in', { replace: true });
     } catch (error) {
       console.error(error);
-      setErrorMessage('User Credential Error');
-      setErrorPopupActive(true);
-      return;
-    } finally {
-      handleLoaderFalse();
+      throw Error('User Credential Error');
     }
   };
 
@@ -152,6 +187,15 @@ const SignUp = ({
               value={password}
               type="password"
               onChange={(e) => setPassword(e.target.value.trim())}
+              onKeyDown={(e) => handleKeyDown(e)}
+            />
+          </div>
+          <div className={styles.inputDiv}>
+            <label>Company</label>
+            <input
+              value={company}
+              type="text"
+              onChange={(e) => setCompany(e.target.value.trim())}
               onKeyDown={(e) => handleKeyDown(e)}
             />
           </div>
