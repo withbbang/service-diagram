@@ -27,13 +27,13 @@ const CreateFlowDiagramPT = ({
   title,
   nodeName,
   edgeName,
-  corporate,
-  corporates,
+  company,
+  companies,
   isDone,
   titleNameRef,
   nodeNameRef,
   edgeNameRef,
-  corporateRef,
+  companyRef,
   isDoneRef,
   nodes,
   edges,
@@ -46,7 +46,7 @@ const CreateFlowDiagramPT = ({
   onSetTitle,
   onSetNodeName,
   onSetEdgeName,
-  onSetCorporate,
+  onSetCompanie,
   onSetIsDone,
   onNodesDelete,
   onNodesChange,
@@ -130,15 +130,17 @@ const CreateFlowDiagramPT = ({
                 onBlur={() => onBlur('edge')}
                 ref={edgeNameRef}
               />
-              <label>Corporate:</label>
+              <label>Companie:</label>
               <select
-                value={corporate}
-                onChange={(e) => onSetCorporate(e.target.value)}
-                onBlur={() => onBlur('corporate')}
-                ref={corporateRef}
+                value={company}
+                onChange={(e) => onSetCompanie(e.target.value)}
+                onBlur={() => onBlur('company')}
+                ref={companyRef}
               >
-                {corporates.map((corporate) => (
-                  <option value={corporate}>{corporate}</option>
+                {companies.map((company, idx) => (
+                  <option key={idx} value={company}>
+                    {company}
+                  </option>
                 ))}
               </select>
               <label>Complete:</label>
@@ -179,13 +181,13 @@ interface typeCreateFlowDiagramPT {
   title: string;
   nodeName: string;
   edgeName: string;
-  corporate: string;
-  corporates: Array<string>;
+  company: string;
+  companies: Array<string>;
   isDone: string;
   titleNameRef: React.MutableRefObject<HTMLInputElement | null>;
   nodeNameRef: React.MutableRefObject<HTMLInputElement | null>;
   edgeNameRef: React.MutableRefObject<HTMLInputElement | null>;
-  corporateRef: React.MutableRefObject<HTMLSelectElement | null>;
+  companyRef: React.MutableRefObject<HTMLSelectElement | null>;
   isDoneRef: React.MutableRefObject<HTMLSelectElement | null>;
   nodes: Node<any, string | undefined>[];
   edges: Edge<any>[];
@@ -198,7 +200,7 @@ interface typeCreateFlowDiagramPT {
   onSetTitle: React.Dispatch<React.SetStateAction<string>>;
   onSetNodeName: React.Dispatch<React.SetStateAction<string>>;
   onSetEdgeName: React.Dispatch<React.SetStateAction<string>>;
-  onSetCorporate: React.Dispatch<React.SetStateAction<string>>;
+  onSetCompanie: React.Dispatch<React.SetStateAction<string>>;
   onSetIsDone: React.Dispatch<React.SetStateAction<string>>;
   onNodesDelete: (deleted: Array<Node>) => void;
   onNodesChange: OnNodesChange;

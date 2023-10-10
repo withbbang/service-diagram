@@ -37,7 +37,7 @@ const SVG = (props: typeSVG): JSX.Element => {
           />
         </svg>
       );
-    case 'corporate':
+    case 'company':
       return (
         <svg
           fill={props.fill ? props.fill : '#000'}

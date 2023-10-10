@@ -34,7 +34,7 @@ const DiagramsCT = ({
 
   const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
   const [grade, setGrade] = useState<number>(20); // 유저 등급
-  const [corporate, setCorporate] = useState<string>(''); // 유저 기업
+  const [company, setCompanie] = useState<string>(''); // 유저 기업
   const [title, setTitle] = useState<string>(''); // 선택한 다이어그램에 따른 제목
   const [contents, setContents] = useState<Array<typeContent>>([]); // 선택한 다이어그램들 배열 훅
   const [selectedContentId, setSelectedContentId] = useState<string>(''); // 다어그램들 중 선택한 놈 id
@@ -50,7 +50,7 @@ const DiagramsCT = ({
 
   useEffect(() => {
     type && handleGetContents(type);
-  }, [grade, corporate]);
+  }, [grade, company]);
 
   // 로그인 여부 판단 훅
   useEffect(() => {
@@ -63,10 +63,10 @@ const DiagramsCT = ({
             const docSnap = await getDoc(doc(db, 'authority', user.uid));
 
             if (docSnap !== undefined && docSnap.exists()) {
-              const { grade, corporate } = docSnap.data();
+              const { grade, company } = docSnap.data();
 
               setGrade(grade);
-              setCorporate(corporate);
+              setCompanie(company);
             }
           }
         });
@@ -74,7 +74,7 @@ const DiagramsCT = ({
     } catch (error: any) {
       setUid_('');
       setGrade(20);
-      setCorporate('');
+      setCompanie('');
     } finally {
       handleLoaderFalse();
     }
@@ -92,11 +92,11 @@ const DiagramsCT = ({
         uid_ !== '' &&
         uid === uid_ &&
         handleHasPermission(['r'], grade) // 로그인 O
-          ? corporate === 'ALL'
+          ? company === 'ALL'
             ? query(collection(db, type), orderBy('createDt', 'desc')) // 전체 보기
             : query(
                 collection(db, type),
-                where('corporate', 'in', ['ALL', corporate]),
+                where('company', 'in', ['ALL', company]),
                 orderBy('createDt', 'desc')
               ) // 특정 기업만 보기
           : query(
@@ -108,12 +108,12 @@ const DiagramsCT = ({
 
       setContents(
         querySnapshot.docs.map((doc) => {
-          const { title, corporate, createDt } = doc.data();
+          const { title, company, createDt } = doc.data();
 
           return {
             id: doc.id,
             title,
-            corporate,
+            company,
             createDt: handleConvertTimestamp(createDt.toDate(), 'date')
           };
         })
@@ -156,7 +156,7 @@ const DiagramsCT = ({
   const handleSignOut = () => {
     handleSetUid('');
     setGrade(20);
-    setCorporate('');
+    setCompanie('');
   };
 
   const handleBack = () => {

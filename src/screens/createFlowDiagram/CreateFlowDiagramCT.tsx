@@ -144,8 +144,8 @@ const CreateFlowDiagramCT = ({
   const navigate = useNavigate();
 
   const [grade, setGrade] = useState<number | undefined>(); // 로그인 사용자 등급
-  const [corporate, setCorporate] = useState<string>('ALL'); // 회사 이름
-  const [corporates, setCorporates] = useState<Array<string>>([]); // 회사 이름들
+  const [company, setCompanie] = useState<string>('ALL'); // 회사 이름
+  const [companies, setCompanies] = useState<Array<string>>([]); // 회사 이름들
   const [id, setId] = useState<string>(''); // 노드 및 엣지 포커싱을 위한 id
   const [title, setTitle] = useState<string>(''); // 다이어그램 제목
   const [nodeName, setNodeName] = useState<string>(''); // 노드 이름
@@ -171,7 +171,7 @@ const CreateFlowDiagramCT = ({
     null
   ) as React.MutableRefObject<HTMLInputElement | null>;
   // 기업이름 select 참조 객체
-  const corporateRef = React.useRef(
+  const companyRef = React.useRef(
     null
   ) as React.MutableRefObject<HTMLSelectElement | null>;
   // 완료 여부 select 참조 객체
@@ -238,18 +238,18 @@ const CreateFlowDiagramCT = ({
 
   // 유저 권한에 따른 초기 회사 목록 가져오기
   useEffect(() => {
-    handleHasPermission(['c'], grade) && handleGetCorporates();
+    handleHasPermission(['c'], grade) && handleGetCompanies();
   }, [grade]);
 
   // 회사 목록 가져오기
-  const handleGetCorporates = async () => {
+  const handleGetCompanies = async () => {
     handleLoaderTrue();
 
     try {
-      const q = query(collection(db, 'corporate'));
+      const q = query(collection(db, 'company'));
       const querySnapshot = await getDocs(q);
 
-      setCorporates(querySnapshot.docs.map((doc) => doc.data().name));
+      setCompanies(querySnapshot.docs.map((doc) => doc.data().name));
     } catch (error) {
       console.error(error);
       setErrorMessage('Data Fetching Error');
@@ -365,8 +365,8 @@ const CreateFlowDiagramCT = ({
     } else if (type === 'edge' && edgeNameRef && edgeNameRef.current) {
       setEdgeName('');
       edgeNameRef.current.blur();
-    } else if (type === 'corporate' && corporateRef && corporateRef.current) {
-      corporateRef.current.blur();
+    } else if (type === 'company' && companyRef && companyRef.current) {
+      companyRef.current.blur();
     } else if (type === 'isDone' && isDoneRef && isDoneRef.current) {
       isDoneRef.current.blur();
     }
@@ -624,13 +624,13 @@ const CreateFlowDiagramCT = ({
       title={title}
       nodeName={nodeName}
       edgeName={edgeName}
-      corporate={corporate}
-      corporates={corporates}
+      company={company}
+      companies={companies}
       isDone={isDone}
       titleNameRef={titleNameRef}
       nodeNameRef={nodeNameRef}
       edgeNameRef={edgeNameRef}
-      corporateRef={corporateRef}
+      companyRef={companyRef}
       isDoneRef={isDoneRef}
       nodes={nodes}
       edges={edges}
@@ -643,7 +643,7 @@ const CreateFlowDiagramCT = ({
       onSetTitle={setTitle}
       onSetNodeName={setNodeName}
       onSetEdgeName={setEdgeName}
-      onSetCorporate={setCorporate}
+      onSetCompanie={setCompanie}
       onSetIsDone={setIsDone}
       onNodesDelete={handleNodesDelete}
       onNodesChange={handleNodesChange}

@@ -88,14 +88,14 @@ const ViewEntityRelationshipDiagramCT = ({
           }
 
           if (docSnap !== undefined && docSnap.exists()) {
-            const { title, content, isDone, corporate } = docSnap.data();
+            const { title, content, isDone, company } = docSnap.data();
 
             if (
               isDone !== 'Y' &&
               (uid === undefined ||
                 uid === null ||
                 uid === '' ||
-                !handleHasPermission(['r'], await handleGetGrade(corporate)))
+                !handleHasPermission(['r'], await handleGetGrade(company)))
             ) {
               throw Error('Invalid Detail ID');
             }
@@ -159,9 +159,9 @@ const ViewEntityRelationshipDiagramCT = ({
       const docSnap = await getDoc(doc(db, 'authority', uid));
 
       if (docSnap !== undefined && docSnap.exists()) {
-        const { grade, corporate } = docSnap.data();
+        const { grade, company } = docSnap.data();
 
-        if (corporate === 'ALL' || corporate === corp) return grade;
+        if (company === 'ALL' || company === corp) return grade;
       }
     }
   };

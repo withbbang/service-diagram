@@ -41,8 +41,8 @@ const CreateSequenceDiagramCT = ({
     # https://bramp.github.io/js-sequence-diagrams 문법 참고
   `); // 다이어그램 내용
   const [isDone, setIsDone] = useState<string>('N'); // 완료 여부
-  const [corporate, setCorporate] = useState<string>('ALL'); // 회사 이름
-  const [corporates, setCorporates] = useState<Array<string>>([]); // 회사 이름들
+  const [company, setCompanie] = useState<string>('ALL'); // 회사 이름
+  const [companies, setCompanies] = useState<Array<string>>([]); // 회사 이름들
   const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false); // 확인 팝업 활성 상태
   const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
   const [errorPopupActive, setErrorPopupActive] = useState<boolean>(false); // 에러 팝업 활성 상태
@@ -76,18 +76,18 @@ const CreateSequenceDiagramCT = ({
 
   // 유저 권한에 따른 초기 회사 목록 가져오기
   useEffect(() => {
-    handleHasPermission(['c'], grade) && handleGetCorporates();
+    handleHasPermission(['c'], grade) && handleGetCompanies();
   }, [grade]);
 
   // 회사 목록 가져오기
-  const handleGetCorporates = async () => {
+  const handleGetCompanies = async () => {
     handleLoaderTrue();
 
     try {
-      const q = query(collection(db, 'corporate'));
+      const q = query(collection(db, 'company'));
       const querySnapshot = await getDocs(q);
 
-      setCorporates(querySnapshot.docs.map((doc) => doc.data().name));
+      setCompanies(querySnapshot.docs.map((doc) => doc.data().name));
     } catch (error) {
       console.error(error);
       setErrorMessage('Data Fetching Error');
@@ -136,13 +136,15 @@ const CreateSequenceDiagramCT = ({
             />
           </div>
           <div className={styles.option}>
-            <label>Corporate</label>
+            <label>Companie</label>
             <select
-              value={corporate}
-              onChange={(e) => setCorporate(e.target.value)}
+              value={company}
+              onChange={(e) => setCompanie(e.target.value)}
             >
-              {corporates.map((corporate) => (
-                <option value={corporate}>{corporate}</option>
+              {companies.map((company, idx) => (
+                <option key={idx} value={company}>
+                  {company}
+                </option>
               ))}
             </select>
           </div>

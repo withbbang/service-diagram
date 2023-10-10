@@ -31,7 +31,7 @@ const SearchDiagramsCT = ({
 
   const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
   const [grade, setGrade] = useState<number | undefined>(); // 로그인 사용자 등급
-  const [corporate, setCorporate] = useState<string>('');
+  const [company, setCompanie] = useState<string>('');
   const [snippet, setSnippet] = useState<string>(''); // 검색어
   const [didSearch, setDidSearch] = useState<boolean>(false); // 검색 여부
   const [contents, setContents] = useState<Array<any>>([]); // 선택한 다이어그램들 배열 훅
@@ -51,10 +51,10 @@ const SearchDiagramsCT = ({
             const docSnap = await getDoc(doc(db, 'authority', user.uid));
 
             if (docSnap !== undefined && docSnap.exists()) {
-              const { grade, corporate } = docSnap.data();
+              const { grade, company } = docSnap.data();
 
               setGrade(grade);
-              setCorporate(corporate);
+              setCompanie(company);
             }
           }
         });
@@ -78,7 +78,7 @@ const SearchDiagramsCT = ({
         uid_ !== '' &&
         uid === uid_ &&
         handleHasPermission(['r'], grade) // 로그인 O
-          ? corporate === 'ALL'
+          ? company === 'ALL'
             ? [
                 ...types.map((type) => {
                   return {
@@ -96,7 +96,7 @@ const SearchDiagramsCT = ({
                     type,
                     query: query(
                       collection(db, type),
-                      where('corporate', 'in', ['ALL', corporate]),
+                      where('company', 'in', ['ALL', company]),
                       orderBy('createDt', 'desc')
                     )
                   };
@@ -130,13 +130,13 @@ const SearchDiagramsCT = ({
             ...prevContents,
             ...docs
               .map((doc) => {
-                const { title, createDt, corporate } = doc.data();
+                const { title, createDt, company } = doc.data();
 
                 return {
                   id: doc.id,
                   title,
                   type,
-                  corporate,
+                  company,
                   createDt: handleConvertTimestamp(createDt.toDate(), 'date')
                 };
               })

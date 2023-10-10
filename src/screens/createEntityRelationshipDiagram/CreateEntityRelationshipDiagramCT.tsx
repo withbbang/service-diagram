@@ -90,8 +90,8 @@ const CreateErdDiagramCT = ({
   const edgeTypes = useMemo(() => ({ normal: NormalEdge }), []); // 커스텀 엣지 타입들
 
   const [grade, setGrade] = useState<number | undefined>(); // 로그인 사용자 등급
-  const [corporate, setCorporate] = useState<string>('ALL'); // 회사 이름
-  const [corporates, setCorporates] = useState<Array<string>>([]); // 회사 이름들
+  const [company, setCompanie] = useState<string>('ALL'); // 회사 이름
+  const [companies, setCompanies] = useState<Array<string>>([]); // 회사 이름들
   const [title, setTitle] = useState<string>(''); // 다이어그램 제목
   const [isDone, setIsDone] = useState<string>('N'); // 완료 여부
   const [tableName, setTableName] = useState<string>(initTableName); // 테이블 이름
@@ -121,7 +121,7 @@ const CreateErdDiagramCT = ({
     null
   ) as React.MutableRefObject<HTMLInputElement | null>;
   // 기업이름 select 참조 객체
-  const corporateRef = React.useRef(
+  const companyRef = React.useRef(
     null
   ) as React.MutableRefObject<HTMLSelectElement | null>;
   // 완료여부 select 참조 객체
@@ -205,18 +205,18 @@ const CreateErdDiagramCT = ({
 
   // 유저 권한에 따른 초기 회사 목록 가져오기
   useEffect(() => {
-    handleHasPermission(['c'], grade) && handleGetCorporates();
+    handleHasPermission(['c'], grade) && handleGetCompanies();
   }, [grade]);
 
   // 회사 목록 가져오기
-  const handleGetCorporates = async () => {
+  const handleGetCompanies = async () => {
     handleLoaderTrue();
 
     try {
-      const q = query(collection(db, 'corporate'));
+      const q = query(collection(db, 'company'));
       const querySnapshot = await getDocs(q);
 
-      setCorporates(querySnapshot.docs.map((doc) => doc.data().name));
+      setCompanies(querySnapshot.docs.map((doc) => doc.data().name));
     } catch (error) {
       console.error(error);
       setErrorMessage('Data Fetching Error');
@@ -441,8 +441,8 @@ const CreateErdDiagramCT = ({
   const handleBlur = (type: string) => {
     if (type === 'title' && titleNameRef && titleNameRef.current) {
       titleNameRef.current.blur();
-    } else if (type === 'corporate' && corporateRef && corporateRef.current) {
-      corporateRef.current.blur();
+    } else if (type === 'company' && companyRef && companyRef.current) {
+      companyRef.current.blur();
     } else if (type === 'isDone' && isDoneRef && isDoneRef.current) {
       isDoneRef.current.blur();
     }
@@ -615,8 +615,8 @@ const CreateErdDiagramCT = ({
     <CreateErdDiagramPT
       grade={grade}
       title={title}
-      corporate={corporate}
-      corporates={corporates}
+      company={company}
+      companies={companies}
       isDone={isDone}
       tableName={tableName}
       tableComment={tableComment}
@@ -627,7 +627,7 @@ const CreateErdDiagramCT = ({
       targetRelation={targetRelation}
       columns={columns}
       titleNameRef={titleNameRef}
-      corporateRef={corporateRef}
+      companyRef={companyRef}
       isDoneRef={isDoneRef}
       tables={tables}
       edges={edges}
@@ -638,7 +638,7 @@ const CreateErdDiagramCT = ({
       errorPopupActive={errorPopupActive}
       errorMessage={errorMessage}
       onSetTitle={setTitle}
-      onSetCorporate={setCorporate}
+      onSetCompanie={setCompanie}
       onSetIsDone={setIsDone}
       onSetTableName={setTableName}
       onSetTableComment={setTableComment}

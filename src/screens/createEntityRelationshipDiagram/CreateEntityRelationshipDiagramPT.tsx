@@ -25,8 +25,8 @@ import { handleHasPermission } from 'modules/utils';
 const CreateErdDiagramPT = ({
   grade,
   title,
-  corporate,
-  corporates,
+  company,
+  companies,
   isDone,
   tableName,
   tableComment,
@@ -36,7 +36,7 @@ const CreateErdDiagramPT = ({
   targetRelation,
   columns,
   titleNameRef,
-  corporateRef,
+  companyRef,
   isDoneRef,
   tables,
   edges,
@@ -47,7 +47,7 @@ const CreateErdDiagramPT = ({
   errorPopupActive,
   errorMessage,
   onSetTitle,
-  onSetCorporate,
+  onSetCompanie,
   onSetIsDone,
   onSetTableName,
   onSetTableComment,
@@ -125,15 +125,17 @@ const CreateErdDiagramPT = ({
               onBlur={() => onBlur('title')}
               ref={titleNameRef}
             />
-            <label>Corporate:</label>
+            <label>Companie:</label>
             <select
-              value={corporate}
-              onChange={(e) => onSetCorporate(e.target.value)}
-              onBlur={() => onBlur('corporate')}
-              ref={corporateRef}
+              value={company}
+              onChange={(e) => onSetCompanie(e.target.value)}
+              onBlur={() => onBlur('company')}
+              ref={companyRef}
             >
-              {corporates.map((corporate) => (
-                <option value={corporate}>{corporate}</option>
+              {companies.map((company, idx) => (
+                <option key={idx} value={company}>
+                  {company}
+                </option>
               ))}
             </select>
             <label>Complete:</label>
@@ -285,8 +287,8 @@ const CreateErdDiagramPT = ({
 interface typeCreateErdDiagramPT {
   grade?: number;
   title: string;
-  corporate: string;
-  corporates: Array<string>;
+  company: string;
+  companies: Array<string>;
   isDone: string;
   tableName: string;
   tableComment: string;
@@ -297,7 +299,7 @@ interface typeCreateErdDiagramPT {
   targetRelation: string;
   columns: Array<typeColumn>;
   titleNameRef: React.MutableRefObject<HTMLInputElement | null>;
-  corporateRef: React.MutableRefObject<HTMLSelectElement | null>;
+  companyRef: React.MutableRefObject<HTMLSelectElement | null>;
   isDoneRef: React.MutableRefObject<HTMLSelectElement | null>;
   tables: Node<any, string | undefined>[];
   edges: Edge<any>[];
@@ -308,7 +310,7 @@ interface typeCreateErdDiagramPT {
   errorPopupActive: boolean;
   errorMessage: string;
   onSetTitle: React.Dispatch<React.SetStateAction<string>>;
-  onSetCorporate: React.Dispatch<React.SetStateAction<string>>;
+  onSetCompanie: React.Dispatch<React.SetStateAction<string>>;
   onSetIsDone: React.Dispatch<React.SetStateAction<string>>;
   onSetTableName: React.Dispatch<React.SetStateAction<string>>;
   onSetTableComment: React.Dispatch<React.SetStateAction<string>>;

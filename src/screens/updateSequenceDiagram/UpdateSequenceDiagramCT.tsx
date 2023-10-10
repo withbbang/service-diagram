@@ -28,8 +28,8 @@ const UpdateSequenceDiagramCT = ({
 
   const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
   const [grade, setGrade] = useState<number | undefined>(); // 로그인 사용자 등급
-  const [corporate, setCorporate] = useState<string>('ALL'); // 회사 이름
-  const [corporates, setCorporates] = useState<Array<string>>([]); // 회사 이름들
+  const [company, setCompanie] = useState<string>('ALL'); // 회사 이름
+  const [companies, setCompanies] = useState<Array<string>>([]); // 회사 이름들
   const [title, setTitle] = useState<string>(''); // 다이어그램 제목
   const [content, setContent] = useState<string>(``); // 다이어그램 내용
   const [isDone, setIsDone] = useState<string>('N'); // 완료 여부
@@ -73,13 +73,13 @@ const UpdateSequenceDiagramCT = ({
           const docSnap = await getDoc(doc(db, 'authority', user.uid));
 
           if (docSnap !== undefined && docSnap.exists()) {
-            const { grade, corporate } = docSnap.data();
+            const { grade, company } = docSnap.data();
             setGrade(grade);
 
             if (!handleHasPermission(['u'], grade)) {
               throw Error("You Don't Have Permission");
             } else {
-              await handleSetContent(corporate);
+              await handleSetContent(company);
             }
           } else {
             throw Error('No User Grade');
@@ -99,18 +99,18 @@ const UpdateSequenceDiagramCT = ({
 
   // 유저 권한에 따른 초기 회사 목록 가져오기
   useEffect(() => {
-    handleHasPermission(['u'], grade) && handleGetCorporates();
+    handleHasPermission(['u'], grade) && handleGetCompanies();
   }, [grade]);
 
   // 회사 목록 가져오기
-  const handleGetCorporates = async () => {
+  const handleGetCompanies = async () => {
     handleLoaderTrue();
 
     try {
-      const q = query(collection(db, 'corporate'));
+      const q = query(collection(db, 'company'));
       const querySnapshot = await getDocs(q);
 
-      setCorporates(querySnapshot.docs.map((doc) => doc.data().name));
+      setCompanies(querySnapshot.docs.map((doc) => doc.data().name));
     } catch (error) {
       console.error(error);
       setErrorMessage('Data Fetching Error');
@@ -159,14 +159,14 @@ const UpdateSequenceDiagramCT = ({
             />
           </div>
           <div className={styles.option}>
-            <label>Corporate</label>
+            <label>Companie</label>
             <select
-              value={corporate}
-              onChange={(e) => setCorporate(e.target.value)}
+              value={company}
+              onChange={(e) => setCompanie(e.target.value)}
             >
-              {corporates.map((corporate, idx) => (
-                <option key={idx} value={corporate}>
-                  {corporate}
+              {companies.map((company, idx) => (
+                <option key={idx} value={company}>
+                  {company}
                 </option>
               ))}
             </select>
@@ -204,13 +204,13 @@ const UpdateSequenceDiagramCT = ({
       }
 
       if (docSnap !== undefined && docSnap.exists()) {
-        const { title, content, isDone, corporate } = docSnap.data();
+        const { title, content, isDone, company } = docSnap.data();
 
-        if (corp === 'ALL' || corporate === corp) {
+        if (corp === 'ALL' || company === corp) {
           setTitle(title);
           setContent(content);
           setIsDone(isDone);
-          setCorporate(corporate);
+          setCompanie(company);
         } else {
           throw Error("You Don't Have Permission");
         }
@@ -232,7 +232,7 @@ const UpdateSequenceDiagramCT = ({
         await updateDoc(doc(db, type, contentId), {
           title,
           content,
-          corporate,
+          company,
           isDone,
           updateDt: serverTimestamp()
         });

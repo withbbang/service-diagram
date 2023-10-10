@@ -26,13 +26,13 @@ const UpdateFlowDiagramPT = ({
   title,
   nodeName,
   edgeName,
-  corporate,
-  corporates,
+  company,
+  companies,
   isDone,
   titleNameRef,
   nodeNameRef,
   edgeNameRef,
-  corporateRef,
+  companyRef,
   isDoneRef,
   nodes,
   edges,
@@ -45,7 +45,7 @@ const UpdateFlowDiagramPT = ({
   onSetTitle,
   onSetNodeName,
   onSetEdgeName,
-  onSetCorporate,
+  onSetCompanie,
   onSetIsDone,
   onNodesDelete,
   onNodesChange,
@@ -130,14 +130,14 @@ const UpdateFlowDiagramPT = ({
                 ref={edgeNameRef}
               />
               <select
-                value={corporate}
-                onChange={(e) => onSetCorporate(e.target.value)}
-                onBlur={() => onBlur('corporate')}
-                ref={corporateRef}
+                value={company}
+                onChange={(e) => onSetCompanie(e.target.value)}
+                onBlur={() => onBlur('company')}
+                ref={companyRef}
               >
-                {corporates.map((corporate, idx) => (
-                  <option key={idx} value={corporate}>
-                    {corporate}
+                {companies.map((company, idx) => (
+                  <option key={idx} value={company}>
+                    {company}
                   </option>
                 ))}
               </select>
@@ -186,13 +186,13 @@ interface typeUpdateFlowDiagramPT {
   title: string;
   nodeName: string;
   edgeName: string;
-  corporate: string;
-  corporates: Array<string>;
+  company: string;
+  companies: Array<string>;
   isDone: string;
   titleNameRef: React.MutableRefObject<HTMLInputElement | null>;
   nodeNameRef: React.MutableRefObject<HTMLInputElement | null>;
   edgeNameRef: React.MutableRefObject<HTMLInputElement | null>;
-  corporateRef: React.MutableRefObject<HTMLSelectElement | null>;
+  companyRef: React.MutableRefObject<HTMLSelectElement | null>;
   isDoneRef: React.MutableRefObject<HTMLSelectElement | null>;
   nodes: Node<any, string | undefined>[];
   edges: Edge<any>[];
@@ -205,7 +205,7 @@ interface typeUpdateFlowDiagramPT {
   onSetTitle: React.Dispatch<React.SetStateAction<string>>;
   onSetNodeName: React.Dispatch<React.SetStateAction<string>>;
   onSetEdgeName: React.Dispatch<React.SetStateAction<string>>;
-  onSetCorporate: React.Dispatch<React.SetStateAction<string>>;
+  onSetCompanie: React.Dispatch<React.SetStateAction<string>>;
   onSetIsDone: React.Dispatch<React.SetStateAction<string>>;
   onNodesDelete: (deleted: Array<Node>) => void;
   onNodesChange: OnNodesChange;
