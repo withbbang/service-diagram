@@ -164,8 +164,10 @@ const UpdateSequenceDiagramCT = ({
               value={corporate}
               onChange={(e) => setCorporate(e.target.value)}
             >
-              {corporates.map((corporate) => (
-                <option value={corporate}>{corporate}</option>
+              {corporates.map((corporate, idx) => (
+                <option key={idx} value={corporate}>
+                  {corporate}
+                </option>
               ))}
             </select>
           </div>
@@ -208,6 +210,7 @@ const UpdateSequenceDiagramCT = ({
           setTitle(title);
           setContent(content);
           setIsDone(isDone);
+          setCorporate(corporate);
         } else {
           throw Error("You Don't Have Permission");
         }

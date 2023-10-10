@@ -186,7 +186,6 @@ const UpdateFlowDiagramCT = ({
 
           if (docSnap !== undefined && docSnap.exists()) {
             const { grade, corporate } = docSnap.data();
-
             setGrade(grade);
 
             if (!handleHasPermission(['u'], grade)) {
@@ -407,6 +406,7 @@ const UpdateFlowDiagramCT = ({
         if (corp === 'ALL' || corporate === corp) {
           setTitle(title);
           setIsDone(isDone);
+          setCorporate(corporate);
 
           const flow = JSON.parse(content);
 

@@ -27,7 +27,7 @@ const SVG = (props: typeSVG): JSX.Element => {
           height={props.height ? props.height : '35px'}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 52 52"
-          enable-background="new 0 0 52 52"
+          enableBackground="new 0 0 52 52"
           xmlSpace="preserve"
         >
           <path

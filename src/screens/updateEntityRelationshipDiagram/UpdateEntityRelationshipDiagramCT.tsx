@@ -241,7 +241,6 @@ const UpdateEntityRelationshipDiagramCT = ({
 
           if (docSnap !== undefined && docSnap.exists()) {
             const { grade, corporate } = docSnap.data();
-
             setGrade(grade);
 
             if (!handleHasPermission(['u'], grade)) {
@@ -643,6 +642,7 @@ const UpdateEntityRelationshipDiagramCT = ({
         if (corp === 'ALL' || corporate === corp) {
           setTitle(title);
           setIsDone(isDone);
+          setCorporate(corporate);
           handleInitItems(JSON.parse(content));
         } else {
           throw Error("You Don't Have Permission");

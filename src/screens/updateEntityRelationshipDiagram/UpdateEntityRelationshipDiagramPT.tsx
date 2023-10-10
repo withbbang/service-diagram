@@ -132,8 +132,10 @@ const UpdateEntityRelationshipDiagramPT = ({
               onBlur={() => onBlur('corporate')}
               ref={corporateRef}
             >
-              {corporates.map((corporate) => (
-                <option value={corporate}>{corporate}</option>
+              {corporates.map((corporate, idx) => (
+                <option key={idx} value={corporate}>
+                  {corporate}
+                </option>
               ))}
             </select>
             <label>Complete:</label>
