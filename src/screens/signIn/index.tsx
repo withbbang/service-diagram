@@ -82,9 +82,7 @@ const SignIn = ({
       console.error(error);
       setErrorMessage('Password Encrypting Error');
       setErrorPopupActive(true);
-      return;
-    } finally {
-      handleLoaderFalse();
+      return handleLoaderFalse();
     }
 
     try {
@@ -137,7 +135,7 @@ const SignIn = ({
             <input
               value={email}
               type="email"
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value.trim())}
               onKeyDown={(e) => handleKeyDown(e)}
             />
           </div>
@@ -146,7 +144,7 @@ const SignIn = ({
             <input
               value={password}
               type="password"
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value.trim())}
               onKeyDown={(e) => handleKeyDown(e)}
             />
           </div>
