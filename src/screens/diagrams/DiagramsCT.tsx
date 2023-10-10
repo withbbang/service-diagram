@@ -74,6 +74,7 @@ const DiagramsCT = ({
     } catch (error: any) {
       setUid_('');
       setGrade(20);
+      setCorporate('');
     } finally {
       handleLoaderFalse();
     }
@@ -154,6 +155,8 @@ const DiagramsCT = ({
 
   const handleSignOut = () => {
     handleSetUid('');
+    setGrade(20);
+    setCorporate('');
   };
 
   const handleBack = () => {
