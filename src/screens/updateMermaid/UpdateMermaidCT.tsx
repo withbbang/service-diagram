@@ -232,6 +232,7 @@ const UpdateMermaidCT = ({
         await updateDoc(doc(db, type, contentId), {
           title,
           content,
+          corporate,
           isDone,
           updateDt: serverTimestamp()
         });

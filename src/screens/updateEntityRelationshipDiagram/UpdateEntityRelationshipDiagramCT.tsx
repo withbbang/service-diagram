@@ -671,6 +671,7 @@ const UpdateEntityRelationshipDiagramCT = ({
           await updateDoc(doc(db, type, contentId), {
             title,
             content: JSON.stringify(rfInstance.toObject()),
+            corporate,
             isDone,
             updateDt: serverTimestamp()
           });

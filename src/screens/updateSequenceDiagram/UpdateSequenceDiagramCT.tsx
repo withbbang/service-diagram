@@ -232,6 +232,7 @@ const UpdateSequenceDiagramCT = ({
         await updateDoc(doc(db, type, contentId), {
           title,
           content,
+          corporate,
           isDone,
           updateDt: serverTimestamp()
         });
