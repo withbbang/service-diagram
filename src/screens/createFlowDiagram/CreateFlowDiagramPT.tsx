@@ -46,7 +46,7 @@ const CreateFlowDiagramPT = ({
   onSetTitle,
   onSetNodeName,
   onSetEdgeName,
-  onSetCompanie,
+  onSetCompany,
   onSetIsDone,
   onNodesDelete,
   onNodesChange,
@@ -133,7 +133,7 @@ const CreateFlowDiagramPT = ({
               <label>Companie:</label>
               <select
                 value={company}
-                onChange={(e) => onSetCompanie(e.target.value)}
+                onChange={(e) => onSetCompany(e.target.value)}
                 onBlur={() => onBlur('company')}
                 ref={companyRef}
               >
@@ -200,7 +200,7 @@ interface typeCreateFlowDiagramPT {
   onSetTitle: React.Dispatch<React.SetStateAction<string>>;
   onSetNodeName: React.Dispatch<React.SetStateAction<string>>;
   onSetEdgeName: React.Dispatch<React.SetStateAction<string>>;
-  onSetCompanie: React.Dispatch<React.SetStateAction<string>>;
+  onSetCompany: React.Dispatch<React.SetStateAction<string>>;
   onSetIsDone: React.Dispatch<React.SetStateAction<string>>;
   onNodesDelete: (deleted: Array<Node>) => void;
   onNodesChange: OnNodesChange;

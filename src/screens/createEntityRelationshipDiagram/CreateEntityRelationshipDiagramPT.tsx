@@ -47,7 +47,7 @@ const CreateErdDiagramPT = ({
   errorPopupActive,
   errorMessage,
   onSetTitle,
-  onSetCompanie,
+  onSetCompany,
   onSetIsDone,
   onSetTableName,
   onSetTableComment,
@@ -128,7 +128,7 @@ const CreateErdDiagramPT = ({
             <label>Companie:</label>
             <select
               value={company}
-              onChange={(e) => onSetCompanie(e.target.value)}
+              onChange={(e) => onSetCompany(e.target.value)}
               onBlur={() => onBlur('company')}
               ref={companyRef}
             >
@@ -310,7 +310,7 @@ interface typeCreateErdDiagramPT {
   errorPopupActive: boolean;
   errorMessage: string;
   onSetTitle: React.Dispatch<React.SetStateAction<string>>;
-  onSetCompanie: React.Dispatch<React.SetStateAction<string>>;
+  onSetCompany: React.Dispatch<React.SetStateAction<string>>;
   onSetIsDone: React.Dispatch<React.SetStateAction<string>>;
   onSetTableName: React.Dispatch<React.SetStateAction<string>>;
   onSetTableComment: React.Dispatch<React.SetStateAction<string>>;

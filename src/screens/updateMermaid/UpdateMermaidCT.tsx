@@ -28,7 +28,7 @@ const UpdateMermaidCT = ({
 
   const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
   const [grade, setGrade] = useState<number | undefined>(); // 로그인 사용자 등급
-  const [company, setCompanie] = useState<string>('ALL'); // 회사 이름
+  const [company, setCompany] = useState<string>('ALL'); // 회사 이름
   const [companies, setCompanies] = useState<Array<string>>([]); // 회사 이름들
   const [title, setTitle] = useState<string>(''); // 다이어그램 제목
   const [content, setContent] = useState<string>(``); // 다이어그램 내용
@@ -162,7 +162,7 @@ const UpdateMermaidCT = ({
             <label>Companie</label>
             <select
               value={company}
-              onChange={(e) => setCompanie(e.target.value)}
+              onChange={(e) => setCompany(e.target.value)}
             >
               {companies.map((company, idx) => (
                 <option key={idx} value={company}>
@@ -210,7 +210,7 @@ const UpdateMermaidCT = ({
           setTitle(title);
           setContent(content);
           setIsDone(isDone);
-          setCompanie(company);
+          setCompany(company);
         } else {
           throw Error("You Don't Have Permission");
         }

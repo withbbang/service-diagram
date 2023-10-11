@@ -93,7 +93,7 @@ const UpdateEntityRelationshipDiagramCT = ({
   const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
   const [title, setTitle] = useState<string>(''); // 다이어그램 제목
   const [grade, setGrade] = useState<number | undefined>(); // 로그인 사용자 등급
-  const [company, setCompanie] = useState<string>('ALL'); // 회사 이름
+  const [company, setCompany] = useState<string>('ALL'); // 회사 이름
   const [companies, setCompanies] = useState<Array<string>>([]); // 회사 이름들
   const [isDone, setIsDone] = useState<string>('N'); // 완료 여부
   const [tableName, setTableName] = useState<string>(initTableName); // 테이블 이름
@@ -642,7 +642,7 @@ const UpdateEntityRelationshipDiagramCT = ({
         if (corp === 'ALL' || company === corp) {
           setTitle(title);
           setIsDone(isDone);
-          setCompanie(company);
+          setCompany(company);
           handleInitItems(JSON.parse(content));
         } else {
           throw Error("You Don't Have Permission");
@@ -750,7 +750,7 @@ const UpdateEntityRelationshipDiagramCT = ({
       errorPopupActive={errorPopupActive}
       errorMessage={errorMessage}
       onSetTitle={setTitle}
-      onSetCompanie={setCompanie}
+      onSetCompany={setCompany}
       onSetIsDone={setIsDone}
       onSetTableName={setTableName}
       onSetTableComment={setTableComment}

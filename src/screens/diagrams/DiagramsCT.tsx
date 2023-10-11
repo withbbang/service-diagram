@@ -34,7 +34,7 @@ const DiagramsCT = ({
 
   const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
   const [grade, setGrade] = useState<number>(20); // 유저 등급
-  const [company, setCompanie] = useState<string>(''); // 유저 기업
+  const [company, setCompany] = useState<string>(''); // 유저 기업
   const [title, setTitle] = useState<string>(''); // 선택한 다이어그램에 따른 제목
   const [contents, setContents] = useState<Array<typeContent>>([]); // 선택한 다이어그램들 배열 훅
   const [selectedContentId, setSelectedContentId] = useState<string>(''); // 다어그램들 중 선택한 놈 id
@@ -66,7 +66,7 @@ const DiagramsCT = ({
               const { grade, company } = docSnap.data();
 
               setGrade(grade);
-              setCompanie(company);
+              setCompany(company);
             }
           }
         });
@@ -74,7 +74,7 @@ const DiagramsCT = ({
     } catch (error: any) {
       setUid_('');
       setGrade(20);
-      setCompanie('');
+      setCompany('');
     } finally {
       handleLoaderFalse();
     }
@@ -156,7 +156,7 @@ const DiagramsCT = ({
   const handleSignOut = () => {
     handleSetUserInfo({ uid: '', email: '', nickname: '' });
     setGrade(20);
-    setCompanie('');
+    setCompany('');
   };
 
   const handleBack = () => {

@@ -37,7 +37,7 @@ const CreateMermaidCT = ({
   # syntax 카테고리 참고
   `); // 다이어그램 내용
   const [isDone, setIsDone] = useState<string>('N'); // 완료 여부
-  const [company, setCompanie] = useState<string>('ALL'); // 회사 이름
+  const [company, setCompany] = useState<string>('ALL'); // 회사 이름
   const [companies, setCompanies] = useState<Array<string>>([]); // 회사 이름들
   const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false); // 확인 팝업 활성 상태
   const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
@@ -135,7 +135,7 @@ const CreateMermaidCT = ({
             <label>Companie</label>
             <select
               value={company}
-              onChange={(e) => setCompanie(e.target.value)}
+              onChange={(e) => setCompany(e.target.value)}
             >
               {companies.map((company, idx) => (
                 <option key={idx} value={company}>

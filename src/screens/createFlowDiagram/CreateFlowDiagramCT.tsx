@@ -144,7 +144,7 @@ const CreateFlowDiagramCT = ({
   const navigate = useNavigate();
 
   const [grade, setGrade] = useState<number | undefined>(); // 로그인 사용자 등급
-  const [company, setCompanie] = useState<string>('ALL'); // 회사 이름
+  const [company, setCompany] = useState<string>('ALL'); // 회사 이름
   const [companies, setCompanies] = useState<Array<string>>([]); // 회사 이름들
   const [id, setId] = useState<string>(''); // 노드 및 엣지 포커싱을 위한 id
   const [title, setTitle] = useState<string>(''); // 다이어그램 제목
@@ -643,7 +643,7 @@ const CreateFlowDiagramCT = ({
       onSetTitle={setTitle}
       onSetNodeName={setNodeName}
       onSetEdgeName={setEdgeName}
-      onSetCompanie={setCompanie}
+      onSetCompany={setCompany}
       onSetIsDone={setIsDone}
       onNodesDelete={handleNodesDelete}
       onNodesChange={handleNodesChange}

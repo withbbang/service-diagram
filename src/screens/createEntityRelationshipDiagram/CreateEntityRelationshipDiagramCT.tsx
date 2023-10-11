@@ -90,7 +90,7 @@ const CreateErdDiagramCT = ({
   const edgeTypes = useMemo(() => ({ normal: NormalEdge }), []); // 커스텀 엣지 타입들
 
   const [grade, setGrade] = useState<number | undefined>(); // 로그인 사용자 등급
-  const [company, setCompanie] = useState<string>('ALL'); // 회사 이름
+  const [company, setCompany] = useState<string>('ALL'); // 회사 이름
   const [companies, setCompanies] = useState<Array<string>>([]); // 회사 이름들
   const [title, setTitle] = useState<string>(''); // 다이어그램 제목
   const [isDone, setIsDone] = useState<string>('N'); // 완료 여부
@@ -638,7 +638,7 @@ const CreateErdDiagramCT = ({
       errorPopupActive={errorPopupActive}
       errorMessage={errorMessage}
       onSetTitle={setTitle}
-      onSetCompanie={setCompanie}
+      onSetCompany={setCompany}
       onSetIsDone={setIsDone}
       onSetTableName={setTableName}
       onSetTableComment={setTableComment}

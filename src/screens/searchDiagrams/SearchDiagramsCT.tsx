@@ -31,7 +31,7 @@ const SearchDiagramsCT = ({
 
   const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
   const [grade, setGrade] = useState<number | undefined>(); // 로그인 사용자 등급
-  const [company, setCompanie] = useState<string>('');
+  const [company, setCompany] = useState<string>('');
   const [snippet, setSnippet] = useState<string>(''); // 검색어
   const [didSearch, setDidSearch] = useState<boolean>(false); // 검색 여부
   const [contents, setContents] = useState<Array<any>>([]); // 선택한 다이어그램들 배열 훅
@@ -54,7 +54,7 @@ const SearchDiagramsCT = ({
               const { grade, company } = docSnap.data();
 
               setGrade(grade);
-              setCompanie(company);
+              setCompany(company);
             }
           }
         });

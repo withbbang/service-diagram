@@ -67,7 +67,7 @@ const UpdateFlowDiagramCT = ({
   const [nodeName, setNodeName] = useState<string>(''); // 노드 이름
   const [edgeName, setEdgeName] = useState<string>(''); // 엣지 이름
   const [grade, setGrade] = useState<number | undefined>(); // 로그인 사용자 등급
-  const [company, setCompanie] = useState<string>('ALL'); // 회사 이름
+  const [company, setCompany] = useState<string>('ALL'); // 회사 이름
   const [companies, setCompanies] = useState<Array<string>>([]); // 회사 이름들
   const [isDone, setIsDone] = useState<string>('N'); // 완료 여부
   const [rfInstance, setRfInstance] = useState<any>(null); // 로컬스토리지 일시 저장용 다이어그램 인스턴스
@@ -406,7 +406,7 @@ const UpdateFlowDiagramCT = ({
         if (corp === 'ALL' || company === corp) {
           setTitle(title);
           setIsDone(isDone);
-          setCompanie(company);
+          setCompany(company);
 
           const flow = JSON.parse(content);
 
@@ -511,7 +511,7 @@ const UpdateFlowDiagramCT = ({
       onSetTitle={setTitle}
       onSetNodeName={setNodeName}
       onSetEdgeName={setEdgeName}
-      onSetCompanie={setCompanie}
+      onSetCompany={setCompany}
       onSetIsDone={setIsDone}
       onNodesDelete={handleNodesDelete}
       onNodesChange={handleNodesChange}
