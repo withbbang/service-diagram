@@ -72,6 +72,10 @@
       display: flex;
       align-items: center;
     }
+
+    .createdBy {
+      opacity: 0;
+    }
   }
 
   .add {
@@ -87,6 +91,12 @@
   .floatBtns {
     display: flex;
   }
+
+  .cardInfo {
+    .createdBy {
+      opacity: 1;
+    }
+  }
 }
 
 @include mobile {
@@ -95,6 +105,12 @@
 
     .floatBtns {
       display: flex;
+    }
+
+    .cardInfo {
+      .createdBy {
+        opacity: 1;
+      }
     }
   }
 }

@@ -130,13 +130,13 @@ const SearchDiagramsCT = ({
             ...prevContents,
             ...docs
               .map((doc) => {
-                const { title, createDt, company } = doc.data();
+                const { title, createDt, createdBy } = doc.data();
 
                 return {
                   id: doc.id,
                   title,
                   type,
-                  company,
+                  createdBy,
                   createDt: handleConvertTimestamp(createDt.toDate(), 'date')
                 };
               })

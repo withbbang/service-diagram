@@ -108,12 +108,12 @@ const DiagramsCT = ({
 
       setContents(
         querySnapshot.docs.map((doc) => {
-          const { title, company, createDt } = doc.data();
+          const { title, createdBy, createDt } = doc.data();
 
           return {
             id: doc.id,
             title,
-            company,
+            createdBy,
             createDt: handleConvertTimestamp(createDt.toDate(), 'date')
           };
         })
