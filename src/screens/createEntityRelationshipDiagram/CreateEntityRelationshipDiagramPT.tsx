@@ -125,7 +125,7 @@ const CreateErdDiagramPT = ({
               onBlur={() => onBlur('title')}
               ref={titleNameRef}
             />
-            <label>Companie:</label>
+            <label>Company:</label>
             <select
               value={company}
               onChange={(e) => onSetCompany(e.target.value)}

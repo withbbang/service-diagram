@@ -129,6 +129,7 @@ const UpdateFlowDiagramPT = ({
                 onBlur={() => onBlur('edge')}
                 ref={edgeNameRef}
               />
+              <label>Company:</label>
               <select
                 value={company}
                 onChange={(e) => onSetCompany(e.target.value)}

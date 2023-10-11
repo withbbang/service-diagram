@@ -18,6 +18,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 
 const CreateSequenceDiagramCT = ({
   uid,
+  nickname,
   handleLoaderTrue,
   handleLoaderFalse
 }: typeCreateSequenceDiagramCT): JSX.Element => {
@@ -65,8 +66,12 @@ const CreateSequenceDiagramCT = ({
         if (user) {
           const docSnap = await getDoc(doc(db, 'authority', user.uid));
 
-          if (docSnap !== undefined && docSnap.exists())
-            setGrade(docSnap.data().grade);
+          if (docSnap !== undefined && docSnap.exists()) {
+            const { grade, company } = docSnap.data();
+
+            setGrade(grade);
+            setCompanies((prevState) => prevState.concat(company));
+          }
         }
 
         handleLoaderFalse();
@@ -76,7 +81,8 @@ const CreateSequenceDiagramCT = ({
 
   // 유저 권한에 따른 초기 회사 목록 가져오기
   useEffect(() => {
-    handleHasPermission(['c'], grade) && handleGetCompanies();
+    handleHasPermission(['c', 'r', 'u', 'd', 'm'], grade) &&
+      handleGetCompanies();
   }, [grade]);
 
   // 회사 목록 가져오기
@@ -136,7 +142,7 @@ const CreateSequenceDiagramCT = ({
             />
           </div>
           <div className={styles.option}>
-            <label>Companie</label>
+            <label>Company</label>
             <select
               value={company}
               onChange={(e) => setCompany(e.target.value)}
@@ -176,8 +182,10 @@ const CreateSequenceDiagramCT = ({
     try {
       const { id } = await addDoc(collection(db, type), {
         title,
+        company,
         content,
         isDone,
+        createdBy: nickname,
         createDt: serverTimestamp(),
         updateDt: ''
       });

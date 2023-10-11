@@ -79,6 +79,7 @@ const initialEdges: Array<Edge> = []; // 엣지 초기화
 
 const CreateErdDiagramCT = ({
   uid,
+  nickname,
   handleLoaderTrue,
   handleLoaderFalse
 }: typeCreateErdDiagramCT): JSX.Element => {
@@ -91,7 +92,7 @@ const CreateErdDiagramCT = ({
 
   const [grade, setGrade] = useState<number | undefined>(); // 로그인 사용자 등급
   const [company, setCompany] = useState<string>('ALL'); // 회사 이름
-  const [companies, setCompanies] = useState<Array<string>>([]); // 회사 이름들
+  const [companies, setCompanies] = useState<Array<string>>(['ALL']); // 회사 이름들
   const [title, setTitle] = useState<string>(''); // 다이어그램 제목
   const [isDone, setIsDone] = useState<string>('N'); // 완료 여부
   const [tableName, setTableName] = useState<string>(initTableName); // 테이블 이름
@@ -142,8 +143,12 @@ const CreateErdDiagramCT = ({
         if (user) {
           const docSnap = await getDoc(doc(db, 'authority', user.uid));
 
-          if (docSnap !== undefined && docSnap.exists())
-            setGrade(docSnap.data().grade);
+          if (docSnap !== undefined && docSnap.exists()) {
+            const { grade, company } = docSnap.data();
+
+            setGrade(grade);
+            setCompanies((prevState) => prevState.concat(company));
+          }
         }
 
         handleLoaderFalse();
@@ -205,7 +210,8 @@ const CreateErdDiagramCT = ({
 
   // 유저 권한에 따른 초기 회사 목록 가져오기
   useEffect(() => {
-    handleHasPermission(['c'], grade) && handleGetCompanies();
+    handleHasPermission(['c', 'r', 'u', 'd', 'm'], grade) &&
+      handleGetCompanies();
   }, [grade]);
 
   // 회사 목록 가져오기
@@ -566,8 +572,10 @@ const CreateErdDiagramCT = ({
       try {
         const { id } = await addDoc(collection(db, type), {
           title,
+          company,
           content: JSON.stringify(rfInstance.toObject()),
           isDone,
+          createdBy: nickname,
           createDt: serverTimestamp(),
           updateDt: ''
         });

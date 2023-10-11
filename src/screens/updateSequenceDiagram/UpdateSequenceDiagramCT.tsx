@@ -74,7 +74,9 @@ const UpdateSequenceDiagramCT = ({
 
           if (docSnap !== undefined && docSnap.exists()) {
             const { grade, company } = docSnap.data();
+
             setGrade(grade);
+            setCompanies((prevState) => prevState.concat(company));
 
             if (!handleHasPermission(['u'], grade)) {
               throw Error("You Don't Have Permission");
@@ -99,7 +101,8 @@ const UpdateSequenceDiagramCT = ({
 
   // 유저 권한에 따른 초기 회사 목록 가져오기
   useEffect(() => {
-    handleHasPermission(['u'], grade) && handleGetCompanies();
+    handleHasPermission(['c', 'r', 'u', 'd', 'm'], grade) &&
+      handleGetCompanies();
   }, [grade]);
 
   // 회사 목록 가져오기
@@ -159,7 +162,7 @@ const UpdateSequenceDiagramCT = ({
             />
           </div>
           <div className={styles.option}>
-            <label>Companie</label>
+            <label>Company</label>
             <select
               value={company}
               onChange={(e) => setCompany(e.target.value)}
