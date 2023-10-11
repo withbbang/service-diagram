@@ -81,8 +81,7 @@ const CreateSequenceDiagramCT = ({
 
   // 유저 권한에 따른 초기 회사 목록 가져오기
   useEffect(() => {
-    handleHasPermission(['c', 'r', 'u', 'd', 'm'], grade) &&
-      handleGetCompanies();
+    handleHasPermission('crudm', grade) && handleGetCompanies();
   }, [grade]);
 
   // 회사 목록 가져오기
@@ -128,7 +127,7 @@ const CreateSequenceDiagramCT = ({
   // 기능 팝업 내부 dom
   const handleChildren = (
     <div className={styles.contentBox}>
-      {handleHasPermission(['c'], grade) && (
+      {handleHasPermission('c', grade) && (
         <div className={styles.options}>
           <div className={styles.option}>
             <label>Title</label>

@@ -55,7 +55,7 @@ const Card = ({
           </span>
         </div>
       )}
-      {id !== '0' && handleHasPermission(['u', 'd'], grade) ? (
+      {id !== '0' && handleHasPermission('ud', grade) ? (
         <div className={styles.floatBtns}>
           <span onClick={(e) => handleUpdateBtn(e)}>
             <SVG type="modify" width="20px" height="20px" />

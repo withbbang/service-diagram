@@ -95,7 +95,7 @@ const ViewEntityRelationshipDiagramCT = ({
               (uid === undefined ||
                 uid === null ||
                 uid === '' ||
-                !handleHasPermission(['r'], await handleGetGrade(company)))
+                !handleHasPermission('r', await handleGetGrade(company)))
             ) {
               throw Error('Invalid Detail ID');
             }

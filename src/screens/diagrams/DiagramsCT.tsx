@@ -91,7 +91,7 @@ const DiagramsCT = ({
         uid !== '' &&
         uid_ !== '' &&
         uid === uid_ &&
-        handleHasPermission(['r'], grade) // 로그인 O
+        handleHasPermission('r', grade) // 로그인 O
           ? company === 'ALL'
             ? query(collection(db, type), orderBy('createDt', 'desc')) // 전체 보기
             : query(

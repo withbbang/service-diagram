@@ -43,7 +43,7 @@ export function handleConvertTimestamp(
  * @returns {boolean}
  */
 export function handleHasPermission(
-  arrayOfPermission: Array<string>,
+  permissionsParam: string,
   grade?: number
 ): boolean {
   // 게시물 및 유저 관리 권한
@@ -58,7 +58,7 @@ export function handleHasPermission(
   if (grade !== undefined) {
     const valueOfPermission = permissions[grade];
 
-    return arrayOfPermission.every((permission) =>
+    return [...permissionsParam].every((permission) =>
       valueOfPermission.includes(permission)
     );
   } else {

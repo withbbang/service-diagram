@@ -77,7 +77,7 @@ const SearchDiagramsCT = ({
         uid !== '' &&
         uid_ !== '' &&
         uid === uid_ &&
-        handleHasPermission(['r'], grade) // 로그인 O
+        handleHasPermission('r', grade) // 로그인 O
           ? company === 'ALL'
             ? [
                 ...types.map((type) => {

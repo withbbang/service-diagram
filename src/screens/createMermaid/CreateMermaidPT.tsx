@@ -52,7 +52,7 @@ const CreateMermaidPT = ({
           </span>
         </div>
         <div className={styles.innerWrap}>
-          {handleHasPermission(['c'], grade) ? (
+          {handleHasPermission('c', grade) ? (
             <button className={styles.saveBtn} onClick={onSaveBtn}>
               Save
             </button>

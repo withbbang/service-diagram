@@ -78,7 +78,7 @@ const UpdateSequenceDiagramCT = ({
             setGrade(grade);
             setCompanies((prevState) => prevState.concat(company));
 
-            if (!handleHasPermission(['u'], grade)) {
+            if (!handleHasPermission('u', grade)) {
               throw Error("You Don't Have Permission");
             } else {
               await handleSetContent(company);
@@ -101,8 +101,7 @@ const UpdateSequenceDiagramCT = ({
 
   // 유저 권한에 따른 초기 회사 목록 가져오기
   useEffect(() => {
-    handleHasPermission(['c', 'r', 'u', 'd', 'm'], grade) &&
-      handleGetCompanies();
+    handleHasPermission('crudm', grade) && handleGetCompanies();
   }, [grade]);
 
   // 회사 목록 가져오기
@@ -148,7 +147,7 @@ const UpdateSequenceDiagramCT = ({
   // 기능 팝업 내부 dom
   const handleChildren = (
     <div className={styles.contentBox}>
-      {handleHasPermission(['u'], grade) && (
+      {handleHasPermission('u', grade) && (
         <div className={styles.options}>
           <div className={styles.option}>
             <label>Title</label>
@@ -210,6 +209,7 @@ const UpdateSequenceDiagramCT = ({
         const { title, content, isDone, company } = docSnap.data();
 
         if (corp === 'ALL' || company === corp) {
+          console.log(company);
           setTitle(title);
           setContent(content);
           setIsDone(isDone);

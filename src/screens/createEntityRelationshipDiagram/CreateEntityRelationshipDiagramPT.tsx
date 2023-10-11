@@ -157,7 +157,7 @@ const CreateErdDiagramPT = ({
             <button onClick={() => onRestore()}>
               Restore Temporary Diagrams
             </button>
-            {handleHasPermission(['c'], grade) ? (
+            {handleHasPermission('c', grade) ? (
               <button onClick={onSaveBtn}>Permanently Save Diagrams</button>
             ) : (
               ''

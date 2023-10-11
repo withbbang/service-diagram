@@ -208,8 +208,7 @@ const UpdateEntityRelationshipDiagramCT = ({
 
   // 유저 권한에 따른 초기 회사 목록 가져오기
   useEffect(() => {
-    handleHasPermission(['c', 'r', 'u', 'd', 'm'], grade) &&
-      handleGetCompanies();
+    handleHasPermission('crudm', grade) && handleGetCompanies();
   }, [grade]);
 
   // 회사 목록 가져오기
@@ -246,7 +245,7 @@ const UpdateEntityRelationshipDiagramCT = ({
             setGrade(grade);
             setCompanies((prevState) => prevState.concat(company));
 
-            if (!handleHasPermission(['u'], grade)) {
+            if (!handleHasPermission('u', grade)) {
               throw Error("You Don't Have Permission");
             } else {
               await handleSetContent(company);
