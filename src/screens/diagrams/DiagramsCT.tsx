@@ -26,7 +26,7 @@ const DiagramsCT = ({
   uid,
   handleLoaderTrue,
   handleLoaderFalse,
-  handleSetUid
+  handleSetUserInfo
 }: typeDiagramsCT): JSX.Element => {
   const navigate = useNavigate(); // router 제어 훅
   const db = getFirestore(app); // Firebase 객체
@@ -154,7 +154,7 @@ const DiagramsCT = ({
   };
 
   const handleSignOut = () => {
-    handleSetUid('');
+    handleSetUserInfo({ uid: '', email: '', nickname: '' });
     setGrade(20);
     setCompanie('');
   };
@@ -237,7 +237,11 @@ const DiagramsCT = ({
 interface typeDiagramsCT extends CommonState {
   handleLoaderTrue: () => void;
   handleLoaderFalse: () => void;
-  handleSetUid: (uid: string) => void;
+  handleSetUserInfo: (payload: {
+    uid: string;
+    email: string;
+    nickname: string;
+  }) => void;
 }
 
 export default DiagramsCT;

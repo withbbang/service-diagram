@@ -7,6 +7,8 @@ export interface CommonState {
   isSuccess?: boolean;
   isFail?: boolean;
   uid?: string;
+  email?: string;
+  nickname?: string;
 }
 
 export const initialState: CommonState = {
@@ -15,7 +17,9 @@ export const initialState: CommonState = {
   isFetching: false,
   isSuccess: false,
   isFail: false,
-  uid: ''
+  uid: '',
+  email: '',
+  nickname: ''
 };
 
 const commonSlice = createSlice({
@@ -32,8 +36,13 @@ const commonSlice = createSlice({
     handleLoaderFalse(state: CommonState) {
       state.isFetching = false;
     },
-    handleSetUid(state: CommonState, action) {
-      state.uid = action.payload.uid;
+    handleSetUserInfo(
+      state: CommonState,
+      { payload: { uid, email, nickname } }
+    ) {
+      state.uid = uid;
+      state.email = email;
+      state.nickname = nickname;
     }
   },
   // API 리듀서들 비동기 상태값들 한번에 관리하기 위한 extraReducers 모음
@@ -46,7 +55,7 @@ export const {
   handleCodeMessage,
   handleLoaderTrue,
   handleLoaderFalse,
-  handleSetUid
+  handleSetUserInfo
 } = commonSlice.actions;
 
 export default commonSlice.reducer;

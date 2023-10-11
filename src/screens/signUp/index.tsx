@@ -24,7 +24,6 @@ import ErrorPopup from 'components/errorPopup/ErrorPopup';
 import { app, auth } from 'modules/utils';
 import { useNavigate } from 'react-router-dom';
 import styles from './SignUp.module.scss';
-import { async } from '@firebase/util';
 
 const mapStateToProps = (state: PropState): CommonState => {
   return { ...state.common };
@@ -52,8 +51,9 @@ const SignUp = ({
   const navigate = useNavigate();
 
   const [email, setEmail] = useState<string>('');
-  const [company, setCompany] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [nickname, setNickname] = useState<string>('');
+  const [company, setCompany] = useState<string>('');
   const [errorPopupActive, setErrorPopupActive] = useState<boolean>(false); // 에러 팝업 활성 상태
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러 팝업 내용 설정 훅
 
@@ -78,6 +78,12 @@ const SignUp = ({
 
     if (!password) {
       setErrorMessage('Empty Password Field');
+      setErrorPopupActive(true);
+      return;
+    }
+
+    if (!nickname) {
+      setErrorMessage('Empty Nickname Field');
       setErrorPopupActive(true);
       return;
     }
@@ -135,8 +141,11 @@ const SignUp = ({
       } = await createUserWithEmailAndPassword(auth, email, encryptPassword);
 
       await setDoc(doc(db, type, uid), {
+        company,
+        createDt: serverTimestamp(),
+        email,
         grade: 20,
-        company
+        nickname
       });
 
       navigate('/sign/in', { replace: true });

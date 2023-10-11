@@ -10,7 +10,7 @@ const IndexCT = ({
   uid,
   handleLoaderTrue,
   handleLoaderFalse,
-  handleSetUid
+  handleSetUserInfo
 }: typeIndexCT): JSX.Element => {
   const navigate = useNavigate(); // router 제어 훅
   const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
@@ -43,7 +43,7 @@ const IndexCT = ({
   };
 
   const handleSignOut = () => {
-    handleSetUid('');
+    handleSetUserInfo({ uid: '', email: '', nickname: '' });
   };
 
   const handleNavigate = (type: string) => {
@@ -75,7 +75,11 @@ const IndexCT = ({
 interface typeIndexCT extends CommonState {
   handleLoaderTrue: () => void;
   handleLoaderFalse: () => void;
-  handleSetUid: (uid: string) => void;
+  handleSetUserInfo: (payload: {
+    uid: string;
+    email: string;
+    nickname: string;
+  }) => void;
 }
 
 export default IndexCT;

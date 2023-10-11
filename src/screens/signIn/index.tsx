@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { doc, getDoc, getFirestore } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { PropState } from 'middlewares/configureReducer';
 import { Action } from '@reduxjs/toolkit';
 import { SHA256 } from 'crypto-js';
+import { app, auth } from 'modules/utils';
 import {
   CommonState,
   handleLoaderFalse,
   handleLoaderTrue,
-  handleSetUid
+  handleSetUserInfo
 } from 'middlewares/reduxToolkits/commonSlice';
 import Loader from 'components/loader';
 import ErrorPopup from 'components/errorPopup/ErrorPopup';
 import SVG from 'modules/SVG';
-import { auth } from 'modules/utils';
-import { useNavigate } from 'react-router-dom';
 import styles from './SignIn.module.scss';
 
 const mapStateToProps = (state: PropState): CommonState => {
@@ -29,8 +30,12 @@ const mapDispatchToProps = (dispatch: (actionFunction: Action<any>) => any) => {
     handleLoaderFalse: (): void => {
       dispatch(handleLoaderFalse());
     },
-    handleSetUid: (uid: string): void => {
-      dispatch(handleSetUid({ uid }));
+    handleSetUserInfo: (payload: {
+      uid: string;
+      email: string;
+      nickname: string;
+    }): void => {
+      dispatch(handleSetUserInfo(payload));
     }
   };
 };
@@ -39,8 +44,9 @@ const SignIn = ({
   uid,
   handleLoaderTrue,
   handleLoaderFalse,
-  handleSetUid
+  handleSetUserInfo
 }: typeSignIn): JSX.Element => {
+  const db = getFirestore(app); // Firebase 객체
   const navigate = useNavigate();
 
   const [email, setEmail] = useState<string>('');
@@ -75,32 +81,59 @@ const SignIn = ({
 
     handleLoaderTrue();
 
-    let encryptPassword;
     try {
-      encryptPassword = SHA256(password).toString();
-    } catch (error) {
-      console.error(error);
-      setErrorMessage('Password Encrypting Error');
-      setErrorPopupActive(true);
-      return handleLoaderFalse();
-    }
-
-    try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        encryptPassword
+      const {
+        user: { uid }
+      } = await handleSignInWithEmailAndPassword(
+        handleEncryptPassword(password)
       );
 
-      handleSetUid(userCredential.user.uid);
+      const nickname = await handleGetUserInfo(uid);
+
+      handleSetUserInfo({ uid, email, nickname });
       navigate('/', { replace: true });
-    } catch (error) {
-      console.error(error);
-      setErrorMessage('User Credential Error');
+    } catch (error: any) {
+      setErrorMessage(error.message);
       setErrorPopupActive(true);
-      return;
     } finally {
       handleLoaderFalse();
+    }
+  };
+
+  // 비밀번호 암호화
+  const handleEncryptPassword = (password: string) => {
+    try {
+      return SHA256(password).toString();
+    } catch (error) {
+      console.error(error);
+      throw Error('Password Encrypting Error');
+    }
+  };
+
+  // 로그인
+  const handleSignInWithEmailAndPassword = async (encryptPassword: string) => {
+    try {
+      return await signInWithEmailAndPassword(auth, email, encryptPassword);
+    } catch (error) {
+      console.error(error);
+      throw Error('User Credential Error');
+    }
+  };
+
+  // 유저 정보 가져오기
+  const handleGetUserInfo = async (uid: string) => {
+    let docSnap;
+    try {
+      docSnap = await getDoc(doc(db, 'authority', uid));
+
+      if (!docSnap.exists()) {
+        throw Error('No User');
+      }
+
+      return docSnap.data().nickname;
+    } catch (error: any) {
+      console.error(error);
+      throw Error('User Credential Error');
     }
   };
 
@@ -158,7 +191,11 @@ const SignIn = ({
 interface typeSignIn extends CommonState {
   handleLoaderTrue: () => void;
   handleLoaderFalse: () => void;
-  handleSetUid: (uid: string) => void;
+  handleSetUserInfo: (payload: {
+    uid: string;
+    email: string;
+    nickname: string;
+  }) => void;
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignIn);
