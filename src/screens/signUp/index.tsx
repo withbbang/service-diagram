@@ -200,6 +200,15 @@ const SignUp = ({
             />
           </div>
           <div className={styles.inputDiv}>
+            <label>Nickname</label>
+            <input
+              value={nickname}
+              type="text"
+              onChange={(e) => setNickname(e.target.value.trim())}
+              onKeyDown={(e) => handleKeyDown(e)}
+            />
+          </div>
+          <div className={styles.inputDiv}>
             <label>Company</label>
             <input
               value={company}
