@@ -38,7 +38,7 @@ export function handleConvertTimestamp(
 
 /**
  * 유저 권한 검증 함수
- * @param {Array<string>} arrayOfPermission
+ * @param {string} permissionsParam
  * @param {number | undefined} grade
  * @returns {boolean}
  */
