@@ -50,7 +50,13 @@ const AdminPT = ({
           handleHasPermission('m', grade) && (
             <>
               <h2>Admin</h2>
-              <div className={styles.innerWrap}></div>
+              <div className={styles.innerWrap}>
+                {Array.isArray(users) &&
+                  users.length > 0 &&
+                  users.map((user: typeAuthority) => (
+                    <div key={user.id}>{user.nickname}</div>
+                  ))}
+              </div>
             </>
           )}
       </div>
