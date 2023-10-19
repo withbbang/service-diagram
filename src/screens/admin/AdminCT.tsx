@@ -15,6 +15,7 @@ const AdminCT = ({
   const db = getFirestore(app); // Firebase 객체
   const navigate = useNavigate(); // router 제어 훅
   const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
+  const [grade, setGrade] = useState<number>(20); // 유저 등급
 
   const [confirmPopupActive, setConfirmPopupActive] = useState<boolean>(false); // 확인 팝업 활성 상태
   const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
@@ -50,6 +51,8 @@ const AdminCT = ({
 
             if (!handleHasPermission('m', grade)) {
               throw Error("You Don't Have Permission");
+            } else {
+              setGrade(grade);
             }
           } else {
             throw Error('No User Grade');
@@ -67,18 +70,6 @@ const AdminCT = ({
         handleLoaderFalse();
       }
     });
-  };
-
-  const handleSignIn = () => {
-    navigate('/sign/in');
-  };
-
-  const handleSignUp = () => {
-    navigate('/sign/up');
-  };
-
-  const handleSignOut = () => {
-    handleSetUserInfo({ uid: '', email: '', nickname: '' });
   };
 
   // confirm 팝업 확인 버튼
@@ -105,6 +96,7 @@ const AdminCT = ({
     <AdminPT
       uid={uid}
       uid_={uid_}
+      grade={grade}
       confirmPopupActive={confirmPopupActive}
       confirmMessage={confirmMessage}
       errorPopupActive={errorPopupActive}

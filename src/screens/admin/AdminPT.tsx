@@ -3,11 +3,13 @@ import SVG from 'modules/SVG';
 import Loader from 'components/loader';
 import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
 import ErrorPopup from 'components/errorPopup/ErrorPopup';
+import { handleHasPermission } from 'modules/utils';
 import styles from './Admin.module.scss';
 
 const AdminPT = ({
   uid,
   uid_,
+  grade,
   confirmPopupActive,
   confirmMessage,
   errorPopupActive,
@@ -38,8 +40,17 @@ const AdminPT = ({
             <SVG type="back" width="30px" height="30px" />
           </span>
         </div>
-        <h2>Admin</h2>
-        <div className={styles.innerWrap}></div>
+        {uid !== undefined &&
+          uid !== null &&
+          uid !== '' &&
+          uid_ !== '' &&
+          uid === uid_ &&
+          handleHasPermission('m', grade) && (
+            <>
+              <h2>Admin</h2>
+              <div className={styles.innerWrap}></div>
+            </>
+          )}
       </div>
     </>
   );
@@ -48,6 +59,7 @@ const AdminPT = ({
 interface typeAdminPT {
   uid?: string;
   uid_: string;
+  grade?: number;
   confirmPopupActive: boolean;
   confirmMessage: string;
   errorPopupActive: boolean;
