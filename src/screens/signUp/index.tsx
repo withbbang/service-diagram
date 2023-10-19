@@ -143,6 +143,7 @@ const SignUp = ({
       await setDoc(doc(db, type, uid), {
         company,
         createDt: serverTimestamp(),
+        isDeleted: 'N',
         email,
         grade: 20,
         nickname

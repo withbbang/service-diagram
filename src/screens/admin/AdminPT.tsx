@@ -5,11 +5,13 @@ import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
 import ErrorPopup from 'components/errorPopup/ErrorPopup';
 import { handleHasPermission } from 'modules/utils';
 import styles from './Admin.module.scss';
+import { typeAuthority } from 'modules/types';
 
 const AdminPT = ({
   uid,
   uid_,
   grade,
+  users,
   confirmPopupActive,
   confirmMessage,
   errorPopupActive,
@@ -60,6 +62,7 @@ interface typeAdminPT {
   uid?: string;
   uid_: string;
   grade?: number;
+  users: Array<typeAuthority>;
   confirmPopupActive: boolean;
   confirmMessage: string;
   errorPopupActive: boolean;
