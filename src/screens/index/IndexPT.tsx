@@ -2,10 +2,12 @@ import React from 'react';
 import Loader from 'components/loader';
 import styles from './Index.module.scss';
 import SVG from 'modules/SVG';
+import { handleHasPermission } from 'modules/utils';
 
 const IndexPT = ({
   uid,
   uid_,
+  grade,
   onSearch,
   onSignIn,
   // onSignUp,
@@ -52,6 +54,16 @@ const IndexPT = ({
           <div>
             <button onClick={() => onNavigate('mermaid')}>Mermaid</button>
           </div>
+          {uid !== undefined &&
+            uid !== null &&
+            uid !== '' &&
+            uid_ !== '' &&
+            uid === uid_ &&
+            handleHasPermission('m', grade) && (
+              <div>
+                <button onClick={() => onNavigate('admin')}>Admin</button>
+              </div>
+            )}
           <div>
             <button onClick={() => onTestErrorReport()}>
               Test Error Report
@@ -66,6 +78,7 @@ const IndexPT = ({
 interface typeIndexPT {
   uid?: string;
   uid_: string;
+  grade?: number;
   onSearch: () => void;
   onSignIn: () => void;
   onSignUp: () => void;

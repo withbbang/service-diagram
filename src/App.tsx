@@ -14,10 +14,11 @@ import ViewMermaid from 'screens/viewMermaid';
 import UpdateEntityRelationshipDiagram from 'screens/updateEntityRelationshipDiagram';
 import UpdateFlowDiagram from 'screens/updateFlowDiagram';
 import UpdateSequencDiagram from 'screens/updateSequenceDiagram';
+import UpdateMermaid from 'screens/updateMermaid';
 import SignIn from 'screens/signIn';
 import SignUp from 'screens/signUp';
 import SearchDiagrams from 'screens/searchDiagrams';
-import UpdateMermaid from 'screens/updateMermaid';
+import Admin from 'screens/admin';
 
 const App = (): JSX.Element => {
   return (
@@ -61,6 +62,7 @@ const App = (): JSX.Element => {
         <Route path="/sign/in" element={<SignIn />} />
         <Route path="/sign/up" element={<SignUp />} />
         <Route path="/search" element={<SearchDiagrams />} />
+        <Route path="/admin" element={<Admin />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
