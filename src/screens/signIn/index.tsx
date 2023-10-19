@@ -130,7 +130,13 @@ const SignIn = ({
         throw Error('No User');
       }
 
-      return docSnap.data().nickname;
+      const { isDeleted, nickname } = docSnap.data();
+
+      if (isDeleted !== 'N') {
+        throw Error('Deleted User');
+      }
+
+      return nickname;
     } catch (error: any) {
       console.error(error);
       throw Error('User Credential Error');

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { PropState } from 'middlewares/configureReducer';
 import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
 import { connect } from 'react-redux';
@@ -20,18 +20,28 @@ const ErrorPopup = ({
   errorMessage,
   onConfirm
 }: typeErrorPopup): JSX.Element => {
+  const buttonRef = useRef(
+    null
+  ) as React.MutableRefObject<HTMLButtonElement | null>;
+
+  useEffect(() => {
+    buttonRef.current?.focus();
+  }, [isActive]);
+
   return (
     <>
-      {isActive ? (
+      {isActive && (
         <div className={styles.background}>
           <div className={styles.modal_body}>
             <span>{errorMessage}</span>
             <div>
-              <button onClick={() => onConfirm()}>OK</button>
+              <button onClick={() => onConfirm()} ref={buttonRef}>
+                OK
+              </button>
             </div>
           </div>
         </div>
-      ) : null}
+      )}
     </>
   );
 };
