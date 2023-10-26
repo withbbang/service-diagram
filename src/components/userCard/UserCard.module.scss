@@ -16,6 +16,10 @@
     margin: 20px 5%;
   }
 
+  &.deleted {
+    opacity: 0.4;
+  }
+
   > div:not(.middleInfo) {
     width: 100%;
     display: flex;

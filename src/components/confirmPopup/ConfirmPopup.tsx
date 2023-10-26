@@ -26,7 +26,7 @@ const ConfirmPopup = ({
     <>
       {isActive ? (
         <div className={styles.background}>
-          <div className={styles.modal_body}>
+          <div className={styles.modalBody}>
             <span>{confirmMessage}</span>
             <div>
               <button onClick={() => onCancel()}>Cancel</button>

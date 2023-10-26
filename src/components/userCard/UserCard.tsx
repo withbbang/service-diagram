@@ -38,7 +38,13 @@ const UserCard = ({
   userNickname
 }: typeUserCard): JSX.Element => {
   return (
-    <div className={styles.wrap}>
+    <div
+      className={
+        isDeleted === 'Y'
+          ? [styles.wrap, styles.deleted].join(' ')
+          : styles.wrap
+      }
+    >
       <div className={styles.topInfo}>
         <span>
           <SVG type="user" width="20px" height="20px" />
@@ -58,7 +64,7 @@ const UserCard = ({
         <span>
           {isDeleted === 'Y' ? (
             <>
-              <SVG type="trash" width="20px" height="20px" />
+              <SVG type="time" width="20px" height="20px" fill="#ff2014" />
               &nbsp;{deleteDt}
             </>
           ) : (

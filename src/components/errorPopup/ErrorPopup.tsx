@@ -32,7 +32,7 @@ const ErrorPopup = ({
     <>
       {isActive && (
         <div className={styles.background}>
-          <div className={styles.modal_body}>
+          <div className={styles.modalBody}>
             <span>{errorMessage}</span>
             <div>
               <button onClick={() => onConfirm()} ref={buttonRef}>

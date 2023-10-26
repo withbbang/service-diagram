@@ -23,8 +23,7 @@ import { typeAuthority } from 'modules/types';
 const AdminCT = ({
   uid,
   handleLoaderTrue,
-  handleLoaderFalse,
-  handleSetUserInfo
+  handleLoaderFalse
 }: typeAdminCT): JSX.Element => {
   const type = 'authority'; // 조회 타입
   const db = getFirestore(app); // Firebase 객체
@@ -115,6 +114,8 @@ const AdminCT = ({
     }
   };
 
+  const handleChildren = <div></div>;
+
   // confirm 팝업 확인 버튼
   const handleConfirm = async () => {};
 
@@ -156,11 +157,6 @@ const AdminCT = ({
 interface typeAdminCT extends CommonState {
   handleLoaderTrue: () => void;
   handleLoaderFalse: () => void;
-  handleSetUserInfo: (payload: {
-    uid: string;
-    email: string;
-    nickname: string;
-  }) => void;
 }
 
 export default AdminCT;

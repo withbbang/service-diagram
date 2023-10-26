@@ -75,7 +75,7 @@ const FunctionPopup = ({
     <>
       {isActive ? (
         <div className={styles.background} id={'container'}>
-          <div className={styles.modal_body} id={'item'}>
+          <div className={styles.modalBody} id={'item'}>
             <span
               className={styles.dnd}
               id={'dnd'}
