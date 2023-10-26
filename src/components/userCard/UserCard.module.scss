@@ -1,0 +1,28 @@
+.wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 30%;
+  padding: 3% 30px;
+  border-radius: 30px;
+  box-sizing: border-box;
+  max-height: 200px;
+  min-height: 200px;
+  @include background-boxShadow-transform($most-light, 'none', scale(1));
+
+  &:nth-child(3n - 1) {
+    margin: 20px 5%;
+  }
+}
+
+.wrap:hover {
+  cursor: pointer;
+  @include boxShadow-transform(4px 4px 2px 1px rgba(0, 0, 0, 0.2), scale(1.03));
+}
+
+@include mobile {
+  .wrap {
+    width: 100%;
+    margin: 20px 0;
+  }
+}

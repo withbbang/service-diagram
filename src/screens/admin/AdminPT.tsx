@@ -6,6 +6,7 @@ import ErrorPopup from 'components/errorPopup/ErrorPopup';
 import { handleHasPermission } from 'modules/utils';
 import styles from './Admin.module.scss';
 import { typeAuthority } from 'modules/types';
+import UserCard from 'components/userCard/UserCard';
 
 const AdminPT = ({
   uid,
@@ -53,8 +54,18 @@ const AdminPT = ({
               <div className={styles.innerWrap}>
                 {Array.isArray(users) &&
                   users.length > 0 &&
-                  users.map((user: typeAuthority) => (
-                    <div key={user.id}>{user.nickname}</div>
+                  users.map((user: typeAuthority, idx) => (
+                    <UserCard
+                      key={idx}
+                      id={user.id}
+                      company={user.company}
+                      createDt={user.createDt}
+                      deleteDt={user.deleteDt}
+                      userEmail={user.email}
+                      grade={user.grade}
+                      isDeleted={user.isDeleted}
+                      userNickname={user.nickname}
+                    />
                   ))}
               </div>
             </>
