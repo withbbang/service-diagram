@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './Diagrams.module.scss';
-import Card from 'components/card/Card';
+import DiagramCard from 'components/diagramCard/DiagramCard';
 import Loader from 'components/loader';
 import { typeContent } from 'modules/types';
 import SVG from 'modules/SVG';
@@ -68,7 +68,7 @@ const DiagramsPT = ({
         </div>
         <h2>{title}</h2>
         <div className={styles.innerWrap}>
-          <Card
+          <DiagramCard
             id={'0'}
             idx={-1}
             title={''}
@@ -78,7 +78,7 @@ const DiagramsPT = ({
           {Array.isArray(contents) &&
             contents.length > 0 &&
             contents.map((content: any, idx: number) => (
-              <Card
+              <DiagramCard
                 key={idx}
                 idx={idx}
                 id={content.id}

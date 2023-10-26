@@ -9,7 +9,7 @@ import {
   handleLoaderTrue
 } from 'middlewares/reduxToolkits/commonSlice';
 import SVG from 'modules/SVG';
-import styles from './Card.module.scss';
+import styles from './DiagramCard.module.scss';
 import { handleHasPermission } from 'modules/utils';
 
 const mapStateToProps = (state: PropState): CommonState => {
@@ -27,7 +27,7 @@ const mapDispatchToProps = (dispatch: (actionFunction: Action<any>) => any) => {
   };
 };
 
-const Card = ({
+const DiagramCard = ({
   id,
   title,
   createdBy,
@@ -36,7 +36,7 @@ const Card = ({
   path,
   grade,
   onDeleteBtn
-}: typeCard): JSX.Element => {
+}: typeDiagramCard): JSX.Element => {
   const navigate = useNavigate();
 
   const handleUpdateBtn = (e: React.MouseEvent) => {
@@ -86,7 +86,7 @@ const Card = ({
   );
 };
 
-interface typeCard extends CommonState {
+interface typeDiagramCard extends CommonState {
   idx: number;
   id: string;
   title: string;
@@ -98,4 +98,4 @@ interface typeCard extends CommonState {
   onDeleteBtn?: (e: React.MouseEvent, selectedContentId: string) => void;
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Card);
+export default connect(mapStateToProps, mapDispatchToProps)(DiagramCard);

@@ -1,7 +1,7 @@
 import React from 'react';
 import Loader from 'components/loader';
 import ErrorPopup from 'components/errorPopup/ErrorPopup';
-import Card from 'components/card/Card';
+import Card from 'components/diagramCard/DiagramCard';
 import SVG from 'modules/SVG';
 import styles from './SearchDiagrams.module.scss';
 
