@@ -66,6 +66,26 @@ export function handleHasPermission(
   }
 }
 
+/**
+ * 유저 등급 반환 함수
+ * @param {number} grade 유저 등급
+ * @returns {string}
+ */
+export function handleReturnAuthority(grade: number) {
+  switch (grade) {
+    case 0:
+      return 'CRUDM';
+    case 5:
+      return 'CRUD';
+    case 10:
+      return 'CR';
+    case 15:
+      return 'R';
+    default:
+      return 'No Authority';
+  }
+}
+
 export const app = initializeApp({
   apiKey: process.env.REACT_APP_FIREBASE_APP_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,

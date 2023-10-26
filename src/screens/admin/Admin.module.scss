@@ -34,6 +34,23 @@
   }
 }
 
+@include tablit {
+  .wrap {
+    padding-top: 100px;
+
+    > h2 {
+      word-break: break-word;
+      text-align: center;
+    }
+
+    .innerWrap {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+  }
+}
+
 @include mobile {
   .wrap {
     padding-top: 100px;

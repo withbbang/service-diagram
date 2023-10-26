@@ -46,8 +46,8 @@ export interface typeContent extends DocumentData {
 export interface typeAuthority {
   id: string;
   company: string;
-  createDt: string;
-  deleteDt?: string;
+  createDt: any;
+  deleteDt?: any;
   email: string;
   grade: number;
   isDeleted: string;

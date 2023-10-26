@@ -75,7 +75,14 @@ const DiagramCard = ({
             &nbsp;{createdBy}
           </span>
         )}
-        <span>{createDt && createDt}</span>
+        <span>
+          {createDt && (
+            <>
+              <SVG type="time" width="20px" height="20px" />
+              &nbsp;{createDt}
+            </>
+          )}
+        </span>
       </div>
       {id === '0' && (
         <span className={styles.add}>

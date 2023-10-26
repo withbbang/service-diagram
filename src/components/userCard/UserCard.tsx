@@ -10,7 +10,7 @@ import {
 } from 'middlewares/reduxToolkits/commonSlice';
 import SVG from 'modules/SVG';
 import styles from './UserCard.module.scss';
-import { handleHasPermission } from 'modules/utils';
+import { handleReturnAuthority } from 'modules/utils';
 
 const mapStateToProps = (state: PropState): CommonState => {
   return { ...state.common };
@@ -37,7 +37,40 @@ const UserCard = ({
   isDeleted,
   userNickname
 }: typeUserCard): JSX.Element => {
-  return <div className={styles.wrap}>{userNickname}</div>;
+  return (
+    <div className={styles.wrap}>
+      <div className={styles.topInfo}>
+        <span>
+          <SVG type="user" width="20px" height="20px" />
+          &nbsp;{userNickname}
+        </span>
+        <span>
+          <SVG type="authority" width="20px" height="20px" />
+          &nbsp;{handleReturnAuthority(grade)}
+        </span>
+      </div>
+      <div className={styles.middleInfo}>{userEmail}</div>
+      <div className={styles.bottomInfo}>
+        <span>
+          <SVG type="company" width="20px" height="20px" />
+          &nbsp;{company}
+        </span>
+        <span>
+          {isDeleted === 'Y' ? (
+            <>
+              <SVG type="trash" width="20px" height="20px" />
+              &nbsp;{deleteDt}
+            </>
+          ) : (
+            <>
+              <SVG type="time" width="20px" height="20px" />
+              &nbsp;{createDt}
+            </>
+          )}
+        </span>
+      </div>
+    </div>
+  );
 };
 
 interface typeUserCard extends CommonState {

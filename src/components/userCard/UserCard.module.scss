@@ -1,9 +1,11 @@
 .wrap {
   position: relative;
   display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   align-items: center;
   width: 30%;
-  padding: 3% 30px;
+  padding: 2% 20px;
   border-radius: 30px;
   box-sizing: border-box;
   max-height: 200px;
@@ -13,11 +15,31 @@
   &:nth-child(3n - 1) {
     margin: 20px 5%;
   }
+
+  > div:not(.middleInfo) {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    > span {
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+    }
+  }
 }
 
 .wrap:hover {
   cursor: pointer;
   @include boxShadow-transform(4px 4px 2px 1px rgba(0, 0, 0, 0.2), scale(1.03));
+}
+
+@include tablit {
+  .wrap {
+    width: 45%;
+    margin: 20px 0 !important;
+  }
 }
 
 @include mobile {

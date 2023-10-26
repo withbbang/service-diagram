@@ -3,7 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import AdminPT from './AdminPT';
 import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
 import { User, onAuthStateChanged } from 'firebase/auth';
-import { app, auth, handleHasPermission } from 'modules/utils';
+import {
+  app,
+  auth,
+  handleConvertTimestamp,
+  handleHasPermission
+} from 'modules/utils';
 import {
   collection,
   doc,
@@ -96,7 +101,11 @@ const AdminCT = ({
 
           return {
             ...data,
-            id: doc.id
+            id: doc.id,
+            createDt: handleConvertTimestamp(data.createDt.toDate(), 'date'),
+            deleteDt: data.deleteDt
+              ? handleConvertTimestamp(data.deleteDt.toDate(), 'date')
+              : ''
           };
         })
       );
