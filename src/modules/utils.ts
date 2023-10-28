@@ -71,7 +71,7 @@ export function handleHasPermission(
  * @param {number} grade 유저 등급
  * @returns {string}
  */
-export function handleReturnAuthority(grade: number) {
+export function handleReturnAuthority(grade: number): string {
   switch (grade) {
     case 0:
       return 'CRUDM';
