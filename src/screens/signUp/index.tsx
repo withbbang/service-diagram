@@ -3,8 +3,6 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import {
   doc,
   setDoc,
-  addDoc,
-  collection,
   getFirestore,
   serverTimestamp,
   getDoc
