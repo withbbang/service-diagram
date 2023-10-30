@@ -36,6 +36,11 @@ const AdminCT = ({
   const [confirmMessage, setConfirmMessage] = useState<string>(''); // 확인 팝업 내용 설정 훅
   const [errorPopupActive, setErrorPopupActive] = useState<boolean>(false); // 에러 팝업 활성 상태
   const [errorMessage, setErrorMessage] = useState<string>(''); // 에러 팝업 내용 설정 훅
+  const [userManagePopupActive, setUserManagePopupActive] =
+    useState<boolean>(false); // 유저 관리 팝업 활성 상태
+
+  const [xPos, setXPos] = useState<number | undefined>(); // 유저 카드 클릭 위치값
+  const [yPos, setYPos] = useState<number | undefined>(); // 유저 카드 클릭 위치값
 
   // 로그인 여부 판단 훅
   useEffect(() => {
@@ -114,7 +119,20 @@ const AdminCT = ({
     }
   };
 
-  const handleChildren = <div></div>;
+  // 유저 카드 클릭 이벤트
+  const handleClickCard = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    setUserManagePopupActive((prev) => {
+      if (prev) {
+        setXPos(undefined);
+        setYPos(undefined);
+      } else {
+        setXPos(e.clientX);
+        setYPos(e.clientY);
+      }
+
+      return !prev;
+    });
+  };
 
   // confirm 팝업 확인 버튼
   const handleConfirm = async () => {};
@@ -138,6 +156,8 @@ const AdminCT = ({
 
   return (
     <AdminPT
+      xPos={xPos}
+      yPos={yPos}
       uid={uid}
       uid_={uid_}
       grade={grade}
@@ -146,10 +166,12 @@ const AdminCT = ({
       confirmMessage={confirmMessage}
       errorPopupActive={errorPopupActive}
       errorMessage={errorMessage}
+      userManagePopupActive={userManagePopupActive}
       onBack={handleBack}
       onConfirm={handleConfirm}
       onCancel={handleCancel}
       onErrorPopup={handleErrorPopup}
+      onClickCard={handleClickCard}
     />
   );
 };
