@@ -10,9 +10,7 @@ const UserManagePopup = ({
   const ref = useRef(null) as React.MutableRefObject<HTMLDivElement | null>;
 
   useEffect(() => {
-    handleMount();
-
-    return handleUnmount;
+    isActive ? handleMount() : handleUnmount();
   }, [isActive]);
 
   const handleMount = () => {
@@ -29,7 +27,6 @@ const UserManagePopup = ({
         ref.current.style.top = '50%';
         ref.current.style.left = '50%';
         ref.current.style.transform = 'translate(-50%, -50%) scale(1)';
-        ref.current.style.display = 'flex';
       }
     }, 0);
   };
@@ -39,15 +36,14 @@ const UserManagePopup = ({
       ref.current.style.transition = 'none';
       ref.current.style.top = '50%';
       ref.current.style.left = '50%';
-      ref.current.style.transform = 'translate(-50%, -50%) scale(0.5)';
-      ref.current.style.display = 'flex';
+      ref.current.style.transform = 'translate(-50%, -50%) scale(1)';
     }
 
     setTimeout(function () {
-      if (ref.current && xPos !== undefined && yPos !== undefined) {
+      if (ref.current) {
         ref.current.style.transition = 'all 0.5s';
-        ref.current.style.left = xPos + 'px';
         ref.current.style.top = yPos + 'px';
+        ref.current.style.left = xPos + 'px';
         ref.current.style.transform = 'translate(-50%, -50%) scale(0)';
       }
     }, 0);
@@ -55,11 +51,15 @@ const UserManagePopup = ({
 
   return (
     <>
-      {isActive ? (
-        <div className={styles.background} onClick={onClick}>
-          <div className={styles.modalBody} ref={ref}></div>
-        </div>
-      ) : null}
+      <div
+        className={
+          isActive
+            ? [styles.background, styles.isActive].join(' ')
+            : styles.background
+        }
+        onClick={onClick}
+      ></div>
+      <div className={styles.modalBody} ref={ref}></div>
     </>
   );
 };
