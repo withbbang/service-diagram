@@ -10,10 +10,13 @@ const UserManagePopup = ({
   const ref = useRef(null) as React.MutableRefObject<HTMLDivElement | null>;
 
   useEffect(() => {
-    isActive ? handleMount() : handleUnmount();
+    isActive ? handleActivePopup() : handleInActivePopup();
   }, [isActive]);
 
-  const handleMount = () => {
+  // 팝업 활성
+  const handleActivePopup = () => {
+    document.body.style.position = 'fixed';
+
     if (ref.current) {
       ref.current.style.transition = 'none';
       ref.current.style.left = xPos + 'px';
@@ -30,7 +33,10 @@ const UserManagePopup = ({
     }, 0);
   };
 
-  const handleUnmount = () => {
+  // 팝업 비활성
+  const handleInActivePopup = () => {
+    document.body.style.position = 'unset';
+
     if (ref.current) {
       ref.current.style.top = yPos + 'px';
       ref.current.style.left = xPos + 'px';
@@ -47,7 +53,7 @@ const UserManagePopup = ({
             : styles.background
         }
         onClick={onClick}
-      ></div>
+      />
       <div className={styles.modalBody} ref={ref}></div>
     </>
   );
