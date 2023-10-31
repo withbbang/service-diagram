@@ -121,13 +121,9 @@ const AdminCT = ({
 
   // 유저 카드 클릭 이벤트
   const handleClickCard = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    setUserManagePopupActive((prev) => {
-      if (!prev) {
-        setXPos(e.clientX);
-        setYPos(e.clientY);
-      }
-      return !prev;
-    });
+    setXPos(e.clientX);
+    setYPos(e.clientY);
+    setUserManagePopupActive(!userManagePopupActive);
   };
 
   // confirm 팝업 확인 버튼

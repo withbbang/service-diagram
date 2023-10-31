@@ -14,11 +14,10 @@ const UserManagePopup = ({
   }, [isActive]);
 
   const handleMount = () => {
-    if (ref.current && xPos !== undefined && yPos !== undefined) {
+    if (ref.current) {
       ref.current.style.transition = 'none';
       ref.current.style.left = xPos + 'px';
       ref.current.style.top = yPos + 'px';
-      ref.current.style.transform = 'translate(-50%, -50%) scale(0)';
     }
 
     setTimeout(function () {
@@ -33,20 +32,10 @@ const UserManagePopup = ({
 
   const handleUnmount = () => {
     if (ref.current) {
-      ref.current.style.transition = 'none';
-      ref.current.style.top = '50%';
-      ref.current.style.left = '50%';
-      ref.current.style.transform = 'translate(-50%, -50%) scale(1)';
+      ref.current.style.top = yPos + 'px';
+      ref.current.style.left = xPos + 'px';
+      ref.current.style.transform = 'translate(-50%, -50%) scale(0)';
     }
-
-    setTimeout(function () {
-      if (ref.current) {
-        ref.current.style.transition = 'all 0.5s';
-        ref.current.style.top = yPos + 'px';
-        ref.current.style.left = xPos + 'px';
-        ref.current.style.transform = 'translate(-50%, -50%) scale(0)';
-      }
-    }, 0);
   };
 
   return (
