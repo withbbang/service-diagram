@@ -1,0 +1,25 @@
+.radioLabel {
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 8px 0;
+  cursor: pointer;
+
+  .radioInput {
+    display: none;
+
+    &:checked + .customRadio {
+      background-color: $less-dark;
+    }
+  }
+
+  .customRadio {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: $less-light;
+    display: inline-block;
+    cursor: pointer;
+  }
+}

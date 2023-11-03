@@ -44,7 +44,7 @@ const UserCard = ({
           ? [styles.wrap, styles.deleted].join(' ')
           : styles.wrap
       }
-      onClick={onClickCard}
+      onClick={(e) => onClickCard(e, id)}
     >
       <div className={styles.topInfo}>
         <span>
@@ -89,7 +89,10 @@ interface typeUserCard extends CommonState {
   grade: number;
   isDeleted: string;
   userNickname: string;
-  onClickCard: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  onClickCard: (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    id?: string
+  ) => void;
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserCard);

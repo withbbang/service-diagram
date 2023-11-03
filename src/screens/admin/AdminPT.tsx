@@ -15,6 +15,8 @@ const AdminPT = ({
   uid,
   uid_,
   grade,
+  newGrade,
+  selectedUserId,
   users,
   confirmPopupActive,
   confirmMessage,
@@ -25,7 +27,9 @@ const AdminPT = ({
   onConfirm,
   onCancel,
   onErrorPopup,
-  onClickCard
+  onClickCard,
+  onSetNewGrade,
+  onUpdateBtn
 }: typeAdminPT): JSX.Element => {
   return (
     <>
@@ -46,7 +50,11 @@ const AdminPT = ({
         xPos={xPos}
         yPos={yPos}
         isActive={userManagePopupActive}
+        newGrade={newGrade}
+        user={users.filter((user) => user.id === selectedUserId)[0]}
         onClick={onClickCard}
+        onSetNewGrade={onSetNewGrade}
+        onUpdateBtn={onUpdateBtn}
       />
       <div className={styles.wrap}>
         <div className={styles.backBtn}>
@@ -93,6 +101,8 @@ interface typeAdminPT {
   uid?: string;
   uid_: string;
   grade?: number;
+  newGrade: number;
+  selectedUserId?: string;
   users: Array<typeAuthority>;
   confirmPopupActive: boolean;
   confirmMessage: string;
@@ -103,7 +113,12 @@ interface typeAdminPT {
   onConfirm: () => void;
   onCancel: () => void;
   onErrorPopup: () => void;
-  onClickCard: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  onClickCard: (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    id?: string
+  ) => void;
+  onSetNewGrade: React.Dispatch<React.SetStateAction<number>>;
+  onUpdateBtn: () => void;
 }
 
 export default AdminPT;

@@ -52,4 +52,5 @@ export interface typeAuthority {
   grade: number;
   isDeleted: string;
   nickname: string;
+  updateDt: any;
 }
