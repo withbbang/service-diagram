@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { typeAuthority } from 'modules/types';
 import SVG from 'modules/SVG';
 import styles from './UserManagePopup.module.scss';

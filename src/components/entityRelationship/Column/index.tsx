@@ -1,6 +1,6 @@
+import { ChangeEvent } from 'react';
 import { typeColumn } from 'modules/types';
 import styles from './Column.module.scss';
-import { ChangeEvent } from 'react';
 
 function Column({
   idx,

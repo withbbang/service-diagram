@@ -7,9 +7,9 @@ import {
   handleLoaderFalse,
   handleLoaderTrue
 } from 'middlewares/reduxToolkits/commonSlice';
+import { handleReturnAuthority } from 'modules/utils';
 import SVG from 'modules/SVG';
 import styles from './UserCard.module.scss';
-import { handleReturnAuthority } from 'modules/utils';
 
 const mapStateToProps = (state: PropState): CommonState => {
   return { ...state.common };

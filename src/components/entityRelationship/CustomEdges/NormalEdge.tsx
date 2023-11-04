@@ -1,7 +1,6 @@
+import { BaseEdge, EdgeLabelRenderer, getBezierPath } from 'reactflow';
 import { typeCustomEdge } from 'modules/types';
 import styles from './CommonEdgeStyles.module.scss';
-import SVG from 'modules/SVG';
-import { BaseEdge, EdgeLabelRenderer, getBezierPath } from 'reactflow';
 
 function NormalEdge({
   id,

@@ -1,8 +1,8 @@
 import { memo } from 'react';
 import { Handle, Position } from 'reactflow';
+import SVG from 'modules/SVG';
 import { typeColumn, typeCustomNode } from 'modules/types';
 import styles from './CommonNodeStyles.module.scss';
-import SVG from 'modules/SVG';
 
 function Table({
   id,
