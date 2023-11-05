@@ -3,21 +3,30 @@ import Loader from 'components/loader';
 import styles from './Index.module.scss';
 import SVG from 'modules/SVG';
 import { handleHasPermission } from 'modules/utils';
+import ErrorPopup from 'components/errorPopup/ErrorPopup';
 
 const IndexPT = ({
   uid,
   uid_,
   grade,
+  errorPopupActive,
+  errorMessage,
   onSearch,
   onSignIn,
   // onSignUp,
   onSignOut,
   onNavigate,
+  onErrorPopup,
   onTestErrorReport
 }: typeIndexPT): JSX.Element => {
   return (
     <>
       <Loader />
+      <ErrorPopup
+        isActive={errorPopupActive}
+        errorMessage={errorMessage}
+        onConfirm={onErrorPopup}
+      />
       <div className={styles.wrap}>
         <div className={styles.signBtns}>
           <span onClick={onSearch}>
@@ -79,11 +88,14 @@ interface typeIndexPT {
   uid?: string;
   uid_: string;
   grade?: number;
+  errorPopupActive: boolean;
+  errorMessage: string;
   onSearch: () => void;
   onSignIn: () => void;
   onSignUp: () => void;
   onSignOut: () => void;
   onNavigate: (type: string) => void;
+  onErrorPopup: () => void;
   onTestErrorReport: () => void;
 }
 

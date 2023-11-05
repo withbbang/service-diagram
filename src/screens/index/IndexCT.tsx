@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Sentry from '@sentry/react';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, getDoc, getFirestore } from 'firebase/firestore';
 import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
 import { auth, app } from 'modules/utils';
@@ -18,6 +18,9 @@ const IndexCT = ({
   const navigate = useNavigate(); // router 제어 훅
   const [uid_, setUid_] = useState<string>(''); // 로그인 여부 판단 훅
   const [grade, setGrade] = useState<number>(20); // 유저 등급
+
+  const [errorPopupActive, setErrorPopupActive] = useState<boolean>(false); // 에러 팝업 활성 상태
+  const [errorMessage, setErrorMessage] = useState<string>(''); // 에러 팝업 내용 설정 훅
 
   // 로그인 여부 판단 훅
   useEffect(() => {
@@ -65,13 +68,29 @@ const IndexCT = ({
   };
 
   const handleSignOut = () => {
-    setGrade(20);
-    handleSetUserInfo({ uid: '', email: '', nickname: '' });
+    handleLoaderTrue();
+    try {
+      signOut(auth);
+      setGrade(20);
+      handleSetUserInfo({ uid: '', email: '', nickname: '' });
+    } catch (error) {
+      console.error(error);
+      setErrorMessage('Sign Out Error');
+      setErrorPopupActive(true);
+    } finally {
+      handleLoaderFalse();
+    }
   };
 
   const handleNavigate = (type: string) => {
     if (type !== undefined && type !== 'admin') navigate(`diagrams/${type}`);
     else navigate(`/${type}`);
+  };
+
+  const handleErrorPopup = () => {
+    setErrorMessage('');
+    setErrorPopupActive(false);
+    navigate(-1);
   };
 
   const handleTestErrorReport = () => {
@@ -87,11 +106,14 @@ const IndexCT = ({
       uid={uid}
       uid_={uid_}
       grade={grade}
+      errorPopupActive={errorPopupActive}
+      errorMessage={errorMessage}
       onSearch={handleSearch}
       onSignIn={handleSignIn}
       onSignUp={handleSignUp}
       onSignOut={handleSignOut}
       onNavigate={handleNavigate}
+      onErrorPopup={handleErrorPopup}
       onTestErrorReport={handleTestErrorReport}
     />
   );

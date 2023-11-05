@@ -20,7 +20,7 @@ import {
 } from 'modules/utils';
 import { typeContent } from 'modules/types';
 import { CommonState } from 'middlewares/reduxToolkits/commonSlice';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 
 const DiagramsCT = ({
   uid,
@@ -154,9 +154,19 @@ const DiagramsCT = ({
   };
 
   const handleSignOut = () => {
-    handleSetUserInfo({ uid: '', email: '', nickname: '' });
-    setGrade(20);
-    setCompany('');
+    handleLoaderTrue();
+    try {
+      signOut(auth);
+      setGrade(20);
+      setCompany('');
+      handleSetUserInfo({ uid: '', email: '', nickname: '' });
+    } catch (error) {
+      console.error(error);
+      setErrorMessage('Sign Out Error');
+      setErrorPopupActive(true);
+    } finally {
+      handleLoaderFalse();
+    }
   };
 
   const handleBack = () => {
