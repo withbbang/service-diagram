@@ -12,7 +12,6 @@ import ReactFlow, {
   OnConnect,
   EdgeMouseHandler
 } from 'reactflow';
-import Loader from 'components/loader';
 import SVG from 'modules/SVG';
 import { typeColumn } from 'modules/types';
 import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
@@ -81,7 +80,6 @@ const CreateErdDiagramPT = ({
 }: typeCreateErdDiagramPT): JSX.Element => {
   return (
     <>
-      <Loader />
       <ConfirmPopup
         isActive={confirmPopupActive}
         confirmMessage={confirmMessage}

@@ -1,5 +1,4 @@
 import React from 'react';
-import Loader from 'components/loader';
 import ErrorPopup from 'components/errorPopup/ErrorPopup';
 import Card from 'components/diagramCard/DiagramCard';
 import SVG from 'modules/SVG';
@@ -19,7 +18,6 @@ const SearchDiagramsPT = ({
 }: typeSearchDiagramsPT): JSX.Element => {
   return (
     <>
-      <Loader />
       <ErrorPopup
         isActive={errorPopupActive}
         errorMessage={errorMessage}

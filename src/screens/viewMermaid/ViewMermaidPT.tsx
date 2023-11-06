@@ -1,7 +1,6 @@
 import React from 'react';
 import Mermaid from 'components/mermaid';
 import ErrorPopup from 'components/errorPopup/ErrorPopup';
-import Loader from 'components/loader';
 import SVG from 'modules/SVG';
 import styles from './ViewMermaid.module.scss';
 
@@ -15,7 +14,6 @@ const ViewMermaidPT = ({
 }: typeViewMermaidPT): JSX.Element => {
   return (
     <>
-      <Loader />
       <ErrorPopup
         isActive={errorPopupActive}
         errorMessage={errorMessage}

@@ -1,7 +1,6 @@
 import React from 'react';
 import Sequence from 'react-sequence-diagram';
 import ErrorPopup from 'components/errorPopup/ErrorPopup';
-import Loader from 'components/loader';
 import SVG from 'modules/SVG';
 import styles from './ViewSequenceDiagram.module.scss';
 
@@ -15,7 +14,6 @@ const ViewSequenceDiagramPT = ({
 }: typeViewSequenceDiagramPT): JSX.Element => {
   return (
     <>
-      <Loader />
       <ErrorPopup
         isActive={errorPopupActive}
         errorMessage={errorMessage}

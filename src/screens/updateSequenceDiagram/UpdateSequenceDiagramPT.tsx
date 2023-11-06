@@ -3,7 +3,6 @@ import Sequence from 'react-sequence-diagram';
 import styles from './UpdateSequenceDiagram.module.scss';
 import SVG from 'modules/SVG';
 import FunctionPopup from 'components/functionPopup/FunctionPopup';
-import Loader from 'components/loader';
 import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
 import ErrorPopup from 'components/errorPopup/ErrorPopup';
 
@@ -27,7 +26,6 @@ const UpdateSequenceDiagramPT = ({
 }: typeUpdateSequenceDiagramPT): JSX.Element => {
   return (
     <>
-      <Loader />
       <ConfirmPopup
         isActive={confirmPopupActive}
         confirmMessage={confirmMessage}

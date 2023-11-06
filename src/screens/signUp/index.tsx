@@ -16,7 +16,6 @@ import {
   handleLoaderFalse,
   handleLoaderTrue
 } from 'middlewares/reduxToolkits/commonSlice';
-import Loader from 'components/loader';
 import SVG from 'modules/SVG';
 import ErrorPopup from 'components/errorPopup/ErrorPopup';
 import { app, auth } from 'modules/utils';
@@ -166,7 +165,6 @@ const SignUp = ({
 
   return (
     <>
-      <Loader />
       <ErrorPopup
         isActive={errorPopupActive}
         errorMessage={errorMessage}

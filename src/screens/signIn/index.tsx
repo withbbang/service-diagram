@@ -13,7 +13,6 @@ import {
   handleLoaderTrue,
   handleSetUserInfo
 } from 'middlewares/reduxToolkits/commonSlice';
-import Loader from 'components/loader';
 import ErrorPopup from 'components/errorPopup/ErrorPopup';
 import SVG from 'modules/SVG';
 import styles from './SignIn.module.scss';
@@ -155,7 +154,6 @@ const SignIn = ({
 
   return (
     <>
-      <Loader />
       <ErrorPopup
         isActive={errorPopupActive}
         errorMessage={errorMessage}

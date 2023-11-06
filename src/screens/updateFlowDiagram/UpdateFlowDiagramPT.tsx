@@ -13,7 +13,6 @@ import ReactFlow, {
   NodeMouseHandler,
   EdgeMouseHandler
 } from 'reactflow';
-import Loader from 'components/loader';
 import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
 import ErrorPopup from 'components/errorPopup/ErrorPopup';
 import SVG from 'modules/SVG';
@@ -67,7 +66,6 @@ const UpdateFlowDiagramPT = ({
 }: typeUpdateFlowDiagramPT): JSX.Element => {
   return (
     <>
-      <Loader />
       <ConfirmPopup
         isActive={confirmPopupActive}
         confirmMessage={confirmMessage}

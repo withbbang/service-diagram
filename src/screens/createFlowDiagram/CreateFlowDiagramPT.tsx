@@ -15,7 +15,6 @@ import ReactFlow, {
 } from 'reactflow';
 import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
 import ErrorPopup from 'components/errorPopup/ErrorPopup';
-import Loader from 'components/loader';
 import { handleHasPermission } from 'modules/utils';
 import SVG from 'modules/SVG';
 import 'driver.js/dist/driver.css';
@@ -68,7 +67,6 @@ const CreateFlowDiagramPT = ({
 }: typeCreateFlowDiagramPT): JSX.Element => {
   return (
     <>
-      <Loader />
       <ConfirmPopup
         isActive={confirmPopupActive}
         confirmMessage={confirmMessage}

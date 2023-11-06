@@ -1,5 +1,4 @@
 import React from 'react';
-import Loader from 'components/loader';
 import styles from './Index.module.scss';
 import SVG from 'modules/SVG';
 import { handleHasPermission } from 'modules/utils';
@@ -21,7 +20,6 @@ const IndexPT = ({
 }: typeIndexPT): JSX.Element => {
   return (
     <>
-      <Loader />
       <ErrorPopup
         isActive={errorPopupActive}
         errorMessage={errorMessage}

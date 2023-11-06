@@ -3,7 +3,6 @@ import Mermaid from 'components/mermaid';
 import styles from './UpdateMermaid.module.scss';
 import SVG from 'modules/SVG';
 import FunctionPopup from 'components/functionPopup/FunctionPopup';
-import Loader from 'components/loader';
 import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
 import ErrorPopup from 'components/errorPopup/ErrorPopup';
 
@@ -27,7 +26,6 @@ const UpdateMermaidPT = ({
 }: typeUpdateMermaidPT): JSX.Element => {
   return (
     <>
-      <Loader />
       <ConfirmPopup
         isActive={confirmPopupActive}
         confirmMessage={confirmMessage}

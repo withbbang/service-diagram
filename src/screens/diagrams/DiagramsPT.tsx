@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './Diagrams.module.scss';
 import DiagramCard from 'components/diagramCard/DiagramCard';
-import Loader from 'components/loader';
 import { typeContent } from 'modules/types';
 import SVG from 'modules/SVG';
 import ConfirmPopup from 'components/confirmPopup/ConfirmPopup';
@@ -30,7 +29,6 @@ const DiagramsPT = ({
 }: typeDiagramsPT): JSX.Element => {
   return (
     <>
-      <Loader />
       <ConfirmPopup
         isActive={confirmPopupActive}
         confirmMessage={confirmMessage}

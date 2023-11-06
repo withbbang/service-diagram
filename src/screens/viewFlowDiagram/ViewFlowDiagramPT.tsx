@@ -9,7 +9,6 @@ import ReactFlow, {
   EdgeTypes
 } from 'reactflow';
 import ErrorPopup from 'components/errorPopup/ErrorPopup';
-import Loader from 'components/loader';
 import SVG from 'modules/SVG';
 import styles from './ViewFlowDiagram.module.scss';
 
@@ -27,7 +26,6 @@ const ViewFlowDiagramPT = ({
 }: typeViewFlowDiagramPT): JSX.Element => {
   return (
     <>
-      <Loader />
       <ErrorPopup
         isActive={errorPopupActive}
         errorMessage={errorMessage}

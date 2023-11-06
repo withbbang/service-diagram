@@ -6,6 +6,7 @@ import store from 'middlewares/configureStore';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore } from 'redux-persist';
 import * as Sentry from '@sentry/react';
+import Loader from 'components/loader';
 
 Sentry.init({
   dsn: process.env.REACT_APP_SENTRY_DSN,
@@ -27,6 +28,7 @@ ReactDOM.createRoot(rootNode!).render(
     {/* loading: 로딩 과정을 보여줄 컴포넌트 */}
     {/* persistor: 로컬 스토리지에 저장할 store (결국 여기선 persistStore가 반환한 값) */}
     <PersistGate persistor={persistStore(store)}>
+      <Loader />
       <App />
     </PersistGate>
   </Provider>
